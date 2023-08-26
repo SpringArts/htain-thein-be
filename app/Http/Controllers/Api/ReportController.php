@@ -1,0 +1,124 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Models\Report;
+use App\Helpers\ResponseHelper;
+use Illuminate\Http\JsonResponse;
+use App\Helpers\FilterSearchHelper;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ReportRequest;
+use Illuminate\Support\Facades\Gate;
+use App\UseCases\Report\ReportAction;
+use App\Http\Resources\ReportResource;
+use App\Http\Resources\HistoryResource;
+use App\UseCases\Report\CreateNotiAction;
+use App\UseCases\Report\ReportHistoryAction;
+use App\Http\Resources\ReportEditHistoryResource;
+
+class ReportController extends Controller
+{
+    private $createNotiAction, $reportAction, $historyAction;
+
+    public function __construct(CreateNotiAction $createNotiAction, ReportAction $reportAction, ReportHistoryAction $historyAction)
+    {
+        $this->reportAction = $reportAction;
+        $this->createNotiAction = $createNotiAction;
+        $this->historyAction = $historyAction;
+    }
+
+    public function index(): JsonResponse
+    {
+        $data = $this->reportAction->fetchData();
+        $meta = ResponseHelper::getPaginationMeta($data);
+        return response()->json([
+            'data' => ReportResource::collection($data),
+            'meta' => $meta,
+        ]);
+    }
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(ReportRequest $request): JsonResponse
+    {
+        Gate::authorize('adminPermission');
+        $formData = $request->all();
+        $storeReport = $this->reportAction->createReport($formData);
+        $this->createNotiAction->createNotification(auth()->user()->id, $storeReport->id);
+        return ResponseHelper::success('Successfully created', null, 201);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Report $report): JsonResponse
+    {
+        return ResponseHelper::success('success', new ReportResource($report));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(ReportRequest $request, Report $report): JsonResponse
+    {
+        Gate::authorize('adminPermission');
+        $this->reportAction->updateReport($request, $report);
+        return ResponseHelper::success('Successfully Updated', null, 200);
+    }
+
+    public function uncheckReport(): JsonResponse
+    {
+        $data = $this->reportAction->uncheckReport();
+        return response()->json([
+            'data' => ReportResource::collection($data)
+        ]);
+    }
+
+    public function calculationFinancial(): JsonResponse
+    {
+        $data = $this->reportAction->calculationFinancial();
+
+        return response()->json([
+            'data' => $data
+        ]);
+    }
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Report $report): JsonResponse
+    {
+        Gate::authorize('superAdminPermission');
+        $this->reportAction->deleteReport($report);
+        return ResponseHelper::success('Successfully deleted', null, 200);
+    }
+
+    public function cancelReportHistory($id): JsonResponse
+    {
+        $this->historyAction->createReportHistory($id);
+        return ResponseHelper::success('Successfully Rejected', null, 201);
+    }
+
+    public function acceptReport(Report $report): JsonResponse
+    {
+        $this->reportAction->acceptReport($report);
+        return ResponseHelper::success('Successfully Accepted', null, 201);
+    }
+
+    public function fetchChangedHistory(): JsonResponse
+    {
+        $data = $this->reportAction->fetchChangedHistory();
+        return response()->json([
+            'data' => ReportEditHistoryResource::collection($data)
+        ]);
+    }
+
+    public function filterReport(): JsonResponse
+    {
+        $data = FilterSearchHelper::reportFilter()->paginate(6);
+        $meta = ResponseHelper::getPaginationMeta($data);
+        return response()->json([
+            'data' => ReportResource::collection($data),
+            'meta' => $meta
+        ]);
+    }
+}
