@@ -25,7 +25,6 @@ class ResponseHelper
             [
                 'result' => 0,
                 'message' => $message,
-                'data' => $data,
             ]
         );
     }

@@ -6,10 +6,12 @@ use App\Http\Requests\ReportRequest;
 use App\Models\Report;
 use App\Models\NotiInfo;
 use App\Models\ReportEditHistory;
+use App\Services\FinancialCalculatorService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
 
 class ReportAction
 {
@@ -25,6 +27,11 @@ class ReportAction
 
     public function createReport(array $data): Report
     {
+        if ($data['type'] == "Outcome") {
+            if (FinancialCalculatorService::calculateAvailableBalance() < $data['amount']) {
+                throw new \Exception(FinancialCalculatorService::calculateAvailableBalance() . ' kyat is only available.');
+            }
+        }
         DB::beginTransaction();
         try {
             $report = Report::create($data);
@@ -83,30 +90,8 @@ class ReportAction
 
     public function calculationFinancial(): array
     {
-        $income = Report::where('type', 'Income')->where('confirm_status', 1)->sum('amount');
-        $outcome = Report::where('type', 'Outcome')->where('confirm_status', 1)->sum('amount');
-        $availableBalance = $income - $outcome;
-        $mostDepositPerson = Report::where('type', 'Income')
-            ->where('confirm_status', 1)
-            ->select('reporter_id', DB::raw('SUM(amount) as amount'))
-            ->groupBy('reporter_id')
-            ->orderBy('amount', 'desc')
-            ->first();
-        $mostWithdrawPerson = Report::where('type', 'Outcome')
-            ->where('confirm_status', 1)
-            ->select('reporter_id', DB::raw('SUM(amount) as amount'))
-            ->groupBy('reporter_id')
-            ->orderBy('amount', 'desc')
-            ->first();
-
-        $data = [
-            'income' => $income,
-            'outcome' => $outcome,
-            'availableBalance' => $availableBalance,
-            'mostDepositPerson' => $mostDepositPerson->reporter->name ?? '-',
-            'mostWithdrawPerson' => $mostWithdrawPerson->reporter->name ?? '-'
-        ];
-        return $data;
+        $overviewData = FinancialCalculatorService::overviewCalculate();
+        return $overviewData;
     }
     public function deleteReport(Report $report): int
     {

@@ -43,9 +43,13 @@ class ReportController extends Controller
     {
         Gate::authorize('adminPermission');
         $formData = $request->all();
-        $storeReport = $this->reportAction->createReport($formData);
-        $this->createNotiAction->createNotification(auth()->user()->id, $storeReport->id);
-        return ResponseHelper::success('Successfully created', null, 201);
+        try {
+            $storeReport = $this->reportAction->createReport($formData);
+            $this->createNotiAction->createNotification(auth()->user()->id, $storeReport->id);
+            return ResponseHelper::success('Successfully created', null, 201);
+        } catch (\Exception $e) {
+            return ResponseHelper::fail($e->getMessage(), null, 400);
+        }
     }
 
     /**

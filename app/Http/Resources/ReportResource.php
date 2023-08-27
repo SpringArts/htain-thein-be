@@ -47,8 +47,8 @@ class ReportResource extends JsonResource
             'confirmStatus' => $this->confirm_status ?? '',
             'reporter' => new UserResource($this->reporter) ?? '',
             'verifier' => new UserResource($this->verifier) ?? '',
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'created_at' => $this->created_at->format('Y-d-M h:i A'),
+            'updatedAt' => $this->updated_at->format('Y-d-M h:i A'),
         ];
     }
 }

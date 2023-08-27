@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\GeneralOutcome;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\GeneralOutcomeRequest;
 use App\Http\Resources\GeneralOutcomeResource;
-use App\Models\GeneralOutcome;
 use App\UseCases\GeneralOutcome\GeneralOutcomeAction;
 
 class GeneralOutcomeController extends Controller
@@ -34,8 +35,9 @@ class GeneralOutcomeController extends Controller
         return ResponseHelper::success("Successfully Created", null);
     }
 
-    public function delete(GeneralOutcome $generalOutcome)
+    public function destroy(GeneralOutcome $generalOutcome)
     {
+        Gate::authorize('superAdminPermission');
         $this->generalOutcomeAction->deleteGeneralOutcome($generalOutcome);
         return ResponseHelper::success("Successfully Deleted", null);
     }

@@ -26,7 +26,11 @@ Route::get('/auth/github/callback',  [AuthController::class, 'handleGitHubCallba
 Route::get('/auth/gmail',  [AuthController::class, 'redirectToGmail']);
 Route::get('/auth/gmail/callback',  [AuthController::class, 'handleGmailCallback']);
 
-
+Route::get('/testing', function () {
+    return response()->json([
+        'message' => 'Hello World!'
+    ]);
+});
 Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/reports', ReportController::class);

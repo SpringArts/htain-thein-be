@@ -14,7 +14,7 @@ class ReportSeeder extends Seeder
     public function run(): void
     {
         Report::truncate();
-        $data = Report::factory(30)->make();
+        $data = Report::factory(10)->make();
         $chunks = $data->chunk(30);
         $chunks->each(function ($chunk) {
             Report::insert($chunk->toArray());

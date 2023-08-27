@@ -15,11 +15,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            ReportSeeder::class,
-            NotiInfoSeeder::class,
-            CancelReportHistorySeeder::class,
-            ReportEditHistorySeeder::class,
-            GeneralOutcomeSeeder::class
+            // ReportSeeder::class,
+            // NotiInfoSeeder::class,
+            // CancelReportHistorySeeder::class,
+            // ReportEditHistorySeeder::class,
+            // GeneralOutcomeSeeder::class
         ]);
     }
 }

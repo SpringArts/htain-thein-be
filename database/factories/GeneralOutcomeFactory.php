@@ -17,8 +17,9 @@ class GeneralOutcomeFactory extends Factory
     public function definition(): array
     {
         return [
+            'reporter_id' => $this->faker->unique(true)->numberBetween(1, 10),
             'amount' => $this->faker->numberBetween(1000, 5000),
-            'description' => $this->faker->name(),
+            'description' => $this->faker->text(),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'updated_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
         ];

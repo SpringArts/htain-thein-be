@@ -14,6 +14,12 @@ class GeneralOutcomeResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id'      => $this->id,
+            'reporter'    => $this->reporter->name ?? '',
+            'description'   => $this->description ?? '',
+            'amount' => $this->amount ?? 0,
+            'created_at' => $this->created_at->format('Y-d-M h:i A'),
+        ];
     }
 }

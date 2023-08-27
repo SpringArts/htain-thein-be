@@ -20,8 +20,8 @@ class HistoryResource extends JsonResource
             'report_id' => $this->report_id,
             'oldData' => json_decode($this->old_data),
             'newData' => json_decode($this->new_data),
-            'createdAt' => $this->created_at,
-            'updatedAt' => $this->updated_at
+            'created_at' => $this->created_at->format('Y-d-M h:i A'),
+            'updatedAt' => $this->updated_at->format('Y-d-M h:i A')
         ];
     }
 }

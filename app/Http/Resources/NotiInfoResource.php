@@ -19,8 +19,8 @@ class NotiInfoResource extends JsonResource
             'userData'      =>  new UserResource($this->user) ?? '',
             'reportData'    =>  new ReportResource($this->report) ?? '',
             'checkStatus'   => $this->check_status ?? '',
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'created_at' => $this->created_at->format('Y-d-M h:i A'),
+            'updatedAt' => $this->updated_at->format('Y-d-M h:i A'),
         ];
     }
 }
