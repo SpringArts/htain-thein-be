@@ -14,7 +14,7 @@ class CancelReportHistorySeeder extends Seeder
     public function run(): void
     {
         CancelReportHistory::truncate();
-        $data = CancelReportHistory::factory(10)->make();
+        $data = CancelReportHistory::factory(30)->make();
         $chunks = $data->chunk(30);
         $chunks->each(function ($chunk) {
             CancelReportHistory::insert($chunk->toArray());
