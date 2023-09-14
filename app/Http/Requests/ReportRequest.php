@@ -24,7 +24,7 @@ class ReportRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'amount' => 'required|integer',
+            'amount' => 'required|integer|gt:50',
             'description' => 'required|max:255',
             'type' => 'required|string',
             'confirm_status' => 'nullable|boolean',
@@ -34,7 +34,7 @@ class ReportRequest extends FormRequest
 
         // Conditional rules for the update operation
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $rules['amount'] = 'required|integer';
+            $rules['amount'] = 'required|integer|gt:50';
             $rules['description'] = 'required|max:255';
             $rules['type'] = 'required|string';
             $rules['confirm_status'] = 'nullable|boolean';

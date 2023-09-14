@@ -48,7 +48,11 @@ class ReportController extends Controller
             $this->createNotiAction->createNotification(auth()->user()->id, $storeReport->id);
             return ResponseHelper::success('Successfully created', null, 201);
         } catch (\Exception $e) {
-            return ResponseHelper::fail($e->getMessage(), null, 400);
+            return response()->json([
+                'errors' => [
+                    'message' => $e->getMessage(),
+                ],
+            ], 422);
         }
     }
 
