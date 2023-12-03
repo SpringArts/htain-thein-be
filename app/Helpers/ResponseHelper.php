@@ -19,13 +19,14 @@ class ResponseHelper
         );
     }
 
-    public static function fail($message, $data = null)
+    public static function fail($message, $data = null, $status = 502)
     {
         return response()->json(
             [
                 'result' => 0,
                 'message' => $message,
-            ]
+            ],
+            $status
         );
     }
 

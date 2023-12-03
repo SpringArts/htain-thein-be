@@ -36,19 +36,19 @@ Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/noti', NotiInfoController::class);
     Route::apiResource('/general-outcome', GeneralOutcomeController::class);
     Route::get('/all-noti', [NotiInfoController::class, 'fetchAll']);
-    Route::get('/uncheck-reports', [ReportController::class, 'uncheckReport']);
     Route::get('/calculations', [ReportController::class, 'calculationFinancial']);
     Route::get('/reports/{report}/reject', [ReportController::class, 'cancelReportHistory']);
-    Route::get('/dashboard', [HomeController::class, 'dashboard']);
     Route::put('/reports/{report}/accept',  [ReportController::class, 'acceptReport']);
-    Route::post('/user-location', [UserController::class, 'saveLocation']);
+    Route::get('/uncheck-reports', [ReportController::class, 'uncheckReport']);
+    Route::get('/report-search', [ReportController::class, 'filterReport']);
     Route::get('/changed-histories', [ReportController::class, 'fetchChangedHistory']);
     Route::post('/contact', [HomeController::class, 'storeContactInfo']);
-    Route::get('/user-search', [UserController::class, 'filterUser']);
-    Route::get('/report-search', [ReportController::class, 'filterReport']);
     Route::get('/monthly-total', [GeneralOutcomeController::class, 'getMonthlyGeneralOutcome']);
+    Route::post('/user-location', [UserController::class, 'saveLocation']);
+    Route::get('/user-search', [UserController::class, 'filterUser']);
     Route::get('/user-report/{id}', [AttachmentExportController::class, 'userReportExport'])->name('report-export');
 
+    Route::get('/dashboard', [HomeController::class, 'dashboard']);
     Route::get('/message/{receiverId?}', [MessageController::class, 'index']);
     Route::post('/message/{receiverId?}', [MessageController::class, 'store']);
 });

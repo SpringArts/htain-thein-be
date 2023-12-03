@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Facade;
+use App\Providers\ReportServiceProvider;
+use App\Providers\RepositoryServiceProvider;
 
 return [
 
@@ -197,6 +199,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
+
+        // Custom Service Providers
+        ReportServiceProvider::class,
+
 
     ],
 

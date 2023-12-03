@@ -11,7 +11,6 @@ use App\Http\Requests\ReportRequest;
 use Illuminate\Support\Facades\Gate;
 use App\UseCases\Report\ReportAction;
 use App\Http\Resources\ReportResource;
-use App\Http\Resources\HistoryResource;
 use App\UseCases\Report\CreateNotiAction;
 use App\UseCases\Report\ReportHistoryAction;
 use App\Http\Resources\ReportEditHistoryResource;
@@ -43,17 +42,9 @@ class ReportController extends Controller
     {
         Gate::authorize('adminPermission');
         $formData = $request->all();
-        try {
-            $storeReport = $this->reportAction->createReport($formData);
-            $this->createNotiAction->createNotification(auth()->user()->id, $storeReport->id);
-            return ResponseHelper::success('Successfully created', null, 201);
-        } catch (\Exception $e) {
-            return response()->json([
-                'errors' => [
-                    'message' => $e->getMessage(),
-                ],
-            ], 422);
-        }
+        $storeReport = $this->reportAction->createReport($formData);
+        $this->createNotiAction->createNotification(auth()->user()->id, $storeReport->id);
+        return ResponseHelper::success('Successfully created', null, 201);
     }
 
     /**
