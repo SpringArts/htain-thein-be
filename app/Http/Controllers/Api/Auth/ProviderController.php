@@ -8,12 +8,12 @@ use App\Services\AuthServices\AuthService;
 
 class ProviderController extends Controller
 {
-    protected $googleAuthService;
+    protected $authService;
 
 
-    public function __construct(AuthService $googleAuthService)
+    public function __construct(AuthService $authService)
     {
-        $this->googleAuthService = $googleAuthService;
+        $this->authService = $authService;
     }
 
     public function redirectToGoogle($provider)
@@ -25,11 +25,11 @@ class ProviderController extends Controller
     {
 
         $user = Socialite::driver($provider)->stateless()->user();
-        // Call the handleAuthentication method of googleAuthService
-        $token = $this->googleAuthService->handleAuthentication($user, $provider);
+        // Call the handleAuthentication method of authService
+        $token = $this->authService->handleAuthentication($user, $provider);
 
         $cookie = cookie('IncomeController', $token, 60 * 24); // 24 hours expiration
-        $redirectUrl = env('FRONTEND_URL') . '?userId=' . auth()->user()->id . '&accessToken=' . $token;
+        $redirectUrl = 'http://localhost:3000' . '?userId=' . auth()->user()->id . '&accessToken=' . $token . '&&userName=' . auth()->user()->name;
         return redirect()->away($redirectUrl)->withCookie($cookie);
     }
 }
