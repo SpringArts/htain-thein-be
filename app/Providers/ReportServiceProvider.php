@@ -3,12 +3,12 @@
 namespace App\Providers;
 
 use App\Interfaces\ReportInterface;
-use App\Repositories\ReportRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\NotificationInterface;
-use App\Repositories\NotificationRepository;
+use App\Repositories\Report\ReportRepository;
 use App\Interfaces\ReportEditHistoryInterface;
-use App\Repositories\ReportEditHistoryRepository;
+use App\Repositories\Report\ReportEditHistoryRepository;
+use App\Repositories\Notification\NotificationRepository;
 
 class ReportServiceProvider extends ServiceProvider
 {

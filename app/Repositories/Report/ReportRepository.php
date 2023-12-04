@@ -1,18 +1,24 @@
 <?php
 
 
-namespace App\Repositories;
+namespace App\Repositories\Report;
 
 use App\Models\Report;
-use App\Interfaces\ReportInterface;
+use App\Enums\ConfirmStatus;
+use App\Interfaces\Report\ReportInterface;
 
 class ReportRepository implements ReportInterface
 {
-    public function getAllReports($limit, $page)
+    public function getAllReports(int $limit, int $page)
     {
         return Report::where('verifier_id', '!=', '')
-            ->where('confirm_status', 1)
+            ->where('confirm_status', ConfirmStatus::CHECKED)
             ->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'page', $page)->withQueryString();
+    }
+
+    public function getReport(int $id)
+    {
+        return Report::findOrFail($id);
     }
 
     public function createReport(array $data)

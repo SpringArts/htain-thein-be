@@ -11,19 +11,15 @@ use App\Http\Requests\ReportRequest;
 use Illuminate\Support\Facades\Gate;
 use App\UseCases\Report\ReportAction;
 use App\Http\Resources\ReportResource;
-use App\UseCases\Report\CreateNotiAction;
-use App\UseCases\Report\ReportHistoryAction;
 use App\Http\Resources\ReportEditHistoryResource;
 
 class ReportController extends Controller
 {
-    private $createNotiAction, $reportAction, $historyAction;
+    private $reportAction, $historyAction;
 
-    public function __construct(CreateNotiAction $createNotiAction, ReportAction $reportAction, ReportHistoryAction $historyAction)
+    public function __construct(ReportAction $reportAction)
     {
         $this->reportAction = $reportAction;
-        $this->createNotiAction = $createNotiAction;
-        $this->historyAction = $historyAction;
     }
 
     public function index(): JsonResponse
@@ -43,7 +39,7 @@ class ReportController extends Controller
         Gate::authorize('adminPermission');
         $formData = $request->all();
         $storeReport = $this->reportAction->createReport($formData);
-        $this->createNotiAction->createNotification(auth()->user()->id, $storeReport->id);
+        $this->reportAction->createNotification(auth()->user()->id, $storeReport->id);
         return ResponseHelper::success('Successfully created', null, 201);
     }
 
