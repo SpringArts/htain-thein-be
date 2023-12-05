@@ -2,8 +2,8 @@
 
 namespace App\UseCases\UserAction;
 
-use App\Helpers\FilterSearchHelper;
 use App\Http\Requests\UserRequest;
+use App\Interfaces\User\UserInterface;
 use App\Models\User;
 use App\Models\UserLocation;
 use Illuminate\Http\Request;
@@ -14,56 +14,45 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserAction
 {
+    private UserInterface $userRepository;
+
+    public function __construct(UserInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     public function fetchUsers(): LengthAwarePaginator
     {
         $limit = request()->limit ?? 6;
         $page = request()->page ?? 1;
-        $data = FilterSearchHelper::userFilter()
-            ->orderBy('created_at', 'desc')
-            ->paginate($limit, ['*'], 'page', $page)
-            ->withQueryString();
+        $filters = [
+            'generalSearch' => request()->generalSearch,
+            'role' => request()->role,
+            'accountStatus' => request()->accountStatus,
+        ];
 
-        return $data;
+        return $this->userRepository->userFilter($filters, $limit, $page);
     }
 
     public function createUser(array $data): User
     {
-        DB::beginTransaction();
-        try {
-            $data['password'] = Hash::make($data['password']);
-            $user = User::create($data);
-            DB::commit();
-            return $user;
-        } catch (QueryException $e) {
-            DB::rollBack();
-            throw new \Exception($e->getMessage());
-        }
+        $data['password'] = Hash::make($data['password']);
+        return $this->userRepository->createUser($data);
     }
 
     public function updateUser(UserRequest $request, User $user): int
     {
-        DB::beginTransaction();
-        try {
-            $hashedPassword = Hash::make($request->password);
-            $user->password = $hashedPassword;
-            $user->account_status = $request->accountStatus;
-            $user->update($request->except(['password']));
-            DB::commit();
-            return 200;
-        } catch (QueryException $e) {
-            DB::rollBack();
-            throw new \Exception($e->getMessage());
+        $userData = $request->except(['password']);
+
+        if ($request->filled('password')) {
+            $userData['password'] = Hash::make($request->password);
         }
+        return $this->userRepository->updateUser($userData, $user);
     }
 
     public function deleteUser(User $user): int
     {
-        try {
-            $user->delete();
-            return 200;
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
+        return $this->userRepository->deleteUser($user);
     }
 
     public function saveLocation(Request $req): int

@@ -6,7 +6,8 @@ use App\Models\Report;
 
 interface ReportInterface
 {
-    public function getAllReports(int $limit, int $page);
+    public function getAllReports();
+    public function getAllVerifiedReports(int $limit, int $page);
     public function getReport(int $id);
     public function createReport(array $data);
     public function updateReport(array $data, Report $report);
@@ -14,4 +15,5 @@ interface ReportInterface
     public function uncheckReport();
     public function acceptReport(Report $report);
     public function calculationFinancial();
+    public function reportFilter(array $filters, int $limit, int $page);
 }

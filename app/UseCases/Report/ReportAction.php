@@ -33,9 +33,30 @@ class ReportAction
     {
         $limit = request()->limit ?? 8;
         $page = request()->page ?? 1;
-        $data = $this->reportRepository->getAllReports($limit, $page);
+        $data = $this->reportRepository->getAllVerifiedReports($limit, $page);
         return $data;
     }
+
+    public function fetchAllReports(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        return $this->reportRepository->getAllReports();
+    }
+
+    public function fetchFilterData(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        $limit = request()->limit ?? 6;
+        $page = request()->page ?? 1;
+        $filters = [
+            'generalSearch' => request()->generalSearch,
+            'amount' => request()->amount,
+            'type' => request()->type,
+            'confirmStatus' => request()->confirmStatus,
+            'createdAt' => request()->createdAt,
+        ];
+
+        return $this->reportRepository->reportFilter($filters, $limit, $page);
+    }
+
 
     //create report depend on financial condition
     public function createReport(array $data): Report

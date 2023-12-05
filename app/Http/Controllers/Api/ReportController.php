@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Models\Report;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
-use App\Helpers\FilterSearchHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReportRequest;
 use Illuminate\Support\Facades\Gate;
@@ -109,7 +108,7 @@ class ReportController extends Controller
 
     public function filterReport(): JsonResponse
     {
-        $data = FilterSearchHelper::reportFilter()->paginate(6);
+        $data = $this->reportAction->fetchFilterData();
         $meta = ResponseHelper::getPaginationMeta($data);
         return response()->json([
             'data' => ReportResource::collection($data),
