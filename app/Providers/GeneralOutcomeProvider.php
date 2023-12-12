@@ -6,7 +6,7 @@ use App\Interfaces\GeneralOutcome\GeneralOutcomeInterface;
 use App\Repositories\GeneralOutcome\GeneralOutcomeRepository;
 use Illuminate\Support\ServiceProvider;
 
-class GenearalIncomeProvider extends ServiceProvider
+class GeneralOutcomeProvider extends ServiceProvider
 {
     public function register()
     {

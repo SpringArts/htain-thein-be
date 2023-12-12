@@ -2,13 +2,13 @@
 
 namespace App\Providers;
 
-use App\Interfaces\ReportInterface;
 use Illuminate\Support\ServiceProvider;
-use App\Interfaces\NotificationInterface;
+use App\Interfaces\Report\ReportInterface;
 use App\Repositories\Report\ReportRepository;
-use App\Interfaces\ReportEditHistoryInterface;
-use App\Repositories\Report\ReportEditHistoryRepository;
+use App\Interfaces\Notification\NotificationInterface;
+use App\Interfaces\Report\ReportHistoryInterface;
 use App\Repositories\Notification\NotificationRepository;
+use App\Repositories\Report\ReportHistoryRepository;
 
 class ReportServiceProvider extends ServiceProvider
 {
@@ -20,8 +20,8 @@ class ReportServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            ReportEditHistoryInterface::class,
-            ReportEditHistoryRepository::class
+            ReportHistoryInterface::class,
+            ReportHistoryRepository::class
         );
 
         $this->app->bind(

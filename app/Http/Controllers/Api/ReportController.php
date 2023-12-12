@@ -14,7 +14,7 @@ use App\Http\Resources\ReportEditHistoryResource;
 
 class ReportController extends Controller
 {
-    private $reportAction, $historyAction;
+    private $reportAction;
 
     public function __construct(ReportAction $reportAction)
     {
@@ -88,7 +88,7 @@ class ReportController extends Controller
 
     public function cancelReportHistory($id): JsonResponse
     {
-        $this->historyAction->createReportHistory($id);
+        $this->reportAction->createReportHistory($id);
         return ResponseHelper::success('Successfully Rejected', null, 201);
     }
 

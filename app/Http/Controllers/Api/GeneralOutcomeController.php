@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\GeneralOutcomeRequest;
 use App\Http\Resources\GeneralOutcomeResource;
 use App\UseCases\GeneralOutcome\GeneralOutcomeAction;
+use Illuminate\Database\Eloquent\Casts\Json;
+use Illuminate\Http\JsonResponse;
 
 class GeneralOutcomeController extends Controller
 {
@@ -19,7 +21,7 @@ class GeneralOutcomeController extends Controller
         $this->generalOutcomeAction = $generalOutcomeAction;
     }
 
-    public function index()
+    public function index(): JsonResponse
     {
         $data = $this->generalOutcomeAction->fetchGeneralOutcome();
         return response()->json(
@@ -29,25 +31,25 @@ class GeneralOutcomeController extends Controller
         );
     }
 
-    public function store(GeneralOutcomeRequest $request)
+    public function store(GeneralOutcomeRequest $request): JsonResponse
     {
         $data = $this->generalOutcomeAction->storeGeneralOutcome($request->all());
         return ResponseHelper::success("Successfully Created", null);
     }
 
-    public function destroy(GeneralOutcome $generalOutcome)
+    public function destroy(GeneralOutcome $generalOutcome): JsonResponse
     {
         Gate::authorize('superAdminPermission');
         $this->generalOutcomeAction->deleteGeneralOutcome($generalOutcome);
         return ResponseHelper::success("Successfully Deleted", null);
     }
 
-    public function getMonthlyGeneralOutcome()
+    public function getMonthlyGeneralOutcome(): JsonResponse
     {
         $data = $this->generalOutcomeAction->fetchMonthlyGeneralOutcome();
         return response()->json(
             [
-                'data' => GeneralOutcomeResource::collection($data)
+                'data' => $data
             ],
         );
     }

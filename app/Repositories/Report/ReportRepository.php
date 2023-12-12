@@ -65,8 +65,9 @@ class ReportRepository implements ReportInterface
         try {
             if (!empty($filters['generalSearch'])) {
                 $query->where(function ($q) use ($filters) {
-                    $q->where('title', 'like', '%' . $filters['generalSearch'] . '%')
-                        ->orWhere('description', 'like', '%' . $filters['generalSearch'] . '%');
+                    $q->where('amount', 'like', '%' . $filters['generalSearch'] . '%')
+                        ->orWhere('description', 'like', '%' . $filters['generalSearch'] . '%')
+                        ->orWhere('type', 'like', '%' . $filters['type'] . '%');
                 });
             }
 
@@ -82,12 +83,8 @@ class ReportRepository implements ReportInterface
                 $query->where('confirm_status', '=', $filters['confirmStatus']);
             }
 
-            if (!empty($filters['reportType'])) {
-                $query->where('report_type', '=', $filters['reportType']);
-            }
-
-            if (!empty($filters['reportStatus'])) {
-                $query->where('report_status', '=', $filters['reportStatus']);
+            if (!empty($filters['type'])) {
+                $query->where('type', '=', $filters['type']);
             }
 
             $data = $query->orderBy('created_at', 'desc')

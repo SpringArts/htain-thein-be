@@ -25,11 +25,10 @@ class GeneralOutcomeRepository implements GeneralOutcomeInterface
         return  $generalOutcome->delete();
     }
 
-    public function fetchMonthlyGeneralOutcome(): array
+    public function fetchMonthlyGeneralOutcome(): Collection
     {
         return GeneralOutcome::select(DB::raw('SUM(amount) as total, DATE_FORMAT(created_at, "%M") as month,DATE_FORMAT(created_at, "%Y") as year'))
             ->groupBy(DB::raw('YEAR(created_at), MONTH(created_at)'))
-            ->get()
-            ->toArray();
+            ->get();
     }
 }
