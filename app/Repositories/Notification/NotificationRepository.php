@@ -2,10 +2,10 @@
 
 namespace App\Repositories\Notification;
 
-use App\Enums\ConfirmStatus;
-use App\Models\NotiInfo;
-use App\Interfaces\NotificationInterface;
 use App\Models\Report;
+use App\Models\NotiInfo;
+use App\Enums\ConfirmStatus;
+use App\Interfaces\Notification\NotificationInterface;
 
 class NotificationRepository implements NotificationInterface
 {

@@ -2,6 +2,7 @@
 
 namespace App\UseCases\GeneralOutcome;
 
+use App\Interfaces\GeneralOutcome\GeneralOutcomeInterface;
 use App\Models\GeneralOutcome;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
@@ -9,43 +10,33 @@ use Illuminate\Database\QueryException;
 
 class GeneralOutcomeAction
 {
+    private GeneralOutcomeInterface $generalOutcomeRepository;
+
+    public function __construct(GeneralOutcomeInterface $generalOutcomeRepository)
+    {
+        $this->generalOutcomeRepository = $generalOutcomeRepository;
+    }
+
     public function fetchGeneralOutcome()
     {
         $limit = request()->limit ?? 8;
         $page = request()->page ?? 1;
-        $data = GeneralOutcome::orderBy('created_at', 'desc')->paginate($limit, ['*'], 'page', $page)->withQueryString();
+        $data = $this->generalOutcomeRepository->fetchData($limit, $page);
         return $data;
     }
 
-    public function storeGeneralOutcome(array $data)
+    public function storeGeneralOutcome(array $data): GeneralOutcome
     {
-        DB::beginTransaction();
-        try {
-            $outcome = GeneralOutcome::create($data);
-            DB::commit();
-            return $outcome;
-        } catch (QueryException $e) {
-            DB::rollBack();
-            throw new \Exception($e->getMessage());
-        }
+        return $this->generalOutcomeRepository->storeGeneralOutcome($data);
     }
 
     public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): int
     {
-        try {
-            $generalOutcome->delete();
-            return 200;
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
+        return $this->generalOutcomeRepository->deleteGeneralOutcome($generalOutcome);
     }
 
-    public function fetchMonthlyGeneralOutcome()
+    public function fetchMonthlyGeneralOutcome(): array
     {
-        $monthlyTotal = GeneralOutcome::select(DB::raw('SUM(amount) as total, DATE_FORMAT(created_at, "%M") as month,DATE_FORMAT(created_at, "%Y") as year'))
-            ->groupBy(DB::raw('YEAR(created_at), MONTH(created_at)'))
-            ->get();
-
-        return $monthlyTotal->toArray();
+        return $this->generalOutcomeRepository->fetchMonthlyGeneralOutcome();
     }
 }

@@ -3,8 +3,9 @@
 namespace App\Repositories\User;
 
 use App\Models\User;
+use App\Interfaces\User\UserInterface;
 
-class UserRepository
+class UserRepository implements UserInterface
 {
     public function getAllUsers()
     {
