@@ -21,8 +21,8 @@ use App\Http\Controllers\Api\AttachmentExportController;
 |
 */
 
-Route::get('/auth/{provider}', [ProviderController::class, 'redirectToGoogle']);
-Route::get('/auth/callback/{provider}', [ProviderController::class, 'handleGoogleCallback']);
+Route::get('/auth/{provider}', [ProviderController::class, 'redirectToProvider']);
+Route::get('/auth/callback/{provider}', [ProviderController::class, 'handleProviderCallback']);
 
 
 Route::get('/testing', function () {

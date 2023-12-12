@@ -16,12 +16,12 @@ class ProviderController extends Controller
         $this->authService = $authService;
     }
 
-    public function redirectToGoogle($provider)
+    public function redirectToProvider($provider)
     {
         return Socialite::driver($provider)->redirect();
     }
 
-    public function handleGoogleCallback($provider)
+    public function handleProviderCallback($provider)
     {
 
         $user = Socialite::driver($provider)->stateless()->user();
