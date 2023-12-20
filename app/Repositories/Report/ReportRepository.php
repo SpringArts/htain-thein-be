@@ -34,6 +34,7 @@ class ReportRepository implements ReportInterface
 
     public function updateReport(array $data, Report $report)
     {
+        return $report->update($data);
     }
 
     public function deleteReport(Report $report)
