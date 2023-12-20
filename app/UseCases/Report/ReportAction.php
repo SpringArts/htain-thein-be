@@ -9,6 +9,7 @@ use App\Models\ReportEditHistory;
 use App\Http\Requests\ReportRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\Report\ReportInterface;
+use App\Services\ReportEditHistoryService;
 use App\Services\FinancialCalculatorService;
 use Illuminate\Database\Eloquent\Collection;
 use App\Interfaces\Report\ReportHistoryInterface;
@@ -20,12 +21,14 @@ class ReportAction
     private ReportInterface $reportRepository;
     private ReportHistoryInterface $reportHistoryRepository;
     private NotificationInterface $notificationRepository;
+    private $reportEditHistoryService;
 
-    public function __construct(ReportInterface $reportRepository, ReportHistoryInterface $reportHistoryRepository, NotificationInterface $notificationRepository)
+    public function __construct(ReportInterface $reportRepository, ReportHistoryInterface $reportHistoryRepository, NotificationInterface $notificationRepository, ReportEditHistoryService $reportEditHistoryService)
     {
         $this->reportRepository = $reportRepository;
         $this->reportHistoryRepository = $reportHistoryRepository;
         $this->notificationRepository = $notificationRepository;
+        $this->reportEditHistoryService = $reportEditHistoryService;
     }
 
     //fetch all reports
@@ -75,7 +78,7 @@ class ReportAction
         $oldData = $report->toArray();
         $this->reportRepository->updateReport($request->all(), $report);
         $newData = $report->toArray();
-        $this->editHistory($oldData, $newData);
+        $this->reportEditHistoryService->editHistory($oldData, $newData);
         return Response::HTTP_OK;
     }
 
@@ -161,32 +164,5 @@ class ReportAction
         ];
         // Create the cancel report history entry
         $this->reportHistoryRepository->rejectReportHistory($rejectReportData);
-    }
-
-    //create report history after report updated
-    private function editHistory(array $oldData, array $newData): void
-    {
-        try {
-            $history = new ReportEditHistory();
-            $history->editor_id = Auth::id();
-            $history->report_id = $oldData['id'];
-
-            $oldDataChangeFields = [];
-            $newDataChangeFields = [];
-
-            foreach ($newData as $key => $value) {
-                if (isset($oldData[$key]) && $oldData[$key] !== $value) {
-                    $oldDataChangeFields[$key] = $oldData[$key];
-                    $newDataChangeFields[$key] = $value;
-                }
-            }
-            if (!empty($newDataChangeFields)) {
-                $history->old_data = json_encode($oldDataChangeFields, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-                $history->new_data = json_encode($newDataChangeFields, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-                $history->save();
-            }
-        } catch (\Throwable $th) {
-            throw new \Exception($th->getMessage());
-        }
     }
 }
