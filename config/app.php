@@ -1,6 +1,12 @@
 <?php
 
+use App\Models\User;
+use App\Providers\GeneralOutcomeProvider;
+use App\Providers\NotificationProvider;
 use Illuminate\Support\Facades\Facade;
+use App\Providers\ReportServiceProvider;
+use App\Providers\RepositoryServiceProvider;
+use App\Providers\UserProvider;
 
 return [
 
@@ -196,6 +202,14 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
+
+        // Custom Service Providers
+        ReportServiceProvider::class,
+        GeneralOutcomeProvider::class,
+        NotificationProvider::class,
+        UserProvider::class,
+
 
     ],
 

@@ -19,7 +19,7 @@ class ReportFactory extends Factory
         return [
             'amount' => $this->faker->numberBetween(1000, 5000),
             'description' => $this->faker->text(),
-            'type' => $this->faker->randomElement(['Income', 'Outcome']),
+            'type' => $this->faker->randomElement(['INCOME', 'EXPENSE']),
             'confirm_status' =>  $this->faker->numberBetween(0, 1),
             'reporter_id' => $this->faker->numberBetween(1, 10),
             'verifier_id' => $this->faker->numberBetween(1, 10),
