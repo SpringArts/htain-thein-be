@@ -7,7 +7,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class ResponseHelper
 {
-    public static function success($message, $data, $status = 200)
+    public static function success($message, $data = null, $status = 200)
     {
         return response()->json(
             [
@@ -19,13 +19,14 @@ class ResponseHelper
         );
     }
 
-    public static function fail($message, $data)
+    public static function fail($message, $data = null, $status = 502)
     {
         return response()->json(
             [
                 'result' => 0,
                 'message' => $message,
-            ]
+            ],
+            $status
         );
     }
 
