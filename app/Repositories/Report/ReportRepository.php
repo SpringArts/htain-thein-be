@@ -97,4 +97,9 @@ class ReportRepository implements ReportInterface
             throw $e;
         }
     }
+
+    public function userReportDownload(int $userId)
+    {
+        return Report::with('reporter', 'verifier')->where('reporter_id', $userId);
+    }
 }

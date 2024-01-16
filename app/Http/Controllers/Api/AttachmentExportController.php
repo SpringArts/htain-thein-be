@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exports\UsersExport;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ReportResource;
 use App\UseCases\AttachmentExport\ExportAction;
-use Illuminate\Http\JsonResponse;
 
 class AttachmentExportController extends Controller
 {
@@ -15,12 +16,9 @@ class AttachmentExportController extends Controller
         $this->excelExport = $excelExport;
     }
 
-    public function userReportExport($id): JsonResponse
+    public function userReportExport($id)
     {
         $data = $this->excelExport->userReportExport($id);
-        return response()->json([
-            'data' => ReportResource::collection($data['result']),
-            'fileName' => $data['fileName']
-        ]);
+        return (new UsersExport($data['query'], $data['fileName']))->download();
     }
 }
