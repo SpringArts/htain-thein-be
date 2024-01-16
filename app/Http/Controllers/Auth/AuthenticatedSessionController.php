@@ -25,7 +25,7 @@ class AuthenticatedSessionController extends Controller
             $token = auth()->user()->createToken('authToken')->plainTextToken;
             $cookie = cookie(name: 'IncomeController', value: $token, minutes: 60 * 24);
             // return the token as a response
-            return ResponseHelper::success('Login Successfully', [
+            return response()->json([
                 'userId' => auth()->user()->id,
                 'userName' => auth()->user()->name,
                 'access_token' => $token,
