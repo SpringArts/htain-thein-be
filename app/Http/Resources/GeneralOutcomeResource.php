@@ -19,7 +19,7 @@ class GeneralOutcomeResource extends JsonResource
             'reporter'    => $this->reporter->name ?? '',
             'description'   => $this->description ?? '',
             'amount' => $this->amount ?? 0,
-            'created_at' => $this->created_at->format('Y-d-M h:i A'),
+            'createdAt' => $this->created_at->format('Y-d-M h:i A'),
         ];
     }
 }

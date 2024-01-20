@@ -36,7 +36,7 @@ class ReportResource extends JsonResource
                 'type' => $this->type ?? '',
                 'reporter' => $this->reporter->name ?? '',
                 'verifier' => $this->verifier->name ?? '',
-                'created_at' => $this->created_at ?? ''
+                'createdAt' => $this->created_at ?? ''
             ];
         }
         return [
@@ -47,7 +47,7 @@ class ReportResource extends JsonResource
             'confirmStatus' => $this->confirm_status ?? '',
             'reporter' => new UserResource($this->reporter) ?? '',
             'verifier' => new UserResource($this->verifier) ?? '',
-            'created_at' => $this->created_at->format('Y-d-M h:i A'),
+            'createdAt' => $this->created_at->format('Y-d-M h:i A'),
             'updatedAt' => $this->updated_at->format('Y-d-M h:i A'),
         ];
     }

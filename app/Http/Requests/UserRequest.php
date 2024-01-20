@@ -29,7 +29,7 @@ class UserRequest extends FormRequest
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
             'role' => 'required',
-            'accountStatus' => 'required|in:ACTIVE,INACTIVE',
+            'accountStatus' => 'required|in:ACTIVE,SUSPENDED',
         ];
 
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
