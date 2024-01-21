@@ -20,6 +20,11 @@ class GeneralOutcomeRepository implements GeneralOutcomeInterface
         return GeneralOutcome::create($formData);
     }
 
+    public function updateGeneralOutcome(array $data, GeneralOutcome $generalOutcome): int
+    {
+        return $generalOutcome->update($data);
+    }
+
     public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): int
     {
         return  $generalOutcome->delete();

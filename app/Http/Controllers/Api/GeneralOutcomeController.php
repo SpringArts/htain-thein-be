@@ -31,10 +31,26 @@ class GeneralOutcomeController extends Controller
         );
     }
 
+    public function show(GeneralOutcome $generalOutcome): JsonResponse
+    {
+        return response()->json(
+            [
+                'data' => new GeneralOutcomeResource($generalOutcome)
+            ],
+        );
+    }
+
     public function store(GeneralOutcomeRequest $request): JsonResponse
     {
         $data = $this->generalOutcomeAction->storeGeneralOutcome($request->all());
         return ResponseHelper::success("Successfully Created", null);
+    }
+
+    public function update(GeneralOutcomeRequest $request, GeneralOutcome $generalOutcome): JsonResponse
+    {
+        Gate::authorize('adminPermission');
+        $data = $this->generalOutcomeAction->updateGeneralOutcome($request->all(), $generalOutcome);
+        return ResponseHelper::success("Successfully Updated", null);
     }
 
     public function destroy(GeneralOutcome $generalOutcome): JsonResponse

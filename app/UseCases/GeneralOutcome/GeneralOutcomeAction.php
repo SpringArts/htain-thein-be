@@ -31,6 +31,11 @@ class GeneralOutcomeAction
         return $this->generalOutcomeRepository->storeGeneralOutcome($data);
     }
 
+    public function updateGeneralOutcome(array $data, GeneralOutcome $generalOutcome): int
+    {
+        return $this->generalOutcomeRepository->updateGeneralOutcome($data, $generalOutcome);
+    }
+
     public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): int
     {
         return $this->generalOutcomeRepository->deleteGeneralOutcome($generalOutcome);
