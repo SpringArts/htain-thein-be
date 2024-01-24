@@ -89,14 +89,14 @@ class ReportAction
     }
 
     //accept report
-    public function acceptReport(Report $report): int
+    public function acceptReport(Report $report): int|null     /*TODO: return type*/
     {
         $this->reportRepository->acceptReport($report);
         $notification = $this->notificationRepository->getUserNotification($report);
         if (!$notification) {
             throw new \Exception('Notification not found');
         }
-        return  $this->notificationRepository->updateNotification($notification);
+        return $this->notificationRepository->updateNotification($notification);
     }
 
     //calculation financial
