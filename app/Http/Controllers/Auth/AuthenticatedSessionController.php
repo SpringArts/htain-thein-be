@@ -23,14 +23,14 @@ class AuthenticatedSessionController extends Controller
         if (Auth::attempt($credentials)) {
             // generate an API token for the authenticated user
             $token = auth()->user()->createToken('authToken')->plainTextToken;
-            $cookie = cookie(name: 'IncomeController', value: $token, minutes: 60 * 24);
+            $cookie = cookie(name: env('APP_NAME'), value: $token, minutes: 60 * 24);
             // return the token as a response
             return response()->json([
                 'userId' => auth()->user()->id,
                 'userName' => auth()->user()->name,
                 'access_token' => $token,
                 'token_type' => 'Bearer'
-            ])->withCookie($cookie);
+            ]);
         }
         return ResponseHelper::fail('Login Failed', null);
     }
@@ -43,8 +43,8 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
         auth()->user()->tokens()->delete();        // Revoke all tokens...
         // Clear the access_token cookie
-        $cookie = Cookie::forget('IncomeController');
+        Cookie::forget(env('APP_NAME'));
 
-        return ResponseHelper::success('Token revoked', null)->withCookie($cookie);
+        return ResponseHelper::success('Token revoked', null);
     }
 }
