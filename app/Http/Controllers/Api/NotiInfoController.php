@@ -22,7 +22,7 @@ class NotiInfoController extends Controller
 
     public function index(): JsonResponse
     {
-        $data = $this->notiInfoAction->fetchNoti(auth()->user()->id);
+        $data = $this->notiInfoAction->fetchNotification(auth()->user()->id);
         $meta = ResponseHelper::getPaginationMeta($data);
 
         return response()->json([
@@ -33,7 +33,7 @@ class NotiInfoController extends Controller
 
     public function fetchAll(): JsonResponse
     {
-        $data = $this->notiInfoAction->fetchAll();
+        $data = $this->notiInfoAction->fetchAllNotifications();
 
         return response()->json([
             'data' => NotiInfoResource::collection($data),
@@ -44,7 +44,7 @@ class NotiInfoController extends Controller
     {
         $formData = $request->all();
         try {
-            $this->notiInfoAction->createNotiInfo($formData);
+            $this->notiInfoAction->createNotificationInfo($formData);
             return ResponseHelper::success('Successfully created', null, 201);
         } catch (\Exception $e) {
             return ResponseHelper::fail($e->getMessage(), null);
@@ -59,7 +59,7 @@ class NotiInfoController extends Controller
     public function update(NotiInfoRequest $request, NotiInfo $noti): JsonResponse
     {
         try {
-            $this->notiInfoAction->updateNotiInfo($request, $noti);
+            $this->notiInfoAction->updateNotificationInfo($request, $noti);
             return ResponseHelper::success('Successfully Updated', null, 200);
         } catch (\Exception $e) {
             return ResponseHelper::fail($e->getMessage(), null);
@@ -69,7 +69,7 @@ class NotiInfoController extends Controller
     public function destroy(NotiInfo $noti): JsonResponse
     {
         try {
-            $this->notiInfoAction->deleteNotiInfo($noti);
+            $this->notiInfoAction->deleteNotificationInfo($noti);
             return ResponseHelper::success('Successfully Deleted', null, 200);
         } catch (\Exception $e) {
             return ResponseHelper::fail($e->getMessage(), null);

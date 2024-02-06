@@ -19,7 +19,7 @@ class UserResource extends JsonResource
         $uri = $request->route()?->uri;
         if (!$uri) return [];
 
-        if ($uri === 'api/app/reports' || $uri === 'api/app/changed-histories' || $uri === 'api/app/uncheck-reports' || $uri === 'api/app/calculations') {
+        if ($uri === 'api/app/reports' || $uri === 'api/app/all-notis' || $uri === 'api/app/changed-histories' || $uri === 'api/app/uncheck-reports' || $uri === 'api/app/calculations') {
             return [
                 'id' => $this->id,
                 'name'    => $this->name ?? '',
