@@ -26,8 +26,8 @@ class FinancialCalculatorService
             'outcome' => $outcome,
             'regularCost' => $regularCost,
             'availableBalance' => $availableBalance,
-            'mostDepositPerson' => $mostDepositPerson ? $mostDepositPerson->reporter->name : '-',
-            'mostWithdrawPerson' => $mostWithdrawPerson ? $mostWithdrawPerson->reporter->name : '-'
+            'mostDepositPerson' => $mostDepositPerson ? $mostDepositPerson->reporter?->name : '-',
+            'mostWithdrawPerson' => $mostWithdrawPerson ? $mostWithdrawPerson->reporter?->name : '-'
         ];
         return $data;
     }
