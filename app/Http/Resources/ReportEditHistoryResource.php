@@ -17,7 +17,7 @@ class ReportEditHistoryResource extends JsonResource
         return [
             'id'      => $this->id,
             'editor'    => $this->editUser->name ?? '',
-            'reportData'   =>  new ReportResource($this->report) ?? '',
+            'reportData'   =>  new ReportResource($this->whenLoaded('report')) ?? '',
             'oldData' => json_decode($this->old_data) ?? '',
             'newData' => json_decode($this->new_data) ?? '',
             'updatedAt' => $this->updated_at->format('Y-d-M h:i A'),
