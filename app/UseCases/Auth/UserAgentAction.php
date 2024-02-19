@@ -21,6 +21,7 @@ class UserAgentAction
     {
         $agent = new Agent();
         $userAgentString = $request->userAgent();
+        $ipAddress = $request->ip(); // Get the IP address of the client
 
         // Parse the user agent string
         $agent->setUserAgent($userAgentString);
@@ -29,8 +30,8 @@ class UserAgentAction
             'browser' => $agent->browser(),
             'platform' => $agent->platform(),
             'device' => $agent->device(),
+            'ip_address' => $ipAddress, // Include the IP address in the agent info
         ];
-
         $this->userAgentRepository->storeUserAgent($agentInfo);
     }
 }
