@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use Laravel\Socialite\Facades\Socialite;
 use App\Services\AuthServices\AuthService;
+use App\UseCases\Auth\UserAgentAction;
 
 class ProviderController extends Controller
 {
     protected $authService;
+    protected $userAgentAction;
 
-
-    public function __construct(AuthService $authService)
+    public function __construct(AuthService $authService, UserAgentAction $userAgentAction)
     {
         $this->authService = $authService;
+        $this->userAgentAction = $userAgentAction;
     }
 
     public function redirectToProvider($provider)

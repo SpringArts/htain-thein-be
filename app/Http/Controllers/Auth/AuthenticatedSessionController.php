@@ -7,12 +7,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use App\Http\Requests\Auth\LoginRequest;
+use App\UseCases\Auth\UserAgentAction;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Handle an incoming authentication request.
-     */
+    protected $userAgentAction;
+
+    public function __construct(UserAgentAction $userAgentAction)
+    {
+        $this->userAgentAction = $userAgentAction;
+    }
+
     public function store(LoginRequest $request)
     {
         $credentials = $request->validate([
@@ -20,10 +25,14 @@ class AuthenticatedSessionController extends Controller
             'password' => ['required'],
         ]);
 
+
+
         if (Auth::attempt($credentials)) {
             // generate an API token for the authenticated user
             $token = auth()->user()->createToken('authToken')->plainTextToken;
             $cookie = cookie(name: env('APP_NAME'), value: $token, minutes: 60 * 24);
+
+            $this->userAgentAction->storeUserAgent($request);
             // return the token as a response
             return response()->json([
                 'userId' => auth()->user()->id,

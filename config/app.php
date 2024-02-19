@@ -1,12 +1,13 @@
 <?php
 
 use App\Models\User;
-use App\Providers\GeneralOutcomeProvider;
-use App\Providers\NotificationProvider;
-use Illuminate\Support\Facades\Facade;
-use App\Providers\ReportServiceProvider;
-use App\Providers\RepositoryServiceProvider;
 use App\Providers\UserProvider;
+use App\Providers\UserAgentProvider;
+use Illuminate\Support\Facades\Facade;
+use App\Providers\NotificationProvider;
+use App\Providers\ReportServiceProvider;
+use App\Providers\GeneralOutcomeProvider;
+use App\Providers\RepositoryServiceProvider;
 
 return [
 
@@ -210,6 +211,8 @@ return [
         GeneralOutcomeProvider::class,
         NotificationProvider::class,
         UserProvider::class,
+        Jenssegers\Agent\AgentServiceProvider::class,
+        UserAgentProvider::class,
 
 
     ],
@@ -227,6 +230,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
 
     ])->toArray(),
 
