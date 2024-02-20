@@ -25,9 +25,8 @@ class AuthenticatedSessionController extends Controller
             'password' => ['required'],
         ]);
 
-
-
         if (Auth::attempt($credentials)) {
+            
             // generate an API token for the authenticated user
             $token = auth()->user()->createToken('authToken')->plainTextToken;
             $cookie = cookie(name: env('APP_NAME'), value: $token, minutes: 60 * 24);
@@ -41,7 +40,7 @@ class AuthenticatedSessionController extends Controller
                 'token_type' => 'Bearer'
             ]);
         }
-        return ResponseHelper::fail('Login Failed', null);
+        abort(401, 'Unauthorized');
     }
 
     /**

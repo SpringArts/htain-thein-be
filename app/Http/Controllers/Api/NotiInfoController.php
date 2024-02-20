@@ -53,7 +53,9 @@ class NotiInfoController extends Controller
 
     public function show(NotiInfo $noti): JsonResponse
     {
-        return ResponseHelper::success('success', new NotiInfoResource($noti));
+        return response()->json([
+            'data' => new NotiInfoResource($noti)
+        ]);
     }
 
     public function update(NotiInfoRequest $request, NotiInfo $noti): JsonResponse

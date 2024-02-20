@@ -42,7 +42,9 @@ class UserController extends Controller
 
     public function show(User $user): JsonResponse
     {
-        return ResponseHelper::success('success', new UserResource($user));
+        return response()->json([
+            'data' => new UserResource($user)
+        ]);
     }
 
     public function update(UserRequest $request, User $user): JsonResponse

@@ -33,7 +33,6 @@ class Report extends Model
 
     public function editHistory()
     {
-        return $this->hasMany(History::class);
+        return $this->hasMany(ReportEditHistory::class);
     }
-
 }
