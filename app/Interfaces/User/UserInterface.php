@@ -4,7 +4,6 @@ namespace App\Interfaces\User;
 
 use App\Models\User;
 
-
 interface UserInterface
 {
     public function getAllUsers();

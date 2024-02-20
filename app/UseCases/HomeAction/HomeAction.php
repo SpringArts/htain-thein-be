@@ -4,9 +4,7 @@ namespace App\UseCases\HomeAction;
 
 use App\Interfaces\Report\ReportInterface;
 use App\Models\ContactInfo;
-use App\Models\Report;
 use App\Models\User;
-
 
 class HomeAction
 {

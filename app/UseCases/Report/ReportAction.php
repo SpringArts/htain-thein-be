@@ -5,16 +5,13 @@ namespace App\UseCases\Report;
 use App\Models\Report;
 use App\Enums\FinancialType;
 use Illuminate\Http\Response;
-use App\Models\ReportEditHistory;
 use App\Http\Requests\ReportRequest;
-use Illuminate\Support\Facades\Auth;
 use App\Interfaces\Report\ReportInterface;
 use App\Services\ReportEditHistoryService;
 use App\Services\FinancialCalculatorService;
 use Illuminate\Database\Eloquent\Collection;
 use App\Interfaces\Report\ReportHistoryInterface;
 use App\Interfaces\Notification\NotificationInterface;
-
 
 class ReportAction
 {

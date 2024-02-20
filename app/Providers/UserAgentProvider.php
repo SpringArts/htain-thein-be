@@ -6,7 +6,6 @@ use Illuminate\Support\ServiceProvider;
 use App\Interfaces\Auth\UserAgentInterface;
 use App\Repositories\Auth\UserAgentRepository;
 
-
 class UserAgentProvider extends ServiceProvider
 {
     /**

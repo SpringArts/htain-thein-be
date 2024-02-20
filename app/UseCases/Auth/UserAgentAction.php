@@ -2,7 +2,6 @@
 
 namespace App\UseCases\Auth;
 
-
 use Jenssegers\Agent\Agent;
 use Illuminate\Http\Request;
 use App\Interfaces\Auth\UserAgentInterface;

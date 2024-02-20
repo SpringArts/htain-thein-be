@@ -26,7 +26,6 @@ class AuthenticatedSessionController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            
             // generate an API token for the authenticated user
             $token = auth()->user()->createToken('authToken')->plainTextToken;
             $cookie = cookie(name: env('APP_NAME'), value: $token, minutes: 60 * 24);

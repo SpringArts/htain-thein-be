@@ -2,24 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use App\Events\MessageSending;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use App\UseCases\Message\FetchUserMessages;
 use App\UseCases\Message\StoreMessageAction;
-use App\UseCases\Message\FetchConnectedUserAction;
 
 class MessageController extends Controller
 {
     //Message Fetching
     public function index(int $senderId = null): JsonResponse
     {
-        $messages = empty($senderId) ? [] : (new FetchUserMessages)();
+        $messages = empty($senderId) ? [] : (new FetchUserMessages())();
 
         return response()->json([
             'messages' => $messages,
@@ -36,7 +33,7 @@ class MessageController extends Controller
             ]);
 
             event(new MessageSending($message));
-            return ResponseHelper::success("Message is sent successfully.", NULL, 200, 0);
+            return ResponseHelper::success("Message is sent successfully.", null, 200, 0);
         } catch (\Throwable $th) {
             return $this->error($th);
         }

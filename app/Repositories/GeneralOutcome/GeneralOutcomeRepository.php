@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Repositories\GeneralOutcome;
 
 use App\Models\GeneralOutcome;

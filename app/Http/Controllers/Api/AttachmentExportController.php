@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Exports\UsersExport;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ReportResource;
 use App\UseCases\AttachmentExport\ExportAction;
 
 class AttachmentExportController extends Controller

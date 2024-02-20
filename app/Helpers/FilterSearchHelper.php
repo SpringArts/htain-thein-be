@@ -8,7 +8,6 @@ use Exception;
 
 class FilterSearchHelper
 {
-
     public static function userFilter()
     {
         $generalSearch = request()->generalSearch;

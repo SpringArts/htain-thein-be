@@ -213,7 +213,7 @@ return [
         UserProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         UserAgentProvider::class,
-
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
     ],
 

@@ -38,7 +38,7 @@ Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/all-notis', [NotiInfoController::class, 'fetchAll']);
     Route::get('/calculations', [ReportController::class, 'calculationFinancial']);
     Route::get('/reports/{report}/reject', [ReportController::class, 'cancelReportHistory']);
-    Route::put('/reports/{report}/accept',  [ReportController::class, 'acceptReport']);
+    Route::put('/reports/{report}/accept', [ReportController::class, 'acceptReport']);
     Route::get('/uncheck-reports', [ReportController::class, 'uncheckReport']);
     Route::get('/report-search', [ReportController::class, 'filterReport']);
     Route::get('/changed-histories', [ReportController::class, 'fetchChangedHistory']);

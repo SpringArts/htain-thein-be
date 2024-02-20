@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\GeneralOutcomeRequest;
 use App\Http\Resources\GeneralOutcomeResource;
 use App\UseCases\GeneralOutcome\GeneralOutcomeAction;
-use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\JsonResponse;
 
 class GeneralOutcomeController extends Controller

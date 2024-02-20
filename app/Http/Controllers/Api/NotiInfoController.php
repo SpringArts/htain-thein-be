@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-
 use App\Models\NotiInfo;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;

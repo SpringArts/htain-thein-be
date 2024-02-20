@@ -1,4 +1,5 @@
 <?php
+
 // ReportEditHistoryService.php
 namespace App\Services;
 
