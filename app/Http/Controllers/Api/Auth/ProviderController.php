@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use Laravel\Socialite\Facades\Socialite;
 use App\Services\AuthServices\AuthService;
+use App\UseCases\Auth\UserAgentAction;
 
 class ProviderController extends Controller
 {
     protected $authService;
+    protected $userAgentAction;
 
-
-    public function __construct(AuthService $authService)
+    public function __construct(AuthService $authService, UserAgentAction $userAgentAction)
     {
         $this->authService = $authService;
+        $this->userAgentAction = $userAgentAction;
     }
 
     public function redirectToProvider($provider)
@@ -28,7 +30,7 @@ class ProviderController extends Controller
         // Call the handleAuthentication method of authService
         $token = $this->authService->handleAuthentication($user, $provider);
 
-        $cookie = cookie('IncomeController', $token, 60 * 24); // 24 hours expiration
+        $cookie = cookie(name: env('APP_NAME'), value: $token, minutes: 60 * 24);
         $redirectUrl = 'http://localhost:3000' . '?userId=' . auth()->user()->id . '&accessToken=' . $token . '&&userName=' . auth()->user()->name;
         return redirect()->away($redirectUrl)->withCookie($cookie);
     }

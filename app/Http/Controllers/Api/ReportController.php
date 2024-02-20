@@ -47,7 +47,9 @@ class ReportController extends Controller
      */
     public function show(Report $report): JsonResponse
     {
-        return ResponseHelper::success('success', new ReportResource($report));
+        return response()->json([
+            'data' => new ReportResource($report)
+        ]);
     }
 
     /**

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Repositories\GeneralOutcome;
 
 use App\Models\GeneralOutcome;
@@ -18,6 +17,11 @@ class GeneralOutcomeRepository implements GeneralOutcomeInterface
     public function storeGeneralOutcome(array $formData): GeneralOutcome
     {
         return GeneralOutcome::create($formData);
+    }
+
+    public function updateGeneralOutcome(array $data, GeneralOutcome $generalOutcome): int
+    {
+        return $generalOutcome->update($data);
     }
 
     public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): int

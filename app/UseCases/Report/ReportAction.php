@@ -5,16 +5,13 @@ namespace App\UseCases\Report;
 use App\Models\Report;
 use App\Enums\FinancialType;
 use Illuminate\Http\Response;
-use App\Models\ReportEditHistory;
 use App\Http\Requests\ReportRequest;
-use Illuminate\Support\Facades\Auth;
 use App\Interfaces\Report\ReportInterface;
 use App\Services\ReportEditHistoryService;
 use App\Services\FinancialCalculatorService;
 use Illuminate\Database\Eloquent\Collection;
 use App\Interfaces\Report\ReportHistoryInterface;
 use App\Interfaces\Notification\NotificationInterface;
-
 
 class ReportAction
 {
@@ -23,8 +20,12 @@ class ReportAction
     private NotificationInterface $notificationRepository;
     private $reportEditHistoryService;
 
-    public function __construct(ReportInterface $reportRepository, ReportHistoryInterface $reportHistoryRepository, NotificationInterface $notificationRepository, ReportEditHistoryService $reportEditHistoryService)
-    {
+    public function __construct(
+        ReportInterface $reportRepository,
+        ReportHistoryInterface $reportHistoryRepository,
+        NotificationInterface $notificationRepository,
+        ReportEditHistoryService $reportEditHistoryService
+    ) {
         $this->reportRepository = $reportRepository;
         $this->reportHistoryRepository = $reportHistoryRepository;
         $this->notificationRepository = $notificationRepository;
@@ -89,14 +90,14 @@ class ReportAction
     }
 
     //accept report
-    public function acceptReport(Report $report): int
+    public function acceptReport(Report $report): int|null     /*TODO: return type*/
     {
         $this->reportRepository->acceptReport($report);
         $notification = $this->notificationRepository->getUserNotification($report);
         if (!$notification) {
             throw new \Exception('Notification not found');
         }
-        return  $this->notificationRepository->updateNotification($notification);
+        return $this->notificationRepository->updateNotification($notification);
     }
 
     //calculation financial

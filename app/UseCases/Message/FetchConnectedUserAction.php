@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\UseCases\Message;
-
 
 use App\Models\Message;
 use App\Models\User;

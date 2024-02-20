@@ -4,6 +4,6 @@ namespace App\Enums;
 
 enum FinancialType: string
 {
-    const INCOME  = 'INCOME';
-    const EXPENSE = 'EXPENSE';
+    public const INCOME  = 'INCOME'; //Income Value
+    public const EXPENSE = 'EXPENSE'; //Expense Value
 }

@@ -48,6 +48,13 @@ class Handler extends ExceptionHandler
             ], 403);
         }
 
+        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+            return response()->json([
+                'errors' => 'No data found in the database.'
+            ], 404);
+        }
+
+
         return parent::render($request, $exception);
     }
 }

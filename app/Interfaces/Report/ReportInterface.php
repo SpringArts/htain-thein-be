@@ -16,4 +16,5 @@ interface ReportInterface
     public function acceptReport(Report $report);
     public function calculationFinancial();
     public function reportFilter(array $filters, int $limit, int $page);
+    public function userReportDownload(int $id);
 }

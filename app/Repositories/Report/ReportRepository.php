@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Repositories\Report;
 
 use App\Models\Report;
@@ -9,7 +8,6 @@ use App\Interfaces\Report\ReportInterface;
 
 class ReportRepository implements ReportInterface
 {
-
     public function getAllReports()
     {
         return Report::with('reporter', 'verifier', 'noti', 'editHistory')->orderBy('created_at', 'desc')->get();
@@ -96,5 +94,10 @@ class ReportRepository implements ReportInterface
         } catch (\Exception $e) {
             throw $e;
         }
+    }
+
+    public function userReportDownload(int $userId)
+    {
+        return Report::with('reporter', 'verifier')->where('reporter_id', $userId);
     }
 }

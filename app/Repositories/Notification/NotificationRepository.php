@@ -9,7 +9,6 @@ use App\Interfaces\Notification\NotificationInterface;
 
 class NotificationRepository implements NotificationInterface
 {
-
     public function updateNotification(NotiInfo $noti)
     {
         $noti->update([
