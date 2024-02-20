@@ -36,7 +36,7 @@ class MessageController extends Controller
             ]);
 
             event(new MessageSending($message));
-            return ResponseHelper::success("Message is sent successfully.");
+            return ResponseHelper::success("Message is sent successfully.", NULL, 200, 0);
         } catch (\Throwable $th) {
             return $this->error($th);
         }

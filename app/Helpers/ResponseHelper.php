@@ -7,11 +7,11 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class ResponseHelper
 {
-    public static function success($message, $data = null, $status = 200)
+    public static function success($message, $data = null, $status = 200, $alertVisible = 1)
     {
         return response()->json(
             [
-                'result' => 1,
+                'alertVisible' => $alertVisible,
                 'msg' => $message,
                 'data' => $data,
             ],
@@ -19,11 +19,11 @@ class ResponseHelper
         );
     }
 
-    public static function fail($message, $data = null, $status = 502)
+    public static function fail($message, $data = null, $status = 502, $alertVisible = 1)
     {
         return response()->json(
             [
-                'result' => 0,
+                'alertVisible' => $alertVisible,
                 'error' => $message,
             ],
             $status
