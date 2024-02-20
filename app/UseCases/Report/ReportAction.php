@@ -20,8 +20,12 @@ class ReportAction
     private NotificationInterface $notificationRepository;
     private $reportEditHistoryService;
 
-    public function __construct(ReportInterface $reportRepository, ReportHistoryInterface $reportHistoryRepository, NotificationInterface $notificationRepository, ReportEditHistoryService $reportEditHistoryService)
-    {
+    public function __construct(
+        ReportInterface $reportRepository,
+        ReportHistoryInterface $reportHistoryRepository,
+        NotificationInterface $notificationRepository,
+        ReportEditHistoryService $reportEditHistoryService
+    ) {
         $this->reportRepository = $reportRepository;
         $this->reportHistoryRepository = $reportHistoryRepository;
         $this->notificationRepository = $notificationRepository;

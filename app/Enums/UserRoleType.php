@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum UserRoleType: string
 {
-    const SUPER_ADMIN  = 'SuperAdmin';
-    const ADMIN = 'Admin';
-    const MEMBER = 'Member';
+    public const SUPER_ADMIN  = 'SuperAdmin';
+    public const ADMIN = 'Admin';
+    public const MEMBER = 'Member';
 }

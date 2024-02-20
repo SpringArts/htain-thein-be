@@ -4,6 +4,6 @@ namespace App\Enums;
 
 enum AccountType: string
 {
-    const ACTIVE  = 'ACTIVE';
-    const SUSPENDED = 'SUSPENDED';
+    public const ACTIVE  = 'ACTIVE';
+    public const SUSPENDED = 'SUSPENDED';
 }
