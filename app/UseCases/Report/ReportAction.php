@@ -74,10 +74,10 @@ class ReportAction
     }
 
     //update report
-    public function updateReport(ReportRequest $request, Report $report): int
+    public function updateReport(array $formData, Report $report): int
     {
         $oldData = $report->toArray();
-        $this->reportRepository->updateReport($request->all(), $report);
+        $this->reportRepository->updateReport($formData, $report);
         $newData = $report->toArray();
         $this->reportEditHistoryService->editHistory($oldData, $newData);
         return Response::HTTP_OK;

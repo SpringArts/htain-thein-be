@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rule;
 
-class UserRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,34 +20,19 @@ class UserRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
-        $rules = [
+        return [
             'name' => 'required|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8',
+            'email' => ['required', 'email', Rule::unique('users')->ignore($this->user)],
+            'password' => 'nullable|min:8',
             'role' => 'required',
             'accountStatus' => 'required|in:ACTIVE,SUSPENDED',
         ];
-
-        if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $rules['email'] =  ['required', 'email', Rule::unique('users')->ignore($this->user)];
-            $rules['password'] = 'nullable|min:8';
-            $rules['role'] = 'required';
-            $rules['accountStatus'] = 'required';
-        }
-
-        return $rules;
     }
 
-    /**
-     * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @throws \Illuminate\Validation\ValidationException
-     */
     protected function failedValidation(Validator $validator)
     {
         throw new ValidationException($validator, $this->errorResponse($validator));

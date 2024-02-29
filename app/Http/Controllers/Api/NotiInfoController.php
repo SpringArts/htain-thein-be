@@ -7,6 +7,8 @@ use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\NotiInfoRequest;
+use App\Http\Requests\StoreNotiInfoRequest;
+use App\Http\Requests\UpdateNotiInfoRequest;
 use App\Http\Resources\NotiInfoResource;
 use App\UseCases\NotiInfo\NotiInfoAction;
 
@@ -39,7 +41,7 @@ class NotiInfoController extends Controller
         ]);
     }
 
-    public function store(NotiInfoRequest $request): JsonResponse
+    public function store(StoreNotiInfoRequest $request): JsonResponse
     {
         $formData = $request->all();
         try {
@@ -57,10 +59,10 @@ class NotiInfoController extends Controller
         ]);
     }
 
-    public function update(NotiInfoRequest $request, NotiInfo $noti): JsonResponse
+    public function update(UpdateNotiInfoRequest $request, NotiInfo $noti): JsonResponse
     {
         try {
-            $this->notiInfoAction->updateNotificationInfo($request, $noti);
+            $this->notiInfoAction->updateNotificationInfo($request->all(), $noti);
             return ResponseHelper::success('Successfully Updated', null, 200);
         } catch (\Exception $e) {
             return ResponseHelper::fail($e->getMessage(), null);

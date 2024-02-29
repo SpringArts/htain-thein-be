@@ -4,16 +4,16 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\ValidationException;;
 
-class UpdateMessageRequest extends FormRequest
+class StoreNotiInfoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class UpdateMessageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user_id' => 'required|integer',
+            'report_id' => 'required|integer',
+            'check_status' => 'nullable|boolean',
         ];
     }
 

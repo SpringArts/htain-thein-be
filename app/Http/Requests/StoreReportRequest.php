@@ -2,11 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\EvenOddCheckRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 
-class StoreMessageRequest extends FormRequest
+class StoreReportRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,25 +25,14 @@ class StoreMessageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'amount' => ['required', 'integer', 'gt:50', new EvenOddCheckRule],
+            'description' => 'required|max:255',
+            'type' => 'required|string',
+            'confirm_status' => 'nullable|boolean',
+            'reporter_id' => 'required|integer',
+            'verifier_id' => 'nullable|integer'
         ];
     }
 
-    protected function failedValidation(Validator $validator)
-    {
-        throw new ValidationException($validator, $this->errorResponse($validator));
-    }
 
-    /**
-     * Get the error response for the request.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    protected function errorResponse(Validator $validator)
-    {
-        return response()->json([
-            'errors' => $validator->errors(),
-        ], 422);
-    }
 }

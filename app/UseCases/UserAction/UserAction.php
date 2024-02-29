@@ -40,13 +40,14 @@ class UserAction
         return $this->userRepository->createUser($data);
     }
 
-    public function updateUser(UserRequest $request, User $user): int
+    public function updateUser(array $formData, User $user): int
     {
-        $userData = $request->except(['password']);
+        $userData = $formData;
 
-        if ($request->filled('password')) {
-            $userData['password'] = Hash::make($request->password);
+        if (isset($formData['password'])) {
+            $userData['password'] = Hash::make($formData['password']);
         }
+
         return $this->userRepository->updateUser($userData, $user);
     }
 
