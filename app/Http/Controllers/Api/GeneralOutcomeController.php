@@ -6,7 +6,8 @@ use App\Models\GeneralOutcome;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
-use App\Http\Requests\GeneralOutcomeRequest;
+use App\Http\Requests\StoreGeneralOutComeRequest;
+use App\Http\Requests\UpdateGeneralOutComeRequest;
 use App\Http\Resources\GeneralOutcomeResource;
 use App\UseCases\GeneralOutcome\GeneralOutcomeAction;
 use Illuminate\Http\JsonResponse;
@@ -39,13 +40,13 @@ class GeneralOutcomeController extends Controller
         );
     }
 
-    public function store(GeneralOutcomeRequest $request): JsonResponse
+    public function store(StoreGeneralOutComeRequest $request): JsonResponse
     {
         $this->generalOutcomeAction->storeGeneralOutcome($request->all());
         return ResponseHelper::success("Successfully Created", null);
     }
 
-    public function update(GeneralOutcomeRequest $request, GeneralOutcome $generalOutcome): JsonResponse
+    public function update(UpdateGeneralOutComeRequest $request, GeneralOutcome $generalOutcome): JsonResponse
     {
         Gate::authorize('adminPermission');
         $this->generalOutcomeAction->updateGeneralOutcome($request->all(), $generalOutcome);

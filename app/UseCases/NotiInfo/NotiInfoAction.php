@@ -39,11 +39,11 @@ class NotiInfoAction
         }
     }
 
-    public function updateNotificationInfo(NotiInfoRequest $request, NotiInfo $noti): int
+    public function updateNotificationInfo(array $formData, NotiInfo $noti): int
     {
         DB::beginTransaction();
         try {
-            $noti->update($request->all());
+            $noti->update($formData);
             DB::commit();
             return 200;
         } catch (QueryException $e) {

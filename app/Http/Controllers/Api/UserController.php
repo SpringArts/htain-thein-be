@@ -9,6 +9,8 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Requests\UserRequest;
 use App\Helpers\FilterSearchHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreReportRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Gate;
 use App\UseCases\UserAction\UserAction;
@@ -32,7 +34,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(UserRequest $request): JsonResponse
+    public function store(StoreReportRequest $request): JsonResponse
     {
         Gate::authorize('adminPermission');
         $formData = $request->all();
@@ -47,10 +49,10 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(UserRequest $request, User $user): JsonResponse
+    public function update(UpdateUserRequest $request, User $user): JsonResponse
     {
         Gate::authorize('adminPermission');
-        $this->userAction->updateUser($request, $user);
+        $this->userAction->updateUser($request->all(), $user);
         return ResponseHelper::success('Successfully Updated', null, 200);
     }
 

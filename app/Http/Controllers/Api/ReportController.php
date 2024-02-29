@@ -7,6 +7,8 @@ use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReportRequest;
+use App\Http\Requests\StoreReportRequest;
+use App\Http\Requests\UpdateReportRequest;
 use Illuminate\Support\Facades\Gate;
 use App\UseCases\Report\ReportAction;
 use App\Http\Resources\ReportResource;
@@ -33,7 +35,7 @@ class ReportController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ReportRequest $request): JsonResponse
+    public function store(StoreReportRequest $request): JsonResponse
     {
         Gate::authorize('adminPermission');
         $formData = $request->all();
@@ -55,10 +57,10 @@ class ReportController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ReportRequest $request, Report $report): JsonResponse
+    public function update(UpdateReportRequest $request, Report $report): JsonResponse
     {
         Gate::authorize('adminPermission');
-        $this->reportAction->updateReport($request, $report);
+        $this->reportAction->updateReport($request->all(), $report);
         return ResponseHelper::success('Successfully Updated', null, 200);
     }
 
