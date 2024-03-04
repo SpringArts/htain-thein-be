@@ -34,5 +34,27 @@ class StoreReportRequest extends FormRequest
         ];
     }
 
+    /**
+     * Handle a failed validation attempt.
+     *
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        throw new ValidationException($validator, $this->errorResponse($validator));
+    }
 
+    /**
+     * Get the error response for the request.
+     *
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function errorResponse(Validator $validator)
+    {
+        return response()->json([
+            'errors' => $validator->errors(),
+        ], 422);
+    }
 }
