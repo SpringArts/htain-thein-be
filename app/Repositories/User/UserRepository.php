@@ -36,9 +36,9 @@ class UserRepository implements UserInterface
     public function userFilter(array $filters, int $limit, int $page)
     {
         $query = User::query();
-        $generalSearch = $filters['generalSearch'];
-        $role = $filters['role'];
-        $accountStatus = $filters['accountStatus'];
+        $generalSearch = $filters['generalSearch'] ?? null;
+        $role = $filters['role'] ?? null;
+        $accountStatus = $filters['accountStatus'] ?? null;
 
         try {
             if (!empty($generalSearch)) {
