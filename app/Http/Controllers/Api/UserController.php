@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
-use App\Http\Requests\UserRequest;
 use App\Helpers\FilterSearchHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreReportRequest;
@@ -67,15 +66,5 @@ class UserController extends Controller
     {
         $saveLocation = $this->userAction->saveLocation($request);
         return 200;
-    }
-
-    public function filterUser(): JsonResponse
-    {
-        $data = FilterSearchHelper::userFilter()->paginate(6);
-        $meta = ResponseHelper::getPaginationMeta($data);
-        return response()->json([
-            'data' => UserResource::collection($data),
-            'meta' => $meta
-        ]);
     }
 }

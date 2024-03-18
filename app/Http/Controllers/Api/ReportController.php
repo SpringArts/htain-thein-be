@@ -6,7 +6,6 @@ use App\Models\Report;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ReportRequest;
 use App\Http\Requests\StoreReportRequest;
 use App\Http\Requests\UpdateReportRequest;
 use Illuminate\Support\Facades\Gate;
@@ -25,13 +24,14 @@ class ReportController extends Controller
 
     public function index(): JsonResponse
     {
-        $data = $this->reportAction->fetchData();
+        $data = $this->reportAction->fetchFilterData();
         $meta = ResponseHelper::getPaginationMeta($data);
         return response()->json([
             'data' => ReportResource::collection($data),
             'meta' => $meta,
         ]);
     }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -107,16 +107,6 @@ class ReportController extends Controller
         $data = $this->reportAction->fetchChangedHistory();
         return response()->json([
             'data' => ReportEditHistoryResource::collection($data)
-        ]);
-    }
-
-    public function filterReport(): JsonResponse
-    {
-        $data = $this->reportAction->fetchFilterData();
-        $meta = ResponseHelper::getPaginationMeta($data);
-        return response()->json([
-            'data' => ReportResource::collection($data),
-            'meta' => $meta
         ]);
     }
 }

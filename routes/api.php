@@ -40,12 +40,10 @@ Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/reports/{report}/reject', [ReportController::class, 'cancelReportHistory']);
     Route::put('/reports/{report}/accept', [ReportController::class, 'acceptReport']);
     Route::get('/uncheck-reports', [ReportController::class, 'uncheckReport']);
-    Route::get('/report-search', [ReportController::class, 'filterReport']);
     Route::get('/changed-histories', [ReportController::class, 'fetchChangedHistory']);
     Route::post('/contact', [HomeController::class, 'storeContactInfo']);
     Route::get('/monthly-total', [GeneralOutcomeController::class, 'getMonthlyGeneralOutcome']);
     Route::post('/user-location', [UserController::class, 'saveLocation']);
-    Route::get('/user-search', [UserController::class, 'filterUser']);
     Route::get('/user-report/{id}', [AttachmentExportController::class, 'userReportExport'])->name('report-export');
 
     Route::get('/dashboard', [HomeController::class, 'dashboard']);

@@ -15,11 +15,6 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::truncate();
-        $data = User::factory(10)->make();
-        $chunks = $data->chunk(10);
-        $chunks->each(function ($chunk) {
-            User::insert($chunk->toArray());
-        });
         User::insert([
             'name' => 'SuperAdmin',
             'email' => 'superadmin@gmail.com',
@@ -47,5 +42,11 @@ class UserSeeder extends Seeder
             'account_status' => 'ACTIVE',
             'role' => UserRoleType::MEMBER,
         ]);
+        $data = User::factory(4)->make();
+        $chunks = $data->chunk(10);
+        $chunks->each(function ($chunk) {
+            User::insert($chunk->toArray());
+        });
+
     }
 }

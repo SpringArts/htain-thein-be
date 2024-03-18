@@ -5,7 +5,6 @@ namespace App\UseCases\Report;
 use App\Models\Report;
 use App\Enums\FinancialType;
 use Illuminate\Http\Response;
-use App\Http\Requests\ReportRequest;
 use App\Interfaces\Report\ReportInterface;
 use App\Services\ReportEditHistoryService;
 use App\Services\FinancialCalculatorService;
@@ -33,13 +32,13 @@ class ReportAction
     }
 
     //fetch all reports
-    public function fetchData(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
-    {
-        $limit = request()->limit ?? 8;
-        $page = request()->page ?? 1;
-        $data = $this->reportRepository->getAllVerifiedReports($limit, $page);
-        return $data;
-    }
+    // public function fetchReports(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    // {
+    //     $limit = request()->limit ?? 8;
+    //     $page = request()->page ?? 1;
+    //     $data = $this->reportRepository->getAllVerifiedReports($limit, $page);
+    //     return $data;
+    // }
 
     public function fetchAllReports(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {

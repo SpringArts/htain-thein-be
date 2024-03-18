@@ -36,22 +36,26 @@ class UserRepository implements UserInterface
     public function userFilter(array $filters, int $limit, int $page)
     {
         $query = User::query();
+        $generalSearch = $filters['generalSearch'];
+        $role = $filters['role'];
+        $accountStatus = $filters['accountStatus'];
 
         try {
-            if (!empty($filters['generalSearch'])) {
-                $query->where(function ($q) use ($filters) {
-                    $q->where('name', 'like', '%' . $filters['generalSearch'] . '%')
-                        ->orWhere('email', 'like', '%' . $filters['generalSearch'] . '%');
+            if (!empty($generalSearch)) {
+                $query->where(function ($q) use ($generalSearch) {
+                    $q->where('name', 'like', '%' . $generalSearch . '%')
+                        ->orWhere('email', 'like', '%' . $generalSearch . '%');
                 });
             }
 
-            if (!empty($filters['role'])) {
-                $query->where('role', '=', $filters['role']);
+            if (!empty($role)) {
+                $query->where('role', '=', $role);
             }
 
-            if (!empty($filters['accountStatus'])) {
-                $query->where('account_status', '=', $filters['accountStatus']);
+            if (!empty($accountStatus)) {
+                $query->where('account_status', '=', $accountStatus);
             }
+
 
             $data = $query->orderBy('created_at', 'desc')
                 ->paginate($limit, ['*'], 'page', $page)
@@ -59,7 +63,9 @@ class UserRepository implements UserInterface
 
             return $data;
         } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+            return response()->json([
+                'errors' => $e->getMessage(),
+            ], 422);
         }
     }
 }

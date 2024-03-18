@@ -13,7 +13,7 @@ class GeneralOutcomeSeeder extends Seeder
     public function run(): void
     {
         GeneralOutcome::truncate();
-        $data = GeneralOutcome::factory(30)->make();
+        $data = GeneralOutcome::factory(40)->make();
         $chunks = $data->chunk(30);
         $chunks->each(function ($chunk) {
             GeneralOutcome::insert($chunk->toArray());
