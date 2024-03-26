@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
                 'userName' => auth()->user()->name,
                 'access_token' => $token,
                 'token_type' => 'Bearer'
-            ]);
+            ])->cookie($cookie);
         }
         abort(401, 'Unauthorized');
     }

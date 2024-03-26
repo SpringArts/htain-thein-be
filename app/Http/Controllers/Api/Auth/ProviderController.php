@@ -31,7 +31,7 @@ class ProviderController extends Controller
         $token = $this->authService->handleAuthentication($user, $provider);
 
         $cookie = cookie(name: env('APP_NAME'), value: $token, minutes: 60 * 24);
-        $redirectUrl = 'http://localhost:3000' . '?userId=' . auth()->user()->id . '&accessToken=' . $token . '&&userName=' . auth()->user()->name;
+        $redirectUrl = config('app.frontend_url') . '?userId=' . auth()->user()->id . '&accessToken=' . $token . '&&userName=' . auth()->user()->name;
         return redirect()->away($redirectUrl)->withCookie($cookie);
     }
 }
