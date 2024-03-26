@@ -33,13 +33,13 @@ class MessageSending implements ShouldBroadcast
     {
         return [
             // 'message.' . $this->message->booking_id,
-            new Channel('home-chat'),
+            new Channel('keeper-channel'),
         ];
     }
 
 
     public function broadcastAs(): string
     {
-        return 'keeper';
+        return 'keeper-event';
     }
 }
