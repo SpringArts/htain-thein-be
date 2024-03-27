@@ -28,7 +28,6 @@ class AuthenticatedSessionController extends Controller
         if (Auth::attempt($credentials)) {
             // generate an API token for the authenticated user
             $token = auth()->user()->createToken('authToken')->plainTextToken;
-            $cookie = cookie(name: env('APP_NAME'), value: $token, minutes: 60 * 24);
 
             $this->userAgentAction->storeUserAgent($request);
             // return the token as a response
@@ -37,7 +36,7 @@ class AuthenticatedSessionController extends Controller
                 'userName' => auth()->user()->name,
                 'access_token' => $token,
                 'token_type' => 'Bearer'
-            ])->cookie($cookie);
+            ]);
         }
         abort(401, 'Unauthorized');
     }

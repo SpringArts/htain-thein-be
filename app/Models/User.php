@@ -108,4 +108,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(GeneralOutcome::class, 'reporter_id');
     }
+
+    public function message()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
 }

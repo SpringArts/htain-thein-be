@@ -7,6 +7,7 @@ use App\Events\MessageSending;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MessageResource;
 use Illuminate\Support\Facades\Auth;
 use App\UseCases\Message\FetchUserMessages;
 use App\UseCases\Message\StoreMessageAction;
@@ -19,7 +20,7 @@ class MessageController extends Controller
         $messages = empty($senderId) ? [] : (new FetchUserMessages())();
 
         return response()->json([
-            'messages' => $messages,
+            'messages' => MessageResource::collection($messages),
         ]);
     }
 

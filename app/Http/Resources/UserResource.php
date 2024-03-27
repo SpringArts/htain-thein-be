@@ -35,6 +35,12 @@ class UserResource extends JsonResource
                 'accountStatus' => $this->account_status,
             ];
         }
+        if ($uri === 'api/app/message/{receiverId?}' && $request->isMethod('GET')) {
+            return [
+                'id'      => $this->id,
+                'name'    => $this->name ?? '',
+            ];
+        }
         return [
             'id'      => $this->id,
             'name'    => $this->name ?? '',

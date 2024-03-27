@@ -8,6 +8,6 @@ class FetchUserMessages
 {
     public function __invoke()
     {
-        return Message::all();
+        return Message::with('sender')->get();
     }
 }

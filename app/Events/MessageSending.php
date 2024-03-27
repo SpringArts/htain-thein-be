@@ -32,7 +32,6 @@ class MessageSending implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            // 'message.' . $this->message->booking_id,
             new Channel('keeper-channel'),
         ];
     }
