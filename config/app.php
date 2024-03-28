@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Providers\ChatProvider;
 use App\Providers\UserProvider;
 use App\Providers\UserAgentProvider;
 use Illuminate\Support\Facades\Facade;
@@ -211,6 +212,7 @@ return [
         GeneralOutcomeProvider::class,
         NotificationProvider::class,
         UserProvider::class,
+        ChatProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         UserAgentProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
