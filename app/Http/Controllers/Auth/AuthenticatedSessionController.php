@@ -50,6 +50,9 @@ class AuthenticatedSessionController extends Controller
         auth()->user()->tokens()->delete();        // Revoke all tokens...
         // Clear the access_token cookie
         Cookie::forget(env('APP_NAME'));
+        Cookie::forget('userId');
+        Cookie::forget('userName');
+        Cookie::forget('accessToken');
 
         return ResponseHelper::success('Token revoked', null);
     }

@@ -29,9 +29,15 @@ class ProviderController extends Controller
         $user = Socialite::driver($provider)->stateless()->user();
         // Call the handleAuthentication method of authService
         $token = $this->authService->handleAuthentication($user, $provider);
+        // Set user ID and name as separate cookies
+        $userIdCookie = cookie('userId', auth()->user()->id, 60 * 24); // Set cookie to expire in 24 hours
+        $userNameCookie = cookie('userName', auth()->user()->name, 60 * 24); // Set cookie to expire in 24 hours
+        $tokenCookie = cookie('accessToken', $token, 60 * 24); // Set cookie to expire in 24 hours
 
-        $cookie = cookie(name: env('APP_NAME'), value: $token, minutes: 60 * 24);
-        $redirectUrl = config('app.frontend_url') . '?userId=' . auth()->user()->id . '&accessToken=' . $token . '&&userName=' . auth()->user()->name;
-        return redirect()->away($redirectUrl)->withCookie($cookie);
+        // Redirect to the dashboard page with the cookies
+        return redirect()->away(config('app.frontend_url') . '/dashboard')
+            ->withCookie($userIdCookie)
+            ->withCookie($userNameCookie)
+            ->withCookie($tokenCookie);
     }
 }
