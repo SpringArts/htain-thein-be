@@ -4,7 +4,6 @@ namespace App\UseCases\NotiInfo;
 
 use App\Models\NotiInfo;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\NotiInfoRequest;
 use Illuminate\Database\QueryException;
 
 class NotiInfoAction

@@ -25,7 +25,7 @@ class StoreReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'amount' => ['required', 'integer', 'gt:50', new EvenOddCheckRule],
+            'amount' => ['required', 'integer', 'gt:50', new EvenOddCheckRule()],
             'description' => 'required|max:255',
             'type' => 'required|string',
             'confirm_status' => 'nullable|boolean',

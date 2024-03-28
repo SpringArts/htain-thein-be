@@ -2,7 +2,6 @@
 
 namespace App\UseCases\UserAction;
 
-use App\Http\Requests\UserRequest;
 use App\Interfaces\User\UserInterface;
 use App\Models\User;
 use App\Models\UserLocation;

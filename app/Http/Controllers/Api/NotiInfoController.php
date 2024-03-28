@@ -6,7 +6,6 @@ use App\Models\NotiInfo;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\NotiInfoRequest;
 use App\Http\Requests\StoreNotiInfoRequest;
 use App\Http\Requests\UpdateNotiInfoRequest;
 use App\Http\Resources\NotiInfoResource;

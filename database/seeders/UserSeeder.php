@@ -47,6 +47,5 @@ class UserSeeder extends Seeder
         $chunks->each(function ($chunk) {
             User::insert($chunk->toArray());
         });
-
     }
 }

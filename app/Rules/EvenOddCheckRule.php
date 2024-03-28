@@ -14,7 +14,7 @@ class EvenOddCheckRule implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if($value % 2 != 0 ){
+        if ($value % 2 != 0) {
             $fail('The :attribute must be Even.');
         }
     }

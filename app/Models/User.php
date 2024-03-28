@@ -25,6 +25,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ReportEditHistory> $editReportHistory
  * @property-read int|null $edit_report_history_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message> $message
+ * @property-read int|null $message_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NotiInfo> $noti
  * @property-read int|null $noti_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
