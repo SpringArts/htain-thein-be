@@ -12,7 +12,7 @@ class ReportSeeder extends Seeder
      */
     public function run(): void
     {
-        Report::truncate();
+        // Report::truncate();
         $data = Report::factory(30)->make();
         $chunks = $data->chunk(30);
         $chunks->each(function ($chunk) {

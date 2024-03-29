@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->enum('type', [FinancialType::INCOME, FinancialType::EXPENSE])->nullable();
             $table->boolean('confirm_status')->default(false);
-            $table->foreignId('reporter_id')->comment('reporter');
-            $table->foreignId('verifier_id')->nullable();
+            $table->foreignId('reporter_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('verifier_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

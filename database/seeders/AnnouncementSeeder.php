@@ -2,21 +2,21 @@
 
 namespace Database\Seeders;
 
-use App\Models\CancelReportHistory;
+use App\Models\Announcement;
 use Illuminate\Database\Seeder;
 
-class CancelReportHistorySeeder extends Seeder
+class AnnouncementSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        // CancelReportHistory::truncate();
-        $data = CancelReportHistory::factory(5)->make();
+        // Announcement::truncate();
+        $data = Announcement::factory(5)->make();
         $chunks = $data->chunk(30);
         $chunks->each(function ($chunk) {
-            CancelReportHistory::insert($chunk->toArray());
+            Announcement::insert($chunk->toArray());
         });
     }
 }

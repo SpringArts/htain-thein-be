@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Providers\AnnouncementProvider;
 use App\Providers\ChatProvider;
 use App\Providers\UserProvider;
 use App\Providers\UserAgentProvider;
@@ -213,6 +214,7 @@ return [
         NotificationProvider::class,
         UserProvider::class,
         ChatProvider::class,
+        AnnouncementProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         UserAgentProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,

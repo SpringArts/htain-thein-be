@@ -16,8 +16,8 @@ return new class extends Migration
             $table->integer('amount')->default(0);
             $table->string('description')->nullable();
             $table->string('type')->nullable();
-            $table->foreignId('reporter_id')->comment('reporter');
-            $table->foreignId('rejecter_id')->nullable();
+            $table->foreignId('reporter_id')->comment('reporter')->constrained('users')->onDelete('cascade');
+            $table->foreignId('rejecter_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

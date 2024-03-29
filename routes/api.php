@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AnnouncementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\UserController;
@@ -34,6 +35,7 @@ Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/reports', ReportController::class);
     Route::apiResource('/notis', NotiInfoController::class);
+    Route::apiResource('/announcements', AnnouncementController::class);
     Route::apiResource('/general-outcome', GeneralOutcomeController::class);
     Route::get('/all-notis', [NotiInfoController::class, 'fetchAll']);
     Route::get('/calculations', [ReportController::class, 'calculationFinancial']);

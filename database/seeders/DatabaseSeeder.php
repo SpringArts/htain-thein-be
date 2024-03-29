@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             NotiInfoSeeder::class,
             CancelReportHistorySeeder::class,
             ReportEditHistorySeeder::class,
-            GeneralOutcomeSeeder::class
+            GeneralOutcomeSeeder::class,
+            AnnouncementSeeder::class,
         ]);
     }
 }

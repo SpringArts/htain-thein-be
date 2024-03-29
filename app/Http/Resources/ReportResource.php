@@ -26,7 +26,7 @@ class ReportResource extends JsonResource
                 'amount' => $this->amount ?? 0,
                 'type' => $this->type ?? '',
                 'confirmStatus' => $this->confirm_status ?? '',
-                'reporter' => new UserResource($this->reporter) ?? '',
+                'reporter' => new UserResource($this->whenLoaded('reporter')) ?? '',
                 'createdAt' => $this->created_at->format('Y-d-M h:i A'),
             ];
         }

@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Announcement>
  */
-class ReportEditHistoryFactory extends Factory
+class AnnouncementFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +17,10 @@ class ReportEditHistoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'editor_id' =>  $this->faker->numberBetween(1, 5),
-            'report_id' => $this->faker->numberBetween(1, 5),
+            'title' => $this->faker->unique(true)->numberBetween(1, 4),
+            'content' => $this->faker->text(),
+            'is_visible' => $this->faker->boolean(),
+            'user_id' => $this->faker->numberBetween(1, 5),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'updated_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
         ];

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_locations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->unsigned();
+            $table->foreignId('user_id')->unsigned()->constrained('users')->onDelete('cascade');
             $table->double('latitude', 10, 7);
             $table->double('longitude', 10, 7);
             $table->timestamps();

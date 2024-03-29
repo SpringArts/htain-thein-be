@@ -12,7 +12,7 @@ class NotiInfoSeeder extends Seeder
      */
     public function run(): void
     {
-        NotiInfo::truncate();
+        // NotiInfo::truncate();
         $data = NotiInfo::factory(30)->make();
         $chunks = $data->chunk(30);
         $chunks->each(function ($chunk) {

@@ -12,7 +12,7 @@ class ReportEditHistorySeeder extends Seeder
      */
     public function run(): void
     {
-        ReportEditHistory::truncate();
+        // ReportEditHistory::truncate();
         $data = ReportEditHistory::factory(30)->make();
         $chunks = $data->chunk(30);
         $chunks->each(function ($chunk) {

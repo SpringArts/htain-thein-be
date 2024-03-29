@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('report_edit_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('editor_id');
-            $table->foreignId('report_id');
+            $table->foreignId('editor_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('report_id')->constrained('users')->onDelete('cascade');
             $table->json('old_data')->nullable();
             $table->json('new_data')->nullable();
             $table->timestamps();
