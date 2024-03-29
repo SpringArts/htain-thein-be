@@ -18,9 +18,13 @@ class FinancialCalculatorService
         $availableBalance = self::calculateAvailableBalance();
         $mostDepositPerson = self::findMostPerson(FinancialType::INCOME);
         $mostWithdrawPerson = self::findMostPerson(FinancialType::EXPENSE);
+        $incomeRate = $income ? number_format(($income / ($income + $outcome)) * 100, 0) : 0;
+        $outcomeRate = $outcome ? number_format(($outcome / ($income + $outcome)) * 100, 0) : 0;
 
         $data = [
             'income' => $income,
+            'incomeRate' => $incomeRate,
+            'outcomeRate' => $outcomeRate,
             'outcome' => $outcome,
             'regularCost' => $regularCost,
             'availableBalance' => $availableBalance,
