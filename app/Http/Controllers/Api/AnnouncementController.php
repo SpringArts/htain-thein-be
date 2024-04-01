@@ -7,7 +7,6 @@ use App\Http\Requests\StoreAnnouncementRequest;
 use App\Http\Resources\AnnouncementResource;
 use App\Models\Announcement;
 use App\UseCases\Announcement\AnnouncementAction;
-use Illuminate\Http\Request;
 
 class AnnouncementController extends Controller
 {

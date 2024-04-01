@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->boolean('is_visible')->default(false);
+            $table->enum('priority', ['1', '2', '3'])->default('1')->comment('1: low, 2: medium, 3: high');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
