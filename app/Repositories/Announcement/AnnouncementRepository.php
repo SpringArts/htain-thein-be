@@ -2,16 +2,14 @@
 
 namespace App\Repositories\Announcement;
 
-use App\Http\Requests\StoreAnnouncementRequest;
 use App\Interfaces\Announcement\AnnouncementInterface;
 use App\Models\Announcement;
-use Request;
 
 class AnnouncementRepository implements AnnouncementInterface
 {
     public function getAllAnnouncements()
     {
-        return Announcement::with('announcer')->get();
+        return Announcement::with('announcer')->where('is_visible', 1)->get();
     }
 
 
