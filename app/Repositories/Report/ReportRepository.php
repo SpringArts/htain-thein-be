@@ -40,9 +40,10 @@ class ReportRepository implements ReportInterface
         return $report->delete();
     }
 
-    public function uncheckReport()
+    public function uncheckReport($limit, $page)
     {
-        return Report::where('confirm_status', ConfirmStatus::UNCHECKED)->get();
+        return Report::with('reporter')->where('confirm_status', ConfirmStatus::UNCHECKED)->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'page', $page)
+            ->withQueryString();
     }
 
     public function acceptReport(Report $report)

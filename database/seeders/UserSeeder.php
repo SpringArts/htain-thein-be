@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
             'account_status' => 'ACTIVE',
             'role' => UserRoleType::MEMBER,
         ]);
-        $data = User::factory(4)->make();
+        $data = User::factory(5)->make();
         $chunks = $data->chunk(10);
         $chunks->each(function ($chunk) {
             User::insert($chunk->toArray());

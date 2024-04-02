@@ -19,6 +19,7 @@ class AnnouncementResource extends JsonResource
             'title' => $this->title,
             'content' => $this->content,
             'isVisible' => $this->is_visible,
+            'slug' => $this->slug,
             'priority' => $this->priority,
             'userInfo' => new UserResource($this->whenLoaded('announcer')) ?? '',
             'createdAt' => $this->created_at->diffForHumans(),

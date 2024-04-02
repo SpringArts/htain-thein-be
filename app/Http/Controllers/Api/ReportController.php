@@ -67,8 +67,10 @@ class ReportController extends Controller
     public function uncheckReport(): JsonResponse
     {
         $data = $this->reportAction->uncheckReport();
+        $meta = ResponseHelper::getPaginationMeta($data);
         return response()->json([
-            'data' => ReportResource::collection($data)
+            'data' => ReportResource::collection($data),
+            'meta' => $meta,
         ]);
     }
 

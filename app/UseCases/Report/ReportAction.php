@@ -8,7 +8,6 @@ use Illuminate\Http\Response;
 use App\Interfaces\Report\ReportInterface;
 use App\Services\ReportEditHistoryService;
 use App\Services\FinancialCalculatorService;
-use Illuminate\Database\Eloquent\Collection;
 use App\Interfaces\Report\ReportHistoryInterface;
 use App\Interfaces\Notification\NotificationInterface;
 
@@ -83,9 +82,11 @@ class ReportAction
     }
 
     //uncheck report
-    public function uncheckReport(): Collection
+    public function uncheckReport(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
-        return $this->reportRepository->uncheckReport();
+        $limit = request()->limit ?? 6;
+        $page = request()->page ?? 1;
+        return $this->reportRepository->uncheckReport($limit, $page);
     }
 
     //accept report

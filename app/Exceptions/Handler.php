@@ -54,6 +54,30 @@ class Handler extends ExceptionHandler
             ], 404);
         }
 
+        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+            return response()->json([
+                'errors' => 'The requested URL was not found on this server.'
+            ], 404);
+        }
+
+        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException) {
+            return response()->json([
+                'errors' => 'The specified method for the request is invalid.'
+            ], 405);
+        }
+
+        if ($exception instanceof \Illuminate\Validation\ValidationException) {
+            return response()->json([
+                'errors' => $exception->errors()
+            ], 422);
+        }
+
+        if ($exception instanceof \Illuminate\Database\QueryException) {
+            return response()->json([
+                'errors' => 'Error occurred.Please Contact Admin.'
+            ], 500);
+        }
+
 
         return parent::render($request, $exception);
     }

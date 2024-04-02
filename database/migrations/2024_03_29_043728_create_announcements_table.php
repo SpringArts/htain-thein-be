@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('announcements', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->enum('slug', ['work', 'cost', 'alert', 'info', 'other'])->default('information');
             $table->text('content');
             $table->boolean('is_visible')->default(false);
             $table->enum('priority', ['1', '2', '3'])->default('1')->comment('1: low, 2: medium, 3: high');
