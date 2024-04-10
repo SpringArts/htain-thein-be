@@ -5,7 +5,6 @@ namespace App\UseCases\Announcement;
 use App\Interfaces\Announcement\AnnouncementInterface;
 use App\Models\Announcement;
 
-
 class AnnouncementAction
 {
     private AnnouncementInterface $announcementRepository;
@@ -24,7 +23,14 @@ class AnnouncementAction
     {
         $authUser = auth()->user();
         $data['user_id'] = $authUser->id;
+        $data['is_visible'] = $data['isVisible'] ?? true;
         return $this->announcementRepository->createAnnouncement($data);
+    }
+
+    public function updateAnnouncement(array $formData, Announcement $announcement): int
+    {
+        $announcementData = $formData;
+        return $this->announcementRepository->updateAnnouncement($announcementData, $announcement);
     }
 
     public function fetchAnnouncement(Announcement $announcement): Announcement

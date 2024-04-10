@@ -8,5 +8,6 @@ interface AnnouncementInterface
 {
     public function getAllAnnouncements();
     public function createAnnouncement(array $data);
+    public function updateAnnouncement(array $formData, Announcement $announcement);
     public function deleteAnnouncement(Announcement $announcement);
 }

@@ -18,7 +18,7 @@ class AnnouncementFactory extends Factory
     {
         return [
             'title' => $this->faker->name(),
-            'slug' => $this->faker->randomElement(['work', 'cost', 'alert', 'info', 'other']),
+            'slug' => $this->faker->randomElement(['work', 'cost', 'alert', 'info', 'others']),
             'content' => $this->faker->text(),
             'is_visible' => $this->faker->boolean(),
             'priority' => $this->faker->randomElement([1, 2, 3]),

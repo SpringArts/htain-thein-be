@@ -21,6 +21,9 @@ class StoreAnnouncementRequest extends FormRequest
         return [
             'title' => 'required|string',
             'content' => 'string',
+            'isVisible' => 'boolean',
+            'priority' => 'integer',
+            'slug' => 'string|in:work,cost,alert,info,others',
         ];
     }
 

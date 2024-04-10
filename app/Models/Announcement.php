@@ -9,7 +9,14 @@ class Announcement extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'title',
+        'slug',
+        'content',
+        'is_visible',
+        'priority',
+        'user_id'
+    ];
 
     public function announcer()
     {

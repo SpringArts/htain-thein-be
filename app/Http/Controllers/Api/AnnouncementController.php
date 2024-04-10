@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAnnouncementRequest;
+use App\Http\Requests\UpdateAnnouncementRequest;
 use App\Http\Resources\AnnouncementResource;
 use App\Models\Announcement;
 use App\UseCases\Announcement\AnnouncementAction;
+use Illuminate\Http\JsonResponse;
 
 class AnnouncementController extends Controller
 {
@@ -42,7 +45,11 @@ class AnnouncementController extends Controller
         return new AnnouncementResource($announcement);
     }
 
-
+    public function update(UpdateAnnouncementRequest $request, Announcement $announcement): JsonResponse
+    {
+        $this->announcementAction->updateAnnouncement($request->all(), $announcement);
+        return ResponseHelper::success('Successfully Updated', null, 200);
+    }
     /**
      * Remove the specified resource from storage.
      */
