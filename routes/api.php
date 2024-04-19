@@ -48,6 +48,7 @@ Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
     Route::post('/user-location', [UserController::class, 'saveLocation']);
     Route::get('/user-report/{id}', [AttachmentExportController::class, 'userReportExport'])->name('report-export');
 
+    Route::get('/announcement-batch-delete', [AnnouncementController::class, 'batchDelete']);
     Route::get('/dashboard', [HomeController::class, 'dashboard']);
     Route::get('/message/{receiverId?}', [MessageController::class, 'index']);
     Route::post('/message/{receiverId?}', [MessageController::class, 'store']);

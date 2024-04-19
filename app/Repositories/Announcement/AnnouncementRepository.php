@@ -31,4 +31,9 @@ class AnnouncementRepository implements AnnouncementInterface
     {
         return $announcement->delete();
     }
+
+    public function batchDelete(array $ids)
+    {
+        return Announcement::whereIn('id', $ids)->delete();
+    }
 }

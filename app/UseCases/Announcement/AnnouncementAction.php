@@ -2,8 +2,10 @@
 
 namespace App\UseCases\Announcement;
 
+use App\Events\AnnouncementEvent;
 use App\Interfaces\Announcement\AnnouncementInterface;
 use App\Models\Announcement;
+use Log;
 
 class AnnouncementAction
 {
@@ -19,12 +21,15 @@ class AnnouncementAction
         return $this->announcementRepository->getAllAnnouncements();
     }
 
-    public function createAnnouncement(array $data): Announcement
+    public function createAnnouncement(array $data)
     {
         $authUser = auth()->user();
         $data['user_id'] = $authUser->id;
         $data['is_visible'] = $data['isVisible'] ?? true;
-        return $this->announcementRepository->createAnnouncement($data);
+        $message = $this->announcementRepository->createAnnouncement($data);
+        event(new AnnouncementEvent($message, $authUser));
+        Log::info('Announcement created by ' . $authUser->name);
+        return $message;
     }
 
     public function updateAnnouncement(array $formData, Announcement $announcement): int
@@ -41,5 +46,10 @@ class AnnouncementAction
     public function deleteAnnouncement(Announcement $announcement): int
     {
         return $this->announcementRepository->deleteAnnouncement($announcement);
+    }
+
+    public function batchDelete(array $ids): int
+    {
+        return $this->announcementRepository->batchDelete($ids);
     }
 }

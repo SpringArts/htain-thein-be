@@ -57,4 +57,11 @@ class AnnouncementController extends Controller
     {
         return $this->announcementAction->deleteAnnouncement($announcement);
     }
+
+    public function batchDelete()
+    {
+        $ids = request('ids');
+        $this->announcementAction->batchDelete($ids);
+        return ResponseHelper::success('Successfully Deleted', null, 200);
+    }
 }
