@@ -27,7 +27,7 @@ class UpdateAnnouncementRequest extends FormRequest
             'title' => 'required|string',
             'content' => 'string',
             'isVisible' => 'boolean',
-            'priority' => 'integer',
+            'priority' => 'integer|in:1,2,3',
             'slug' => 'string|in:work,cost,alert,info,others',
         ];
     }

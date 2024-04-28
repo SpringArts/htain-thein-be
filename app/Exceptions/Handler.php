@@ -74,7 +74,7 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof \Illuminate\Database\QueryException) {
             return response()->json([
-                'errors' => 'Error occurred.Please Contact Admin.'
+                'errors' => $exception->getMessage()
             ], 500);
         }
 
