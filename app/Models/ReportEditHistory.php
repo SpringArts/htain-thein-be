@@ -15,8 +15,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property mixed|null $new_data
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User|null $editUser
- * @property-read \App\Models\Report|null $report
+ * @property-read \App\Models\User $editUser
+ * @property-read \App\Models\Report $report
  * @method static \Database\Factories\ReportEditHistoryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ReportEditHistory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ReportEditHistory newQuery()

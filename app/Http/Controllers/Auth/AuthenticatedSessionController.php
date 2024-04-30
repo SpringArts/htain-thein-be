@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 use App\Http\Requests\Auth\LoginRequest;
 use App\UseCases\Auth\UserAgentAction;
 

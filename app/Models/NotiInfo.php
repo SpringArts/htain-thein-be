@@ -14,9 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $check_status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $is_read
- * @property-read \App\Models\Report|null $report
- * @property-read \App\Models\User|null $user
+ * @property-read \App\Models\Report $report
+ * @property-read \App\Models\User $user
  * @method static \Database\Factories\NotiInfoFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo newQuery()
@@ -24,7 +23,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo whereCheckStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo whereIsRead($value)
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo whereReportId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo whereUserId($value)
