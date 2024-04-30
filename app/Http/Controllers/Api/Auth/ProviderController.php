@@ -33,6 +33,7 @@ class ProviderController extends Controller
         $encryptedUserData = encryptAlgorithm([
             'userId' => $authUser->id,
             'userName' => $authUser->name,
+            'userRole' => $authUser->role,
             'token' => $token
         ]);
         return redirect()->away(config('app.frontend_url') . '/login?&encryptedUserData=' . urlencode($encryptedUserData));

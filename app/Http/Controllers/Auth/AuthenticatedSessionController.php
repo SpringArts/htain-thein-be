@@ -34,6 +34,7 @@ class AuthenticatedSessionController extends Controller
             return response()->json([
                 'userId' => auth()->user()->id,
                 'userName' => auth()->user()->name,
+                'userRole' => auth()->user()->role,
                 'access_token' => $token,
                 'token_type' => 'Bearer'
             ]);
@@ -48,12 +49,6 @@ class AuthenticatedSessionController extends Controller
     {
         Auth::guard('web')->logout();
         auth()->user()->tokens()->delete();        // Revoke all tokens...
-        // Clear the access_token cookie
-        Cookie::forget(env('APP_NAME'));
-        Cookie::forget('userId');
-        Cookie::forget('userName');
-        Cookie::forget('accessToken');
-
         return ResponseHelper::success('Token revoked', null);
     }
 }

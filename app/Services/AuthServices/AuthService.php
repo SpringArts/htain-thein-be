@@ -3,7 +3,6 @@
 namespace  App\Services\AuthServices;
 
 use App\Models\User;
-use Log;
 
 class AuthService
 {
