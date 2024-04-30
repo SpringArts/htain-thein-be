@@ -91,7 +91,7 @@ class ReportController extends Controller
         return ResponseHelper::success('Successfully deleted', null, 200);
     }
 
-    public function cancelReportHistory($id): JsonResponse
+    public function cancelReportHistory(int $id): JsonResponse //Report that Admin or SuperAdmin is rejected
     {
         $this->reportAction->createReportHistory($id);
         return ResponseHelper::success('Successfully Rejected', null, 201);
@@ -103,9 +103,9 @@ class ReportController extends Controller
         return ResponseHelper::success('Successfully Accepted', null, 201);
     }
 
-    public function fetchChangedHistory(): JsonResponse
+    public function fetchChangedHistory(int $reportId): JsonResponse
     {
-        $data = $this->reportAction->fetchChangedHistory();
+        $data = $this->reportAction->fetchChangedHistory($reportId);
         return response()->json([
             'data' => ReportEditHistoryResource::collection($data)
         ]);

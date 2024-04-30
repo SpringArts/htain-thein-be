@@ -103,7 +103,7 @@ class User extends Authenticatable
 
     public function noti()
     {
-        return $this->hasMany(NotiInfo::class);
+        return $this->hasMany(NotiInfo::class, 'reporter_id');
     }
 
     public function regularCostReport()

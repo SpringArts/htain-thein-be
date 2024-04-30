@@ -10,12 +10,12 @@ class ReportHistoryRepository implements ReportHistoryInterface
 {
     public function getAllReportChangedHistories()
     {
-        return ReportEditHistory::all();
+        return ReportEditHistory::with('report', 'editUser')->get();
     }
 
-    public function getReportChangedHistory(int $id)
+    public function getReportChangedHistory(int $reportId)
     {
-        return ReportEditHistory::where('report_id', $id)->get();
+        return ReportEditHistory::where('report_id', $reportId)->get();
     }
 
     public function createReportChangedHistory(int $id)

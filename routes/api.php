@@ -42,7 +42,7 @@ Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/reports/{report}/reject', [ReportController::class, 'cancelReportHistory']);
     Route::put('/reports/{report}/accept', [ReportController::class, 'acceptReport']);
     Route::get('/uncheck-reports', [ReportController::class, 'uncheckReport']);
-    Route::get('/changed-histories', [ReportController::class, 'fetchChangedHistory']);
+    Route::get('/changed-histories/{id}', [ReportController::class, 'fetchChangedHistory']);
     Route::post('/contact', [HomeController::class, 'storeContactInfo']);
     Route::get('/monthly-total', [GeneralOutcomeController::class, 'getMonthlyGeneralOutcome']);
     Route::post('/user-location', [UserController::class, 'saveLocation']);

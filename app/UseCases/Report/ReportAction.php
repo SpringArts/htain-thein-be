@@ -114,9 +114,9 @@ class ReportAction
     }
 
     //fetch report changed history
-    public function fetchChangedHistory()
+    public function fetchChangedHistory(int $reportId)
     {
-        return $this->reportHistoryRepository->getAllReportChangedHistories();
+        return $this->reportHistoryRepository->getReportChangedHistory($reportId);
     }
 
     //create notification after report created

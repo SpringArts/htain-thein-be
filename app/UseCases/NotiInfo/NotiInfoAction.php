@@ -10,7 +10,7 @@ class NotiInfoAction
 {
     public function fetchAllNotifications()
     {
-        $data = NotiInfo::all();
+        $data = NotiInfo::with('user', 'report')->get();
         return $data;
     }
     public function fetchNotification($userId): \Illuminate\Contracts\Pagination\LengthAwarePaginator
