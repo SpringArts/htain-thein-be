@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Laravel\Socialite\Facades\Socialite;
 use App\Services\AuthServices\AuthService;
 use App\UseCases\Auth\UserAgentAction;
-use Log;
 
 class ProviderController extends Controller
 {

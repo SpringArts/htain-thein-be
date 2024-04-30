@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $amount
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User|null $reporter
+ * @property-read \App\Models\User $reporter
  * @method static \Database\Factories\GeneralOutcomeFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|GeneralOutcome newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|GeneralOutcome newQuery()

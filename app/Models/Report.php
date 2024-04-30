@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $description
  * @property string|null $type
  * @property bool $confirm_status
- * @property int $reporter_id reporter
+ * @property int $reporter_id
  * @property int|null $verifier_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read int|null $edit_history_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NotiInfo> $noti
  * @property-read int|null $noti_count
- * @property-read \App\Models\User|null $reporter
+ * @property-read \App\Models\User $reporter
  * @property-read \App\Models\User|null $verifier
  * @method static \Database\Factories\ReportFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Report newModelQuery()
