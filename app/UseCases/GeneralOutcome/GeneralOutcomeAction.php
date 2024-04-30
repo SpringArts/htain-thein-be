@@ -5,9 +5,6 @@ namespace App\UseCases\GeneralOutcome;
 use App\Interfaces\GeneralOutcome\GeneralOutcomeInterface;
 use App\Models\GeneralOutcome;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\QueryException;
-
 
 class GeneralOutcomeAction
 {
@@ -29,6 +26,11 @@ class GeneralOutcomeAction
     public function storeGeneralOutcome(array $data): GeneralOutcome
     {
         return $this->generalOutcomeRepository->storeGeneralOutcome($data);
+    }
+
+    public function updateGeneralOutcome(array $data, GeneralOutcome $generalOutcome): int
+    {
+        return $this->generalOutcomeRepository->updateGeneralOutcome($data, $generalOutcome);
     }
 
     public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): int

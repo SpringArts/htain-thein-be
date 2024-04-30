@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\FinancialType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,12 +14,12 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->integer('amount')->default(0);
+            $table->bigInteger('amount')->default(0);
             $table->string('description')->nullable();
-            $table->string('type')->nullable();
+            $table->enum('type', [FinancialType::INCOME, FinancialType::EXPENSE])->nullable();
             $table->boolean('confirm_status')->default(false);
-            $table->foreignId('reporter_id')->comment('reporter');
-            $table->foreignId('verifier_id')->nullable();
+            $table->foreignId('reporter_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('verifier_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

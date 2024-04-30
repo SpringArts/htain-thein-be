@@ -6,9 +6,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
-use App\Http\Requests\UserRequest;
-use App\Helpers\FilterSearchHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreReportRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Gate;
 use App\UseCases\UserAction\UserAction;
@@ -32,23 +32,25 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(UserRequest $request): JsonResponse
+    public function store(StoreReportRequest $request): JsonResponse
     {
         Gate::authorize('adminPermission');
-        $formData = $request->all();
+        $formData = $request->safe()->all();
         $this->userAction->createUser($formData);
         return ResponseHelper::success('Successfully created', null, 201);
     }
 
     public function show(User $user): JsonResponse
     {
-        return ResponseHelper::success('success', new UserResource($user));
+        return response()->json([
+            'data' => new UserResource($user)
+        ]);
     }
 
-    public function update(UserRequest $request, User $user): JsonResponse
+    public function update(UpdateUserRequest $request, User $user): JsonResponse
     {
         Gate::authorize('adminPermission');
-        $this->userAction->updateUser($request, $user);
+        $this->userAction->updateUser($request->safe()->all(), $user);
         return ResponseHelper::success('Successfully Updated', null, 200);
     }
 
@@ -63,15 +65,5 @@ class UserController extends Controller
     {
         $saveLocation = $this->userAction->saveLocation($request);
         return 200;
-    }
-
-    public function filterUser(): JsonResponse
-    {
-        $data = FilterSearchHelper::userFilter()->paginate(6);
-        $meta = ResponseHelper::getPaginationMeta($data);
-        return response()->json([
-            'data' => UserResource::collection($data),
-            'meta' => $meta
-        ]);
     }
 }

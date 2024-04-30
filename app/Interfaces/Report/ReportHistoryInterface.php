@@ -2,7 +2,6 @@
 
 namespace App\Interfaces\Report;
 
-
 interface ReportHistoryInterface
 {
     public function getAllReportChangedHistories();

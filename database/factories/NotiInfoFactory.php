@@ -17,7 +17,7 @@ class NotiInfoFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => $this->faker->unique(true)->numberBetween(1, 30),
+            'user_id' => $this->faker->unique(true)->numberBetween(1, 5),
             'report_id' => $this->faker->unique(true)->numberBetween(1, 30),
             'check_status' =>  $this->faker->numberBetween(0, 1),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),

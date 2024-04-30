@@ -4,15 +4,15 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 class MessageSending implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public $message;
 
@@ -32,14 +32,13 @@ class MessageSending implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            // 'message.' . $this->message->booking_id,
-            new Channel('home-chat'),
+            new Channel('keeper-channel'),
         ];
     }
 
 
     public function broadcastAs(): string
     {
-        return 'keeper';
+        return 'keeper-event';
     }
 }

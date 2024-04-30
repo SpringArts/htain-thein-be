@@ -1,12 +1,15 @@
 <?php
 
 use App\Models\User;
-use App\Providers\GeneralOutcomeProvider;
-use App\Providers\NotificationProvider;
-use Illuminate\Support\Facades\Facade;
-use App\Providers\ReportServiceProvider;
-use App\Providers\RepositoryServiceProvider;
+use App\Providers\AnnouncementProvider;
+use App\Providers\ChatProvider;
 use App\Providers\UserProvider;
+use App\Providers\UserAgentProvider;
+use Illuminate\Support\Facades\Facade;
+use App\Providers\NotificationProvider;
+use App\Providers\ReportServiceProvider;
+use App\Providers\GeneralOutcomeProvider;
+use App\Providers\RepositoryServiceProvider;
 
 return [
 
@@ -203,13 +206,18 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
         // Custom Service Providers
         ReportServiceProvider::class,
         GeneralOutcomeProvider::class,
         NotificationProvider::class,
         UserProvider::class,
-
+        ChatProvider::class,
+        AnnouncementProvider::class,
+        Jenssegers\Agent\AgentServiceProvider::class,
+        UserAgentProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
     ],
 
@@ -225,7 +233,9 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
+
     ])->toArray(),
 
 ];

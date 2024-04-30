@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
+use App\Rules\EvenOddCheckRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 
-class UserRequest extends FormRequest
+class StoreReportRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,26 +20,18 @@ class UserRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
-        $rules = [
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8',
-            'role' => 'required',
-            'accountStatus' => 'required|in:ACTIVE,INACTIVE',
+        return [
+            'amount' => ['required', 'integer', 'gt:50', new EvenOddCheckRule()],
+            'description' => 'required|max:255',
+            'type' => 'required|string',
+            'confirm_status' => 'nullable|boolean',
+            'reporter_id' => 'required|integer',
+            'verifier_id' => 'nullable|integer'
         ];
-
-        if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $rules['email'] =  ['required', 'email', Rule::unique('users')->ignore($this->user)];
-            $rules['password'] = 'nullable|min:8';
-            $rules['role'] = 'required';
-            $rules['accountStatus'] = 'required';
-        }
-
-        return $rules;
     }
 
     /**

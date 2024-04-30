@@ -1,10 +1,8 @@
 <?php
 
-
 namespace  App\Services\AuthServices;
 
 use App\Models\User;
-
 
 class AuthService
 {
@@ -20,17 +18,15 @@ class AuthService
     private function store($user, $provider)
     {
         return User::updateOrCreate(
-            [
-                'provider_id' => $user->getId(),
-                'provider_name' => $provider,
-            ],
+            ['email' => $user->getEmail()], // Check if user exists based on email
             [
                 'name' => $user->getName(),
-                'email' => $user->getEmail(),
-
+                'provider_id' => $user->getId(),
+                'provider_name' => $provider,
             ]
         );
     }
+
 
     private function login($newUser)
     {

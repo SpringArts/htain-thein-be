@@ -20,8 +20,8 @@ class CancelReportHistoryFactory extends Factory
             'amount' => $this->faker->numberBetween(1000, 5000),
             'description' => $this->faker->text(),
             'type' => $this->faker->randomElement(['INCOME', 'EXPENSE']),
-            'reporter_id' => $this->faker->numberBetween(1, 30),
-            'rejecter_id' => $this->faker->numberBetween(1, 30),
+            'reporter_id' => $this->faker->numberBetween(1, 5),
+            'rejecter_id' => $this->faker->numberBetween(1, 5),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'updated_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
         ];

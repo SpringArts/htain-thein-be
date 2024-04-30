@@ -9,6 +9,7 @@ interface GeneralOutcomeInterface
 {
     public function fetchData(int $limit, int $page);
     public function storeGeneralOutcome(array $formData): GeneralOutcome;
+    public function updateGeneralOutcome(array $data, GeneralOutcome $generalOutcome): int;
     public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): int;
     public function fetchMonthlyGeneralOutcome(): Collection;
 }

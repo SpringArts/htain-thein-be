@@ -17,8 +17,8 @@ class ReportEditHistoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'editor_id' =>  $this->faker->numberBetween(1, 30),
-            'report_id' => $this->faker->numberBetween(1, 30),
+            'editor_id' =>  $this->faker->numberBetween(1, 5),
+            'report_id' => $this->faker->numberBetween(1, 5),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'updated_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
         ];

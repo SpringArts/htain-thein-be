@@ -5,16 +5,11 @@ namespace App\UseCases\Report;
 use App\Models\Report;
 use App\Enums\FinancialType;
 use Illuminate\Http\Response;
-use App\Models\ReportEditHistory;
-use App\Http\Requests\ReportRequest;
-use Illuminate\Support\Facades\Auth;
 use App\Interfaces\Report\ReportInterface;
 use App\Services\ReportEditHistoryService;
 use App\Services\FinancialCalculatorService;
-use Illuminate\Database\Eloquent\Collection;
 use App\Interfaces\Report\ReportHistoryInterface;
 use App\Interfaces\Notification\NotificationInterface;
-
 
 class ReportAction
 {
@@ -23,8 +18,12 @@ class ReportAction
     private NotificationInterface $notificationRepository;
     private $reportEditHistoryService;
 
-    public function __construct(ReportInterface $reportRepository, ReportHistoryInterface $reportHistoryRepository, NotificationInterface $notificationRepository, ReportEditHistoryService $reportEditHistoryService)
-    {
+    public function __construct(
+        ReportInterface $reportRepository,
+        ReportHistoryInterface $reportHistoryRepository,
+        NotificationInterface $notificationRepository,
+        ReportEditHistoryService $reportEditHistoryService
+    ) {
         $this->reportRepository = $reportRepository;
         $this->reportHistoryRepository = $reportHistoryRepository;
         $this->notificationRepository = $notificationRepository;
@@ -32,13 +31,13 @@ class ReportAction
     }
 
     //fetch all reports
-    public function fetchData(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
-    {
-        $limit = request()->limit ?? 8;
-        $page = request()->page ?? 1;
-        $data = $this->reportRepository->getAllVerifiedReports($limit, $page);
-        return $data;
-    }
+    // public function fetchReports(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    // {
+    //     $limit = request()->limit ?? 8;
+    //     $page = request()->page ?? 1;
+    //     $data = $this->reportRepository->getAllVerifiedReports($limit, $page);
+    //     return $data;
+    // }
 
     public function fetchAllReports(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
@@ -73,30 +72,32 @@ class ReportAction
     }
 
     //update report
-    public function updateReport(ReportRequest $request, Report $report): int
+    public function updateReport(array $formData, Report $report): int
     {
         $oldData = $report->toArray();
-        $this->reportRepository->updateReport($request->all(), $report);
+        $this->reportRepository->updateReport($formData, $report);
         $newData = $report->toArray();
         $this->reportEditHistoryService->editHistory($oldData, $newData);
         return Response::HTTP_OK;
     }
 
     //uncheck report
-    public function uncheckReport(): Collection
+    public function uncheckReport(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
-        return $this->reportRepository->uncheckReport();
+        $limit = request()->limit ?? 6;
+        $page = request()->page ?? 1;
+        return $this->reportRepository->uncheckReport($limit, $page);
     }
 
     //accept report
-    public function acceptReport(Report $report): int
+    public function acceptReport(Report $report): int|null     /*TODO: return type*/
     {
         $this->reportRepository->acceptReport($report);
         $notification = $this->notificationRepository->getUserNotification($report);
         if (!$notification) {
             throw new \Exception('Notification not found');
         }
-        return  $this->notificationRepository->updateNotification($notification);
+        return $this->notificationRepository->updateNotification($notification);
     }
 
     //calculation financial
@@ -113,9 +114,9 @@ class ReportAction
     }
 
     //fetch report changed history
-    public function fetchChangedHistory()
+    public function fetchChangedHistory(int $reportId)
     {
-        return $this->reportHistoryRepository->getAllReportChangedHistories();
+        return $this->reportHistoryRepository->getReportChangedHistory($reportId);
     }
 
     //create notification after report created

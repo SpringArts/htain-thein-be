@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AnnouncementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\UserController;
@@ -33,21 +34,21 @@ Route::get('/testing', function () {
 Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/reports', ReportController::class);
-    Route::apiResource('/noti', NotiInfoController::class);
+    Route::apiResource('/notis', NotiInfoController::class);
+    Route::apiResource('/announcements', AnnouncementController::class);
     Route::apiResource('/general-outcome', GeneralOutcomeController::class);
-    Route::get('/all-noti', [NotiInfoController::class, 'fetchAll']);
+    Route::get('/all-notis', [NotiInfoController::class, 'fetchAll']);
     Route::get('/calculations', [ReportController::class, 'calculationFinancial']);
     Route::get('/reports/{report}/reject', [ReportController::class, 'cancelReportHistory']);
-    Route::put('/reports/{report}/accept',  [ReportController::class, 'acceptReport']);
+    Route::put('/reports/{report}/accept', [ReportController::class, 'acceptReport']);
     Route::get('/uncheck-reports', [ReportController::class, 'uncheckReport']);
-    Route::get('/report-search', [ReportController::class, 'filterReport']);
-    Route::get('/changed-histories', [ReportController::class, 'fetchChangedHistory']);
+    Route::get('/changed-histories/{id}', [ReportController::class, 'fetchChangedHistory']);
     Route::post('/contact', [HomeController::class, 'storeContactInfo']);
     Route::get('/monthly-total', [GeneralOutcomeController::class, 'getMonthlyGeneralOutcome']);
     Route::post('/user-location', [UserController::class, 'saveLocation']);
-    Route::get('/user-search', [UserController::class, 'filterUser']);
     Route::get('/user-report/{id}', [AttachmentExportController::class, 'userReportExport'])->name('report-export');
 
+    Route::get('/announcement-batch-delete', [AnnouncementController::class, 'batchDelete']);
     Route::get('/dashboard', [HomeController::class, 'dashboard']);
     Route::get('/message/{receiverId?}', [MessageController::class, 'index']);
     Route::post('/message/{receiverId?}', [MessageController::class, 'store']);

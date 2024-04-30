@@ -3,19 +3,17 @@
 namespace App\UseCases\NotiInfo;
 
 use App\Models\NotiInfo;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\NotiInfoRequest;
 use Illuminate\Database\QueryException;
 
 class NotiInfoAction
 {
-    public function fetchAll()
+    public function fetchAllNotifications()
     {
-        $data = NotiInfo::all();
+        $data = NotiInfo::with('user', 'report')->get();
         return $data;
     }
-    public function fetchNoti($userId): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function fetchNotification($userId): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         $limit = request()->limit ?? 8;
         $page = request()->page ?? 1;
@@ -27,7 +25,7 @@ class NotiInfoAction
         return $data;
     }
 
-    public function createNotiInfo(array $data): NotiInfo
+    public function createNotificationInfo(array $data): NotiInfo
     {
         DB::beginTransaction();
         try {
@@ -40,11 +38,11 @@ class NotiInfoAction
         }
     }
 
-    public function updateNotiInfo(NotiInfoRequest $request, NotiInfo $noti): int
+    public function updateNotificationInfo(array $formData, NotiInfo $noti): int
     {
         DB::beginTransaction();
         try {
-            $noti->update($request->all());
+            $noti->update($formData);
             DB::commit();
             return 200;
         } catch (QueryException $e) {
@@ -53,7 +51,7 @@ class NotiInfoAction
         }
     }
 
-    public function deleteNotiInfo(NotiInfo $noti): int
+    public function deleteNotificationInfo(NotiInfo $noti): int
     {
         try {
             $noti->delete();

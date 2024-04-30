@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('account_status')->default('ACTIVE');
+            $table->enum('account_status', ['ACTIVE', 'SUSPENDED'])->default('ACTIVE');
             $table->string('role')->default('Member')->nullable();
             $table->string('provider_name')->nullable();
             $table->string('provider_id')->nullable();

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRoleType;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
@@ -13,12 +14,6 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::truncate();
-        $data = User::factory(10)->make();
-        $chunks = $data->chunk(10);
-        $chunks->each(function ($chunk) {
-            User::insert($chunk->toArray());
-        });
         User::insert([
             'name' => 'SuperAdmin',
             'email' => 'superadmin@gmail.com',
@@ -26,7 +21,7 @@ class UserSeeder extends Seeder
             'password' => '$2y$10$/wQTKHDVTKcZXxqvgXHR5.yOr6vjBkHoErWrI0vhnHCs6rhF8LTRW',
             'remember_token' => Str::random(10),
             'account_status' => 'ACTIVE',
-            'role' => 'SuperAdmin',
+            'role' =>  UserRoleType::SUPER_ADMIN,
         ]);
         User::insert([
             'name' => 'Admin',
@@ -35,7 +30,7 @@ class UserSeeder extends Seeder
             'password' => '$2y$10$/wQTKHDVTKcZXxqvgXHR5.yOr6vjBkHoErWrI0vhnHCs6rhF8LTRW',
             'remember_token' => Str::random(10),
             'account_status' => 'ACTIVE',
-            'role' => 'Admin',
+            'role' => UserRoleType::ADMIN,
         ]);
         User::insert([
             'name' => 'member',
@@ -44,7 +39,12 @@ class UserSeeder extends Seeder
             'password' => '$2y$10$/wQTKHDVTKcZXxqvgXHR5.yOr6vjBkHoErWrI0vhnHCs6rhF8LTRW',
             'remember_token' => Str::random(10),
             'account_status' => 'ACTIVE',
-            'role' => 'Member',
+            'role' => UserRoleType::MEMBER,
         ]);
+        $data = User::factory(5)->make();
+        $chunks = $data->chunk(10);
+        $chunks->each(function ($chunk) {
+            User::insert($chunk->toArray());
+        });
     }
 }

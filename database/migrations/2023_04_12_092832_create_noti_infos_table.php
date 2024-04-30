@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('noti_infos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('report_id');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('report_id')->constrained('reports')->onDelete('cascade');
             $table->boolean('check_status')->default(false);
             $table->timestamps();
         });

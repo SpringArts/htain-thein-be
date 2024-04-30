@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Repositories\Report;
 
 use App\Models\Report;
@@ -9,7 +8,6 @@ use App\Interfaces\Report\ReportInterface;
 
 class ReportRepository implements ReportInterface
 {
-
     public function getAllReports()
     {
         return Report::with('reporter', 'verifier', 'noti', 'editHistory')->orderBy('created_at', 'desc')->get();
@@ -42,9 +40,10 @@ class ReportRepository implements ReportInterface
         return $report->delete();
     }
 
-    public function uncheckReport()
+    public function uncheckReport($limit, $page)
     {
-        return Report::where('confirm_status', ConfirmStatus::UNCHECKED)->get();
+        return Report::with('reporter')->where('confirm_status', ConfirmStatus::UNCHECKED)->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'page', $page)
+            ->withQueryString();
     }
 
     public function acceptReport(Report $report)
@@ -62,30 +61,38 @@ class ReportRepository implements ReportInterface
     public function reportFilter(array $filters, int $limit, int $page)
     {
         $query = Report::query();
+        $generalSearch = $filters['generalSearch'] ?? null;
+        $amount = $filters['amount'] ?? null;
+        $type = $filters['type'] ?? null;
+        $confirmStatus = $filters['confirmStatus'] ?? null;
+        $createdAt = $filters['createdAt'] ?? null;
 
         try {
-            if (!empty($filters['generalSearch'])) {
-                $query->where(function ($q) use ($filters) {
-                    $q->where('amount', 'like', '%' . $filters['generalSearch'] . '%')
-                        ->orWhere('description', 'like', '%' . $filters['generalSearch'] . '%')
-                        ->orWhere('type', 'like', '%' . $filters['type'] . '%');
+            if (!empty($generalSearch)) {
+                $query->where(function ($q) use ($generalSearch) {
+                    $q->orWhere('description', 'like', '%' . $generalSearch . '%')
+                        ->whereHas('reporter', function ($q) use ($generalSearch) {
+                            $q->where('name', 'like', '%' . $generalSearch . '%');
+                        })->orWhereHas('verifier', function ($q) use ($generalSearch) {
+                            $q->where('name', 'like', '%' . $generalSearch . '%');
+                        });
                 });
             }
 
-            if (!empty($filters['reporter'])) {
-                $query->where('reporter_id', '=', $filters['reporter']);
+            if (!empty($amount)) {
+                $query->where('amount', '=', $amount);
             }
 
-            if (!empty($filters['verifier'])) {
-                $query->where('verifier_id', '=', $filters['verifier']);
+            if (!empty($confirmStatus)) {
+                $query->where('confirm_status', '=', $confirmStatus);
             }
 
-            if (!empty($filters['confirmStatus'])) {
-                $query->where('confirm_status', '=', $filters['confirmStatus']);
+            if (!empty($type)) {
+                $query->where('type', '=', $type);
             }
 
-            if (!empty($filters['type'])) {
-                $query->where('type', '=', $filters['type']);
+            if (!empty($createdAt)) {
+                $query->where('created_at', '=', $createdAt);
             }
 
             $data = $query->orderBy('created_at', 'desc')
@@ -96,5 +103,10 @@ class ReportRepository implements ReportInterface
         } catch (\Exception $e) {
             throw $e;
         }
+    }
+
+    public function userReportDownload(int $userId)
+    {
+        return Report::with('reporter', 'verifier')->where('reporter_id', $userId);
     }
 }

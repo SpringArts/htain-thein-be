@@ -2,9 +2,9 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRoleType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Support\Facades\Log;
 
 class UserPolicy
 {
@@ -12,16 +12,16 @@ class UserPolicy
 
     public function superAdminPermission()
     {
-        return Auth::user()->role === 'SuperAdmin';
+        return Auth::user()->role === UserRoleType::SUPER_ADMIN;
     }
 
     public function adminPermission()
     {
-        return in_array(Auth::user()->role, ['SuperAdmin', 'Admin']);
+        return in_array(Auth::user()->role, [UserRoleType::SUPER_ADMIN, UserRoleType::ADMIN]);
     }
 
     public function memberPermission()
     {
-        return in_array(Auth::user()->role, ['SuperAdmin', 'Admin']);
+        return in_array(Auth::user()->role, [UserRoleType::SUPER_ADMIN,  UserRoleType::ADMIN]);
     }
 }

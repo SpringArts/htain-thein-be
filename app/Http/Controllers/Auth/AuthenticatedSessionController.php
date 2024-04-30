@@ -7,12 +7,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use App\Http\Requests\Auth\LoginRequest;
+use App\UseCases\Auth\UserAgentAction;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Handle an incoming authentication request.
-     */
+    protected $userAgentAction;
+
+    public function __construct(UserAgentAction $userAgentAction)
+    {
+        $this->userAgentAction = $userAgentAction;
+    }
+
     public function store(LoginRequest $request)
     {
         $credentials = $request->validate([
@@ -23,16 +28,18 @@ class AuthenticatedSessionController extends Controller
         if (Auth::attempt($credentials)) {
             // generate an API token for the authenticated user
             $token = auth()->user()->createToken('authToken')->plainTextToken;
-            $cookie = cookie(name: 'IncomeController', value: $token, minutes: 60 * 24);
+
+            $this->userAgentAction->storeUserAgent($request);
             // return the token as a response
-            return ResponseHelper::success('Login Successfully', [
+            return response()->json([
                 'userId' => auth()->user()->id,
                 'userName' => auth()->user()->name,
+                'userRole' => auth()->user()->role,
                 'access_token' => $token,
                 'token_type' => 'Bearer'
-            ])->withCookie($cookie);
+            ]);
         }
-        return ResponseHelper::fail('Login Failed', null);
+        abort(401, 'Unauthorized');
     }
 
     /**
@@ -42,9 +49,6 @@ class AuthenticatedSessionController extends Controller
     {
         Auth::guard('web')->logout();
         auth()->user()->tokens()->delete();        // Revoke all tokens...
-        // Clear the access_token cookie
-        $cookie = Cookie::forget('IncomeController');
-
-        return ResponseHelper::success('Token revoked', null)->withCookie($cookie);
+        return ResponseHelper::success('Token revoked', null);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,7 +19,7 @@ class UserResource extends JsonResource
         $uri = $request->route()?->uri;
         if (!$uri) return [];
 
-        if ($uri === 'api/app/reports' || $uri === 'api/app/changed-histories' || $uri === 'api/app/uncheck-reports' || $uri === 'api/app/calculations') {
+        if ($uri === 'api/app/reports' || $uri === 'api/app/all-notis' || $uri === 'api/app/changed-histories' || $uri === 'api/app/uncheck-reports' || $uri === 'api/app/calculations') {
             return [
                 'id' => $this->id,
                 'name'    => $this->name ?? '',
@@ -31,7 +32,13 @@ class UserResource extends JsonResource
                 'email'   => $this->email ?? '',
                 'role' => $this->role ?? '',
                 'password' => $this->password ?? '',
-                'accountStatus' => $this->account_status
+                'accountStatus' => $this->account_status,
+            ];
+        }
+        if ($uri === 'api/app/message/{receiverId?}' && $request->isMethod('GET')) {
+            return [
+                'id'      => $this->id,
+                'name'    => $this->name ?? '',
             ];
         }
         return [
@@ -39,7 +46,8 @@ class UserResource extends JsonResource
             'name'    => $this->name ?? '',
             'email'   => $this->email ?? '',
             'role' => $this->role ?? '',
-            'accountStatus' => $this->account_status
+            'accountStatus' => $this->account_status,
+            'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d'),
         ];
     }
 }
