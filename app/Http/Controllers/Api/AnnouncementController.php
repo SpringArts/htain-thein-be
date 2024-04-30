@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateAnnouncementRequest;
 use App\Http\Resources\AnnouncementResource;
 use App\Models\Announcement;
 use App\UseCases\Announcement\AnnouncementAction;
+use Gate;
 use Illuminate\Http\JsonResponse;
 
 class AnnouncementController extends Controller
@@ -34,7 +35,8 @@ class AnnouncementController extends Controller
      */
     public function store(StoreAnnouncementRequest $request)
     {
-        return $this->announcementAction->createAnnouncement($request->all());
+        $this->announcementAction->createAnnouncement($request->safe()->all());
+        return ResponseHelper::success('Successfully created', null, 201);
     }
 
     /**
@@ -47,7 +49,9 @@ class AnnouncementController extends Controller
 
     public function update(UpdateAnnouncementRequest $request, Announcement $announcement): JsonResponse
     {
-        $this->announcementAction->updateAnnouncement($request->all(), $announcement);
+        $formData = $request->safe()->all();
+        $formData['is_visible'] = (int)$formData['isVisible'];
+        $this->announcementAction->updateAnnouncement($formData, $announcement);
         return ResponseHelper::success('Successfully Updated', null, 200);
     }
     /**
@@ -55,7 +59,9 @@ class AnnouncementController extends Controller
      */
     public function destroy(Announcement $announcement)
     {
-        return $this->announcementAction->deleteAnnouncement($announcement);
+        Gate::authorize('adminPermission');
+        $this->announcementAction->deleteAnnouncement($announcement);
+        return ResponseHelper::success('Successfully deleted', null, 200);
     }
 
     public function batchDelete()

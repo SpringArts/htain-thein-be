@@ -26,7 +26,7 @@ class HomeController extends Controller
 
     public function storeContactInfo(Request $request): JsonResponse
     {
-        $formData = $request->all();
+        $formData = $request->safe()->all();
         $storeData = $this->overviewData->storeContactInfo($formData);
         return ResponseHelper::success('Successfully Submitted', null, 201);
     }

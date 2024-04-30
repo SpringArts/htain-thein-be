@@ -42,7 +42,7 @@ class NotiInfoController extends Controller
 
     public function store(StoreNotiInfoRequest $request): JsonResponse
     {
-        $formData = $request->all();
+        $formData = $request->safe()->all();
         try {
             $this->notiInfoAction->createNotificationInfo($formData);
             return ResponseHelper::success('Successfully created', null, 201);
@@ -61,7 +61,7 @@ class NotiInfoController extends Controller
     public function update(UpdateNotiInfoRequest $request, NotiInfo $noti): JsonResponse
     {
         try {
-            $this->notiInfoAction->updateNotificationInfo($request->all(), $noti);
+            $this->notiInfoAction->updateNotificationInfo($request->safe()->all(), $noti);
             return ResponseHelper::success('Successfully Updated', null, 200);
         } catch (\Exception $e) {
             return ResponseHelper::fail($e->getMessage(), null);

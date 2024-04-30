@@ -42,14 +42,14 @@ class GeneralOutcomeController extends Controller
 
     public function store(StoreGeneralOutComeRequest $request): JsonResponse
     {
-        $this->generalOutcomeAction->storeGeneralOutcome($request->all());
+        $this->generalOutcomeAction->storeGeneralOutcome($request->safe()->all());
         return ResponseHelper::success("Successfully Created", null);
     }
 
     public function update(UpdateGeneralOutComeRequest $request, GeneralOutcome $generalOutcome): JsonResponse
     {
         Gate::authorize('adminPermission');
-        $this->generalOutcomeAction->updateGeneralOutcome($request->all(), $generalOutcome);
+        $this->generalOutcomeAction->updateGeneralOutcome($request->safe()->all(), $generalOutcome);
         return ResponseHelper::success("Successfully Updated", null);
     }
 

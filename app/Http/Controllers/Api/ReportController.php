@@ -38,7 +38,7 @@ class ReportController extends Controller
     public function store(StoreReportRequest $request): JsonResponse
     {
         Gate::authorize('adminPermission');
-        $formData = $request->all();
+        $formData = $request->safe()->all();
         $storeReport = $this->reportAction->createReport($formData);
         $this->reportAction->createNotification(auth()->user()->id, $storeReport->id);
         return ResponseHelper::success('Successfully created', null, 201);
@@ -59,8 +59,7 @@ class ReportController extends Controller
      */
     public function update(UpdateReportRequest $request, Report $report): JsonResponse
     {
-        Gate::authorize('adminPermission');
-        $this->reportAction->updateReport($request->all(), $report);
+        $this->reportAction->updateReport($request->safe()->all(), $report);
         return ResponseHelper::success('Successfully Updated', null, 200);
     }
 

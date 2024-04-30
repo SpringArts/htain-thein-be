@@ -13,7 +13,7 @@ class FinancialCalculatorService
     public static function overviewCalculate(): array
     {
         $income = self::calculateSum(FinancialType::INCOME, 1);
-        $outcome = self::calculateSum(FinancialType::EXPENSE, 1);
+        $outcome = self::calculateTotalOutcome();
         $regularCost = self::calculateRegularCost();
         $availableBalance = self::calculateAvailableBalance();
         $mostDepositPerson = self::findMostPerson(FinancialType::INCOME);
@@ -34,11 +34,19 @@ class FinancialCalculatorService
         return $data;
     }
 
-    private static function calculateSum($type, $confirmStatus)
+    private static function calculateSum(string $type, int $confirmStatus)
     {
         return Report::where('type', $type)
             ->where('confirm_status', $confirmStatus)
             ->sum('amount');
+    }
+
+    private static function calculateTotalOutcome()
+    {
+        $reportOutcome = self::calculateSum(FinancialType::EXPENSE, 1);
+        $regularOutcome = self::calculateRegularCost();
+        $totalOutcome = $reportOutcome + $regularOutcome;
+        return $totalOutcome;
     }
 
     private static function calculateRegularCost()

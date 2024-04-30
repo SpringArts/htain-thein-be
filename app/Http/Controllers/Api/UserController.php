@@ -35,7 +35,7 @@ class UserController extends Controller
     public function store(StoreReportRequest $request): JsonResponse
     {
         Gate::authorize('adminPermission');
-        $formData = $request->all();
+        $formData = $request->safe()->all();
         $this->userAction->createUser($formData);
         return ResponseHelper::success('Successfully created', null, 201);
     }
@@ -50,7 +50,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user): JsonResponse
     {
         Gate::authorize('adminPermission');
-        $this->userAction->updateUser($request->all(), $user);
+        $this->userAction->updateUser($request->safe()->all(), $user);
         return ResponseHelper::success('Successfully Updated', null, 200);
     }
 
