@@ -10,6 +10,7 @@ use App\Services\ReportEditHistoryService;
 use App\Services\FinancialCalculatorService;
 use App\Interfaces\Report\ReportHistoryInterface;
 use App\Interfaces\Notification\NotificationInterface;
+use Log;
 
 class ReportAction
 {

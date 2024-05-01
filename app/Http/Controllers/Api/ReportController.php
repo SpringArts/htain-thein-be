@@ -37,7 +37,7 @@ class ReportController extends Controller
      */
     public function store(StoreReportRequest $request): JsonResponse
     {
-        Gate::authorize('adminPermission');
+        // Gate::authorize('adminPermission');
         $formData = $request->safe()->all();
         $storeReport = $this->reportAction->createReport($formData);
         $this->reportAction->createNotification(auth()->user()->id, $storeReport->id);

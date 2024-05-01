@@ -24,11 +24,11 @@ class GeneralOutcomeController extends Controller
     public function index(): JsonResponse
     {
         $data = $this->generalOutcomeAction->fetchGeneralOutcome();
-        return response()->json(
-            [
-                'data' => GeneralOutcomeResource::collection($data)
-            ],
-        );
+        $meta = ResponseHelper::getPaginationMeta($data);
+        return response()->json([
+            'data' => GeneralOutcomeResource::collection($data),
+            'meta' => $meta,
+        ]);
     }
 
     public function show(GeneralOutcome $generalOutcome): JsonResponse
