@@ -9,22 +9,24 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreReportRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\V1\App\User\FetchUserRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Gate;
 use App\UseCases\UserAction\UserAction;
 
 class UserController extends Controller
 {
-    private $userAction;
+    private UserAction $userAction;
 
     public function __construct(UserAction $userAction)
     {
         $this->userAction = $userAction;
     }
 
-    public function index(): JsonResponse
+    public function index(FetchUserRequest $request): JsonResponse
     {
-        $data = $this->userAction->fetchUsers();
+        $validatedData = $request->safe()->all();
+        $data = $this->userAction->fetchUsers($validatedData);
         $meta = ResponseHelper::getPaginationMeta($data);
         return response()->json([
             'data' => UserResource::collection($data),

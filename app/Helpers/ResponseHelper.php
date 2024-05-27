@@ -2,11 +2,12 @@
 
 namespace App\Helpers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ResponseHelper
 {
-    public static function success($message, $data = null, $status = 200, $alertVisible = 1)
+    public static function success(string $message, mixed $data = null, int $status = 200, int $alertVisible = 1): JsonResponse
     {
         return response()->json(
             [
@@ -18,7 +19,7 @@ class ResponseHelper
         );
     }
 
-    public static function fail($message, $data = null, $status = 502, $alertVisible = 1)
+    public static function fail(string $message, mixed $data = null, int $status = 502, int $alertVisible = 1): JsonResponse
     {
         return response()->json(
             [
@@ -29,7 +30,7 @@ class ResponseHelper
         );
     }
 
-    public static function getPaginationMeta(LengthAwarePaginator $data)
+    public static function getPaginationMeta(LengthAwarePaginator $data): array
     {
         return [
             'currentPage' => $data->currentPage(),

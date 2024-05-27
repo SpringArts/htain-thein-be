@@ -40,7 +40,9 @@
         "files":[
             "App/Helpers/FunctionalHelper.php",
             "App/Helpers/ResponseHelper.php",
-            "App/Helpers/FilterSearchHelper.php"
+            "App/Helpers/FilterSearchHelper.php",
+            "App/Helpers/AuthHelper.php",
+            "App/Helpers/DateChangeHelper.php"
         ]
     },
     "autoload-dev": {

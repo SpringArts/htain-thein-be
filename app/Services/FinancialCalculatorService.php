@@ -28,20 +28,20 @@ class FinancialCalculatorService
             'outcome' => $outcome,
             'regularCost' => $regularCost,
             'availableBalance' => $availableBalance,
-            'mostDepositPerson' => $mostDepositPerson ? $mostDepositPerson->reporter?->name : '-',
-            'mostWithdrawPerson' => $mostWithdrawPerson ? $mostWithdrawPerson->reporter?->name : '-'
+            'mostDepositPerson' => $mostDepositPerson->reporter->name,
+            'mostWithdrawPerson' => $mostWithdrawPerson->reporter->name
         ];
         return $data;
     }
 
-    private static function calculateSum(string $type, int $confirmStatus)
+    private static function calculateSum(string $type, int $confirmStatus): mixed
     {
         return Report::where('type', $type)
             ->where('confirm_status', $confirmStatus)
             ->sum('amount');
     }
 
-    private static function calculateTotalOutcome()
+    private static function calculateTotalOutcome(): float
     {
         $reportOutcome = self::calculateSum(FinancialType::EXPENSE, 1);
         $regularOutcome = self::calculateRegularCost();
@@ -49,12 +49,12 @@ class FinancialCalculatorService
         return $totalOutcome;
     }
 
-    private static function calculateRegularCost()
+    private static function calculateRegularCost(): mixed
     {
         return GeneralOutcome::sum('amount');
     }
 
-    public static function calculateAvailableBalance()
+    public static function calculateAvailableBalance(): float
     {
         $income = self::calculateSum(FinancialType::INCOME, 1);
         $outcome = self::calculateSum(FinancialType::EXPENSE, 1);
@@ -62,13 +62,13 @@ class FinancialCalculatorService
         return $income - $outcome - $regularCost;
     }
 
-    private static function findMostPerson($type)
+    private static function findMostPerson(string $type): Report
     {
         return Report::where('type', $type)
             ->where('confirm_status', ConfirmStatus::CHECKED)
             ->select('reporter_id', DB::raw('SUM(amount) as total_amount'))
             ->groupBy('reporter_id')
             ->orderByDesc('total_amount')
-            ->first();
+            ->firstOrFail();
     }
 }

@@ -15,26 +15,7 @@ parameters:
 #        - '#PHPDoc tag @var#'
 #
     excludePaths:
-        - ./app/Providers
-        - ./app/Http/Controllers/Auth
-        - ./app/Http/Controllers/Api
-        - ./app/Http/Controllers/Api/Auth
-        - ./app/Console
-        - ./app/Exceptions
-        - ./app/Http/Middleware
-        - ./app/Http/Requests
-        - ./app/Http/Resources
-        - ./app/Models
-        - ./app/Policies
-        - ./app/Interfaces
-        - ./app/Helpers
-        - ./app/Services
-        - ./app/Repositories
-        - ./app/Rules
-        - ./app/UseCases
-        - ./app/Enums
-        - ./app/Events
-        - ./app/Exports
+
 #
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false

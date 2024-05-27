@@ -5,7 +5,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 10.44.0.
+ * Generated for Laravel 10.48.10.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -6381,12 +6381,12 @@ namespace Illuminate\Support\Facades {
          *
          * @param string $target
          * @param string $link
-         * @return void 
+         * @return bool|null 
          * @static 
          */        public static function link($target, $link)
         {
                         /** @var \Illuminate\Filesystem\Filesystem $instance */
-                        $instance->link($target, $link);
+                        return $instance->link($target, $link);
         }
                     /**
          * Create a relative symlink to the target file or directory.
@@ -8874,6 +8874,17 @@ namespace Illuminate\Support\Facades {
                         return $instance->hasSent($notifiable, $notification);
         }
                     /**
+         * Specify if notification should be serialized and restored when being "pushed" to the queue.
+         *
+         * @param bool $serializeAndRestore
+         * @return \Illuminate\Support\Testing\Fakes\NotificationFake 
+         * @static 
+         */        public static function serializeAndRestore($serializeAndRestore = true)
+        {
+                        /** @var \Illuminate\Support\Testing\Fakes\NotificationFake $instance */
+                        return $instance->serializeAndRestore($serializeAndRestore);
+        }
+                    /**
          * Get the notifications that have been sent.
          *
          * @return array 
@@ -8986,7 +8997,7 @@ namespace Illuminate\Support\Facades {
      * @method static \Illuminate\Process\PendingProcess tty(bool $tty = true)
      * @method static \Illuminate\Process\PendingProcess options(array $options)
      * @method static \Illuminate\Contracts\Process\ProcessResult run(array|string|null $command = null, callable|null $output = null)
-     * @method static \Illuminate\Process\InvokedProcess start(array|string|null $command = null, callable $output = null)
+     * @method static \Illuminate\Process\InvokedProcess start(array|string|null $command = null, callable|null $output = null)
      * @method static \Illuminate\Process\PendingProcess withFakeHandlers(array $fakeHandlers)
      * @method static \Illuminate\Process\PendingProcess|mixed when(\Closure|mixed|null $value = null, callable|null $callback = null, callable|null $default = null)
      * @method static \Illuminate\Process\PendingProcess|mixed unless(\Closure|mixed|null $value = null, callable|null $callback = null, callable|null $default = null)
@@ -9834,7 +9845,7 @@ namespace Illuminate\Support\Facades {
                         return $instance->tooManyAttempts($key, $maxAttempts);
         }
                     /**
-         * Increment the counter for a given key for a given decay time.
+         * Increment (by 1) the counter for a given key for a given decay time.
          *
          * @param string $key
          * @param int $decaySeconds
@@ -9844,6 +9855,19 @@ namespace Illuminate\Support\Facades {
         {
                         /** @var \Illuminate\Cache\RateLimiter $instance */
                         return $instance->hit($key, $decaySeconds);
+        }
+                    /**
+         * Increment the counter for a given key for a given decay time by a given amount.
+         *
+         * @param string $key
+         * @param int $decaySeconds
+         * @param int $amount
+         * @return int 
+         * @static 
+         */        public static function increment($key, $decaySeconds = 60, $amount = 1)
+        {
+                        /** @var \Illuminate\Cache\RateLimiter $instance */
+                        return $instance->increment($key, $decaySeconds, $amount);
         }
                     /**
          * Get the number of attempts for the given key.
@@ -17886,6 +17910,10 @@ namespace Laravel\Socialite\Facades {
             /**
      * 
      *
+     * @method array getScopes()
+     * @method \Laravel\Socialite\Contracts\Provider scopes(array|string $scopes)
+     * @method \Laravel\Socialite\Contracts\Provider setScopes(array|string $scopes)
+     * @method \Laravel\Socialite\Contracts\Provider redirectUrl(string $url)
      * @see \Laravel\Socialite\SocialiteManager
      */        class Socialite {
                     /**
@@ -18174,10 +18202,10 @@ namespace Spatie\LaravelIgnition\Facades {
          * 
          *
          * @static 
-         */        public static function registerErrorHandler()
+         */        public static function registerErrorHandler($errorLevels = null)
         {
                         /** @var \Spatie\FlareClient\Flare $instance */
-                        return $instance->registerErrorHandler();
+                        return $instance->registerErrorHandler($errorLevels);
         }
                     /**
          * 
@@ -18245,10 +18273,19 @@ namespace Spatie\LaravelIgnition\Facades {
          * 
          *
          * @static 
-         */        public static function report($throwable, $callback = null, $report = null)
+         */        public static function report($throwable, $callback = null, $report = null, $handled = null)
         {
                         /** @var \Spatie\FlareClient\Flare $instance */
-                        return $instance->report($throwable, $callback, $report);
+                        return $instance->report($throwable, $callback, $report, $handled);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */        public static function reportHandled($throwable)
+        {
+                        /** @var \Spatie\FlareClient\Flare $instance */
+                        return $instance->reportHandled($throwable);
         }
                     /**
          * 
@@ -20075,7 +20112,7 @@ namespace  {
              * Add a join clause to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $table
-             * @param \Closure|string $first
+             * @param \Closure|\Illuminate\Contracts\Database\Query\Expression|string $first
              * @param string|null $operator
              * @param \Illuminate\Contracts\Database\Query\Expression|string|null $second
              * @param string $type
@@ -20091,7 +20128,7 @@ namespace  {
              * Add a "join where" clause to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $table
-             * @param \Closure|string $first
+             * @param \Closure|\Illuminate\Contracts\Database\Query\Expression|string $first
              * @param string $operator
              * @param \Illuminate\Contracts\Database\Query\Expression|string $second
              * @param string $type
@@ -20107,7 +20144,7 @@ namespace  {
              *
              * @param \Closure|\Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|string $query
              * @param string $as
-             * @param \Closure|string $first
+             * @param \Closure|\Illuminate\Contracts\Database\Query\Expression|string $first
              * @param string|null $operator
              * @param \Illuminate\Contracts\Database\Query\Expression|string|null $second
              * @param string $type
@@ -20121,10 +20158,35 @@ namespace  {
                                 return $instance->joinSub($query, $as, $first, $operator, $second, $type, $where);
             }
                             /**
+             * Add a lateral join clause to the query.
+             *
+             * @param \Closure|\Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|string $query
+             * @param string $as
+             * @param string $type
+             * @return \Illuminate\Database\Query\Builder 
+             * @static 
+             */            public static function joinLateral($query, $as, $type = 'inner')
+            {
+                                /** @var \Illuminate\Database\Query\Builder $instance */
+                                return $instance->joinLateral($query, $as, $type);
+            }
+                            /**
+             * Add a lateral left join to the query.
+             *
+             * @param \Closure|\Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|string $query
+             * @param string $as
+             * @return \Illuminate\Database\Query\Builder 
+             * @static 
+             */            public static function leftJoinLateral($query, $as)
+            {
+                                /** @var \Illuminate\Database\Query\Builder $instance */
+                                return $instance->leftJoinLateral($query, $as);
+            }
+                            /**
              * Add a left join to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $table
-             * @param \Closure|string $first
+             * @param \Closure|\Illuminate\Contracts\Database\Query\Expression|string $first
              * @param string|null $operator
              * @param \Illuminate\Contracts\Database\Query\Expression|string|null $second
              * @return \Illuminate\Database\Query\Builder 
@@ -20138,7 +20200,7 @@ namespace  {
              * Add a "join where" clause to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $table
-             * @param \Closure|string $first
+             * @param \Closure|\Illuminate\Contracts\Database\Query\Expression|string $first
              * @param string $operator
              * @param \Illuminate\Contracts\Database\Query\Expression|string|null $second
              * @return \Illuminate\Database\Query\Builder 
@@ -20153,7 +20215,7 @@ namespace  {
              *
              * @param \Closure|\Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|string $query
              * @param string $as
-             * @param \Closure|string $first
+             * @param \Closure|\Illuminate\Contracts\Database\Query\Expression|string $first
              * @param string|null $operator
              * @param \Illuminate\Contracts\Database\Query\Expression|string|null $second
              * @return \Illuminate\Database\Query\Builder 
@@ -20181,7 +20243,7 @@ namespace  {
              * Add a "right join where" clause to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $table
-             * @param \Closure|string $first
+             * @param \Closure|\Illuminate\Contracts\Database\Query\Expression|string $first
              * @param string $operator
              * @param \Illuminate\Contracts\Database\Query\Expression|string $second
              * @return \Illuminate\Database\Query\Builder 
@@ -20196,7 +20258,7 @@ namespace  {
              *
              * @param \Closure|\Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|string $query
              * @param string $as
-             * @param \Closure|string $first
+             * @param \Closure|\Illuminate\Contracts\Database\Query\Expression|string $first
              * @param string|null $operator
              * @param \Illuminate\Contracts\Database\Query\Expression|string|null $second
              * @return \Illuminate\Database\Query\Builder 
@@ -20210,7 +20272,7 @@ namespace  {
              * Add a "cross join" clause to the query.
              *
              * @param \Illuminate\Contracts\Database\Query\Expression|string $table
-             * @param \Closure|string|null $first
+             * @param \Closure|\Illuminate\Contracts\Database\Query\Expression|string|null $first
              * @param string|null $operator
              * @param \Illuminate\Contracts\Database\Query\Expression|string|null $second
              * @return \Illuminate\Database\Query\Builder 
@@ -20261,7 +20323,7 @@ namespace  {
                             /**
              * Add a "where" clause comparing two columns to the query.
              *
-             * @param string|array $first
+             * @param \Illuminate\Contracts\Database\Query\Expression|string|array $first
              * @param string|null $operator
              * @param string|null $second
              * @param string|null $boolean
@@ -20275,7 +20337,7 @@ namespace  {
                             /**
              * Add an "or where" clause comparing two columns to the query.
              *
-             * @param string|array $first
+             * @param \Illuminate\Contracts\Database\Query\Expression|string|array $first
              * @param string|null $operator
              * @param string|null $second
              * @return \Illuminate\Database\Query\Builder 
@@ -20980,6 +21042,60 @@ namespace  {
             {
                                 /** @var \Illuminate\Database\Query\Builder $instance */
                                 return $instance->orWhereFullText($columns, $value, $options);
+            }
+                            /**
+             * Add a "where" clause to the query for multiple columns with "and" conditions between them.
+             *
+             * @param string[] $columns
+             * @param mixed $operator
+             * @param mixed $value
+             * @param string $boolean
+             * @return \Illuminate\Database\Query\Builder 
+             * @static 
+             */            public static function whereAll($columns, $operator = null, $value = null, $boolean = 'and')
+            {
+                                /** @var \Illuminate\Database\Query\Builder $instance */
+                                return $instance->whereAll($columns, $operator, $value, $boolean);
+            }
+                            /**
+             * Add an "or where" clause to the query for multiple columns with "and" conditions between them.
+             *
+             * @param string[] $columns
+             * @param string $operator
+             * @param mixed $value
+             * @return \Illuminate\Database\Query\Builder 
+             * @static 
+             */            public static function orWhereAll($columns, $operator = null, $value = null)
+            {
+                                /** @var \Illuminate\Database\Query\Builder $instance */
+                                return $instance->orWhereAll($columns, $operator, $value);
+            }
+                            /**
+             * Add an "where" clause to the query for multiple columns with "or" conditions between them.
+             *
+             * @param string[] $columns
+             * @param string $operator
+             * @param mixed $value
+             * @param string $boolean
+             * @return \Illuminate\Database\Query\Builder 
+             * @static 
+             */            public static function whereAny($columns, $operator = null, $value = null, $boolean = 'and')
+            {
+                                /** @var \Illuminate\Database\Query\Builder $instance */
+                                return $instance->whereAny($columns, $operator, $value, $boolean);
+            }
+                            /**
+             * Add an "or where" clause to the query for multiple columns with "or" conditions between them.
+             *
+             * @param string[] $columns
+             * @param string $operator
+             * @param mixed $value
+             * @return \Illuminate\Database\Query\Builder 
+             * @static 
+             */            public static function orWhereAny($columns, $operator = null, $value = null)
+            {
+                                /** @var \Illuminate\Database\Query\Builder $instance */
+                                return $instance->orWhereAny($columns, $operator, $value);
             }
                             /**
              * Add a "group by" clause to the query.

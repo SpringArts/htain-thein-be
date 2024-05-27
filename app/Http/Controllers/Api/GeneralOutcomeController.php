@@ -8,22 +8,24 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreGeneralOutComeRequest;
 use App\Http\Requests\UpdateGeneralOutComeRequest;
+use App\Http\Requests\V1\App\GeneralOutcome\FetchGeneralOutcomeRequest;
 use App\Http\Resources\GeneralOutcomeResource;
 use App\UseCases\GeneralOutcome\GeneralOutcomeAction;
 use Illuminate\Http\JsonResponse;
 
 class GeneralOutcomeController extends Controller
 {
-    protected $generalOutcomeAction;
+    protected GeneralOutcomeAction $generalOutcomeAction;
 
     public function __construct(GeneralOutcomeAction $generalOutcomeAction)
     {
         $this->generalOutcomeAction = $generalOutcomeAction;
     }
 
-    public function index(): JsonResponse
+    public function index(FetchGeneralOutcomeRequest $request): JsonResponse
     {
-        $data = $this->generalOutcomeAction->fetchGeneralOutcome();
+        $validatedData = $request->safe()->all();
+        $data = $this->generalOutcomeAction->fetchGeneralOutcome($validatedData);
         $meta = ResponseHelper::getPaginationMeta($data);
         return response()->json([
             'data' => GeneralOutcomeResource::collection($data),

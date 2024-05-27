@@ -4,7 +4,8 @@ namespace App\UseCases\GeneralOutcome;
 
 use App\Interfaces\GeneralOutcome\GeneralOutcomeInterface;
 use App\Models\GeneralOutcome;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class GeneralOutcomeAction
 {
@@ -15,10 +16,10 @@ class GeneralOutcomeAction
         $this->generalOutcomeRepository = $generalOutcomeRepository;
     }
 
-    public function fetchGeneralOutcome()
+    public function fetchGeneralOutcome(array $validateData): LengthAwarePaginator
     {
-        $limit = request()->limit ?? 8;
-        $page = request()->page ?? 1;
+        $limit = $validateData['limit'] ?? 8;
+        $page =  $validateData['page'] ?? 1;
         $data = $this->generalOutcomeRepository->fetchData($limit, $page);
         return $data;
     }
@@ -28,12 +29,12 @@ class GeneralOutcomeAction
         return $this->generalOutcomeRepository->storeGeneralOutcome($data);
     }
 
-    public function updateGeneralOutcome(array $data, GeneralOutcome $generalOutcome): int
+    public function updateGeneralOutcome(array $data, GeneralOutcome $generalOutcome): bool
     {
         return $this->generalOutcomeRepository->updateGeneralOutcome($data, $generalOutcome);
     }
 
-    public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): int
+    public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): bool|null
     {
         return $this->generalOutcomeRepository->deleteGeneralOutcome($generalOutcome);
     }

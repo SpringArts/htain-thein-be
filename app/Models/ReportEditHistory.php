@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\ReportEditHistory
@@ -37,12 +38,12 @@ class ReportEditHistory extends Model
     protected $guarded = ['id'];
 
 
-    public function report()
+    public function report(): BelongsTo
     {
         return $this->belongsTo(Report::class, 'report_id');
     }
 
-    public function editUser()
+    public function editUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'editor_id');
     }

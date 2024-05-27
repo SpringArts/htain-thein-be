@@ -5,7 +5,6 @@ namespace App\Services;
 
 use Carbon\Carbon;
 use App\Models\ReportEditHistory;
-use Illuminate\Support\Facades\Auth;
 
 class ReportEditHistoryService
 {
@@ -13,7 +12,7 @@ class ReportEditHistoryService
     {
         try {
             $history = new ReportEditHistory();
-            $history->editor_id = Auth::id();
+            $history->editor_id = getAuthUserOrFail()->id;
             $history->report_id = $oldData['id'];
 
             $oldDataChangeFields = [];

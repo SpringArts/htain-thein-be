@@ -2,62 +2,53 @@
 
 namespace App\UseCases\NotiInfo;
 
+use App\Interfaces\Notification\NotificationInterface;
 use App\Models\NotiInfo;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\QueryException;
+use App\Models\Report;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class NotiInfoAction
 {
-    public function fetchAllNotifications()
-    {
-        $data = NotiInfo::with('user', 'report')->get();
-        return $data;
-    }
-    public function fetchNotification($userId): \Illuminate\Contracts\Pagination\LengthAwarePaginator
-    {
-        $limit = request()->limit ?? 8;
-        $page = request()->page ?? 1;
-        $data = NotiInfo::where('user_id', $userId)
-            ->where('check_status', 0)
-            ->orderBy('created_at', 'desc')
-            ->paginate($limit, ['*'], 'page', $page)
-            ->appends(request()->query());
-        return $data;
+    private NotificationInterface $notiInfoResponsitory;
+
+    public function __construct(
+        NotificationInterface $notiInfoResponsitory
+    ) {
+        $this->notiInfoResponsitory = $notiInfoResponsitory;
     }
 
-    public function createNotificationInfo(array $data): NotiInfo
+    public function fetchAllNotifications(): Collection
     {
-        DB::beginTransaction();
-        try {
-            $notiInfo = NotiInfo::create($data);
-            DB::commit();
-            return $notiInfo;
-        } catch (QueryException $e) {
-            DB::rollBack();
-            throw new \Exception($e->getMessage());
-        }
+        return $this->notiInfoResponsitory->fetchAllNotifications();
     }
 
-    public function updateNotificationInfo(array $formData, NotiInfo $noti): int
+    public function fetchUncheckedNotifications(array $formData, int $userId): LengthAwarePaginator
     {
-        DB::beginTransaction();
-        try {
-            $noti->update($formData);
-            DB::commit();
-            return 200;
-        } catch (QueryException $e) {
-            DB::rollBack();
-            throw new \Exception($e->getMessage());
-        }
+        $limit = $formData['limit'] ?? 8;
+        $page = $formData['page'] ?? 1;
+        return $this->notiInfoResponsitory->fetchUncheckedNotifications($userId, $limit, $page);
     }
 
-    public function deleteNotificationInfo(NotiInfo $noti): int
+    public function getUserNotification(Report $report): NotiInfo
     {
-        try {
-            $noti->delete();
-            return 200;
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
+        return $this->notiInfoResponsitory->getUserNotification($report);
+    }
+
+    public function createNotification(array $formData): NotiInfo
+    {
+        $userId = $formData['user_id'];
+        $reportId = $formData['report_id'];
+        return $this->notiInfoResponsitory->createNotification($userId, $reportId);
+    }
+
+    public function updateNotification(NotiInfo $notiInfo): bool
+    {
+        return $this->notiInfoResponsitory->updateNotification($notiInfo);
+    }
+
+    public function deleteNotification(NotiInfo $notiInfo): bool|null
+    {
+        return $this->notiInfoResponsitory->deleteNotification($notiInfo);
     }
 }

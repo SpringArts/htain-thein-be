@@ -14,12 +14,12 @@ class MessageSending implements ShouldBroadcast
     use InteractsWithSockets;
     use SerializesModels;
 
-    public $message;
+    public string $message;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($message)
+    public function __construct(string $message)
     {
         $this->message = $message;
     }

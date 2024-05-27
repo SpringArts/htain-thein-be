@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\Announcement;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -14,13 +15,13 @@ class AnnouncementEvent
     use InteractsWithSockets;
     use SerializesModels;
 
-    public $announcement;
-    public $user;
+    public Announcement $announcement;
+    public User $user;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Announcement $announcement, $user)
+    public function __construct(Announcement $announcement, User $user)
     {
         $this->announcement = $announcement;
         $this->user = $user;

@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use Laravel\Socialite\Facades\Socialite;
 use App\Services\AuthServices\AuthService;
 use App\UseCases\Auth\UserAgentAction;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ProviderController extends Controller
 {
-    protected $authService;
-    protected $userAgentAction;
+    protected AuthService $authService;
+    protected UserAgentAction $userAgentAction;
 
     public function __construct(AuthService $authService, UserAgentAction $userAgentAction)
     {
@@ -18,16 +19,16 @@ class ProviderController extends Controller
         $this->userAgentAction = $userAgentAction;
     }
 
-    public function redirectToProvider($provider)
+    public function redirectToProvider(string $provider): RedirectResponse
     {
         return Socialite::driver($provider)->redirect();
     }
 
-    public function handleProviderCallback($provider)
+    public function handleProviderCallback(string $provider): RedirectResponse
     {
-        $user = Socialite::driver($provider)->stateless()->user();
+        $user = Socialite::driver($provider)->user();
         $token = $this->authService->handleAuthentication($user, $provider);
-        $authUser = auth()->user();
+        $authUser = getAuthUserOrFail();
 
         $encryptedUserData = encryptAlgorithm([
             'userId' => $authUser->id,

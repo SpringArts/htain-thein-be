@@ -5,6 +5,8 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @mixin \App\Models\ReportEditHistory */
+
 class ReportEditHistoryResource extends JsonResource
 {
     /**
@@ -17,10 +19,10 @@ class ReportEditHistoryResource extends JsonResource
         return [
             'id'      => $this->id,
             'editor'    => $this->editUser->name ?? '',
-            'reportData'   =>  new ReportResource($this->whenLoaded('report')) ?? '',
-            'oldData' => json_decode($this->old_data) ?? '',
-            'newData' => json_decode($this->new_data) ?? '',
-            'updatedAt' => $this->updated_at->format('Y-d-M h:i A'),
+            'reportData'   =>  new ReportResource($this->whenLoaded('report')),
+            'oldData' => is_string($this->old_data) ? json_decode($this->old_data) : '',
+            'newData' => is_string($this->new_data) ? json_decode($this->new_data) : '',
+            'updatedAt' => $this->updated_at ? formatDateTime($this->updated_at) : '',
         ];
     }
 }

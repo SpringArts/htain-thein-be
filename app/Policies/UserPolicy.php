@@ -3,25 +3,24 @@
 namespace App\Policies;
 
 use App\Enums\UserRoleType;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
 {
     use HandlesAuthorization;
 
-    public function superAdminPermission()
+    public function superAdminPermission(): bool
     {
-        return Auth::user()->role === UserRoleType::SUPER_ADMIN;
+        return getAuthUserOrFail()->role === UserRoleType::SUPER_ADMIN;
     }
 
-    public function adminPermission()
+    public function adminPermission(): bool
     {
-        return in_array(Auth::user()->role, [UserRoleType::SUPER_ADMIN, UserRoleType::ADMIN]);
+        return in_array(getAuthUserOrFail()->role, [UserRoleType::SUPER_ADMIN, UserRoleType::ADMIN]);
     }
 
-    public function memberPermission()
+    public function memberPermission(): bool
     {
-        return in_array(Auth::user()->role, [UserRoleType::SUPER_ADMIN,  UserRoleType::ADMIN]);
+        return in_array(getAuthUserOrFail()->role, [UserRoleType::SUPER_ADMIN,  UserRoleType::ADMIN]);
     }
 }

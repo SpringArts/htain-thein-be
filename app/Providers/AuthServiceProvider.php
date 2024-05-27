@@ -6,7 +6,9 @@ use App\Models\User;
 use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use InvalidArgumentException;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -27,7 +29,10 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
         Gate::define('superAdminPermission', [UserPolicy::class, 'superAdminPermission']);
         Gate::define('adminPermission', [UserPolicy::class, 'adminPermission']);
-        ResetPassword::createUrlUsing(function (object $notifiable, string $token) {
+        ResetPassword::createUrlUsing(function (mixed $notifiable, string $token) {
+            if (!$notifiable instanceof CanResetPassword) {
+                throw new InvalidArgumentException('The notifiable object must implement CanResetPassword interface.');
+            }
             return config('app.frontend_url') . "/password-reset/$token?email={$notifiable->getEmailForPasswordReset()}";
         });
 

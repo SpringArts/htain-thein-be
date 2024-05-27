@@ -7,22 +7,24 @@ use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreNotiInfoRequest;
-use App\Http\Requests\UpdateNotiInfoRequest;
+use App\Http\Requests\V1\App\NotificationInfo\UncheckNotiInfoRequest;
 use App\Http\Resources\NotiInfoResource;
 use App\UseCases\NotiInfo\NotiInfoAction;
 
 class NotiInfoController extends Controller
 {
-    private $notiInfoAction;
+    private NotiInfoAction $notiInfoAction;
 
     public function __construct(NotiInfoAction $notiInfoAction)
     {
         $this->notiInfoAction = $notiInfoAction;
     }
 
-    public function index(): JsonResponse
+    public function index(UncheckNotiInfoRequest $request): JsonResponse
     {
-        $data = $this->notiInfoAction->fetchNotification(auth()->user()->id);
+        $formData = $request->safe()->all();
+        $authUserId = getAuthUserOrFail()->id;
+        $data = $this->notiInfoAction->fetchUncheckedNotifications($formData, $authUserId);
         $meta = ResponseHelper::getPaginationMeta($data);
 
         return response()->json([
@@ -44,7 +46,7 @@ class NotiInfoController extends Controller
     {
         $formData = $request->safe()->all();
         try {
-            $this->notiInfoAction->createNotificationInfo($formData);
+            $this->notiInfoAction->createNotification($formData);
             return ResponseHelper::success('Successfully created', null, 201);
         } catch (\Exception $e) {
             return ResponseHelper::fail($e->getMessage(), null);
@@ -58,23 +60,15 @@ class NotiInfoController extends Controller
         ]);
     }
 
-    public function update(UpdateNotiInfoRequest $request, NotiInfo $noti): JsonResponse
+    public function update(NotiInfo $noti): JsonResponse
     {
-        try {
-            $this->notiInfoAction->updateNotificationInfo($request->safe()->all(), $noti);
-            return ResponseHelper::success('Successfully Updated', null, 200);
-        } catch (\Exception $e) {
-            return ResponseHelper::fail($e->getMessage(), null);
-        }
+        $this->notiInfoAction->updateNotification($noti);
+        return ResponseHelper::success('Successfully Updated', null, 200);
     }
 
     public function destroy(NotiInfo $noti): JsonResponse
     {
-        try {
-            $this->notiInfoAction->deleteNotificationInfo($noti);
-            return ResponseHelper::success('Successfully Deleted', null, 200);
-        } catch (\Exception $e) {
-            return ResponseHelper::fail($e->getMessage(), null);
-        }
+        $this->notiInfoAction->deleteNotification($noti);
+        return ResponseHelper::success('Successfully Deleted', null, 200);
     }
 }

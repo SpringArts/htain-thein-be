@@ -3,37 +3,38 @@
 namespace  App\Services\AuthServices;
 
 use App\Models\User;
+use Laravel\Socialite\Contracts\User as SocialiteUser;
 
 class AuthService
 {
-    public function handleAuthentication($user, $provider)
+    public function handleAuthentication(SocialiteUser $socialiteUser, string $provider): string
     {
-        $newUser =  $this->store($user, $provider);
+        $newUser =  $this->store($socialiteUser, $provider);
         $this->login($newUser);
         $token = $this->createToken($newUser);
         return $token;
     }
 
 
-    private function store($user, $provider)
+    private function store(SocialiteUser $socialiteUser, string $provider): User
     {
         return User::updateOrCreate(
-            ['email' => $user->getEmail()], // Check if user exists based on email
+            ['email' => $socialiteUser->getEmail()], // Use getEmail() method
             [
-                'name' => $user->getName(),
-                'provider_id' => $user->getId(),
+                'name' => $socialiteUser->getName(), // Use getName() method
+                'provider_id' => $socialiteUser->getId(), // Use getId() method
                 'provider_name' => $provider,
             ]
         );
     }
 
 
-    private function login($newUser)
+    private function login(User $newUser): void
     {
-        return auth()->login($newUser);
+        auth()->login($newUser);
     }
 
-    public function createToken($newUser)
+    public function createToken(User $newUser): string
     {
         return $newUser->createToken('authToken')->plainTextToken;
     }
