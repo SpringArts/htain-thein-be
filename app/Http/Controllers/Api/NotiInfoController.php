@@ -6,7 +6,7 @@ use App\Models\NotiInfo;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreNotiInfoRequest;
+use App\Http\Requests\V1\App\NotificationInfo\StoreNotiInfoRequest;
 use App\Http\Requests\V1\App\NotificationInfo\UncheckNotiInfoRequest;
 use App\Http\Resources\NotiInfoResource;
 use App\UseCases\NotiInfo\NotiInfoAction;

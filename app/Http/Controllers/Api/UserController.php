@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreReportRequest;
-use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\V1\App\User\FetchUserRequest;
+use App\Http\Requests\V1\App\User\StoreUserRequest;
+use App\Http\Requests\V1\App\User\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Gate;
 use App\UseCases\UserAction\UserAction;
@@ -34,7 +34,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(StoreReportRequest $request): JsonResponse
+    public function store(StoreUserRequest $request): JsonResponse
     {
         Gate::authorize('adminPermission');
         $formData = $request->safe()->all();

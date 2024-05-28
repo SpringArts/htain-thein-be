@@ -28,8 +28,8 @@ class FinancialCalculatorService
             'outcome' => $outcome,
             'regularCost' => $regularCost,
             'availableBalance' => $availableBalance,
-            'mostDepositPerson' => $mostDepositPerson->reporter->name,
-            'mostWithdrawPerson' => $mostWithdrawPerson->reporter->name
+            'mostDepositPerson' => $mostDepositPerson?->reporter->name,
+            'mostWithdrawPerson' => $mostWithdrawPerson?->reporter->name
         ];
         return $data;
     }
@@ -62,13 +62,13 @@ class FinancialCalculatorService
         return $income - $outcome - $regularCost;
     }
 
-    private static function findMostPerson(string $type): Report
+    private static function findMostPerson(string $type): Report|null
     {
         return Report::where('type', $type)
             ->where('confirm_status', ConfirmStatus::CHECKED)
             ->select('reporter_id', DB::raw('SUM(amount) as total_amount'))
             ->groupBy('reporter_id')
             ->orderByDesc('total_amount')
-            ->firstOrFail();
+            ->first();
     }
 }

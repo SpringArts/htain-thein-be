@@ -18,7 +18,7 @@ class GeneralOutcomeResource extends JsonResource
     {
         return [
             'id'      => $this->id,
-            'reporter'    => $this->reporter?->name ?? '',
+            'reporter'    => new UserResource($this->reporter),
             'description'   => $this->description ?? '',
             'amount' => $this->amount ?? 0,
             'createdAt' => $this->created_at ? formatDateTime($this->created_at) : '',

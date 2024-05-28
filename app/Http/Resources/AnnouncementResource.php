@@ -24,7 +24,7 @@ class AnnouncementResource extends JsonResource
             'slug' => $this->slug,
             'priority' => $this->priority,
             'userInfo' => new UserResource($this->whenLoaded('announcer')),
-            'createdAt' =>  $this->created_at ? changeToDifferForHuman($this->created_at) : 'N/A',
+            'createdAt' => changeToDifferForHuman($this->created_at),
         ];
     }
 }

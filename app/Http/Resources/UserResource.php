@@ -42,6 +42,13 @@ class UserResource extends JsonResource
                 'name'    => $this->name ?? '',
             ];
         }
+
+        if ($uri === 'api/app/general-outcome/{general_outcome}' && $request->isMethod('GET')) {
+            return [
+                'id'      => $this->id,
+                'name'    => $this->name ?? '',
+            ];
+        }
         return [
             'id'      => $this->id,
             'name'    => $this->name ?? '',

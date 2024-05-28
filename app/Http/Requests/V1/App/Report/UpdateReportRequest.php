@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\V1\App\Report;
 
 use App\Rules\EvenOddCheckRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Validation\ValidationException;
 
 class UpdateReportRequest extends FormRequest
 {
@@ -32,23 +30,5 @@ class UpdateReportRequest extends FormRequest
             'reporter_id' => 'required|integer',
             'verifier_id' => 'nullable|integer'
         ];
-    }
-
-    protected function failedValidation(Validator $validator)
-    {
-        throw new ValidationException($validator, $this->errorResponse($validator));
-    }
-
-    /**
-     * Get the error response for the request.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    protected function errorResponse(Validator $validator)
-    {
-        return response()->json([
-            'errors' => $validator->errors(),
-        ], 422);
     }
 }

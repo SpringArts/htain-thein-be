@@ -38,7 +38,7 @@ class UserRepository implements UserInterface
     public function userFilter(array $validatedData): LengthAwarePaginator
     {
         $query = User::query();
-        $limit = $validatedData['limit'] ?? 3;
+        $limit = $validatedData['limit'] ?? 8;
         $page = $validatedData['page'] ?? 1;
         $generalSearch = $validatedData['generalSearch'] ?? null;
         $role = $validatedData['role'] ?? null;

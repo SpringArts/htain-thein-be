@@ -2,12 +2,21 @@
 
 use Carbon\Carbon;
 
+
 if (!function_exists('changeToDifferForHuman')) {
-    function changeToDifferForHuman(Carbon $date): string
+    function changeToDifferForHuman(mixed $date): string
     {
-        return $date->diffForHumans();
+        if ($date instanceof Carbon) {
+            $newDate = $date;
+        } elseif (is_string($date) || $date instanceof DateTimeInterface) {
+            $newDate = new Carbon($date);
+        } else {
+            throw new InvalidArgumentException('The $date parameter must be a string, a DateTimeInterface instance, or null.');
+        }
+        return $newDate->diffForHumans();
     }
 }
+
 
 if (!function_exists('formatDateTime')) {
     function formatDateTime(Carbon|string $date): string

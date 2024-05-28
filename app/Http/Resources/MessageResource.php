@@ -19,7 +19,7 @@ class MessageResource extends JsonResource
             'id' => $this->id,
             'message'      =>  $this->message ?? '',
             'senderInfo'   =>  new UserResource($this->whenLoaded('sender')),
-            'createdAt' =>  is_string($this->created_at) ? changeToDifferForHuman(Carbon::parse($this->created_at)) : 'N/A',
+            'createdAt' =>  changeToDifferForHuman($this->created_at),
         ];
     }
 }

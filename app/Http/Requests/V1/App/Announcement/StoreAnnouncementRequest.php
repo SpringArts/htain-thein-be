@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1\App\User;
+namespace App\Http\Requests\V1\App\Announcement;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateUserRequest extends FormRequest
+class StoreAnnouncementRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,11 @@ class CreateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8',
-            'role' => 'required',
-            'accountStatus' => 'required|in:ACTIVE,SUSPENDED',
+            'title' => 'required|string',
+            'content' => 'string',
+            'isVisible' => 'boolean',
+            'priority' => 'integer|in:1,2,3',
+            'slug' => 'string|in:work,cost,alert,info,others',
         ];
     }
 }

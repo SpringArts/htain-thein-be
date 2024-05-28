@@ -36,6 +36,6 @@ class ProviderController extends Controller
             'userRole' => $authUser->role,
             'token' => $token
         ]);
-        return redirect()->away(config('app.frontend_url') . '/login?&encryptedUserData=' . urlencode($encryptedUserData));
+        return redirect()->away(config('app.frontend_url') . '/login?encryptedUserData=' . urlencode($encryptedUserData));
     }
 }

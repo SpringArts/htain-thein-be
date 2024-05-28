@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreAnnouncementRequest;
-use App\Http\Requests\UpdateAnnouncementRequest;
 use App\Http\Requests\V1\App\Announcement\BatchDeleteRequest;
+use App\Http\Requests\V1\App\Announcement\StoreAnnouncementRequest;
+use App\Http\Requests\V1\App\Announcement\UpdateAnnouncementRequest;
 use App\Http\Resources\AnnouncementResource;
 use App\Models\Announcement;
 use App\UseCases\Announcement\AnnouncementAction;
@@ -45,7 +45,9 @@ class AnnouncementController extends Controller
      */
     public function show(Announcement $announcement): JsonResponse
     {
-        return ResponseHelper::success('Successfully created', new AnnouncementResource($announcement), 201);
+        return response()->json([
+            'data' => new AnnouncementResource($announcement)
+        ]);
     }
 
     public function update(UpdateAnnouncementRequest $request, Announcement $announcement): JsonResponse

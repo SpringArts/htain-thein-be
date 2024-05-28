@@ -49,6 +49,9 @@ class ReportAction
     {
         if ($data['type'] == FinancialType::EXPENSE) {
             if (FinancialCalculatorService::calculateAvailableBalance() < $data['amount']) {
+                if (FinancialCalculatorService::calculateAvailableBalance() <= 0) {
+                    throw new \Exception('Current Income is ( 0 ) balance.You cannot withdraw.');
+                }
                 throw new \Exception(FinancialCalculatorService::calculateAvailableBalance() . ' kyat is only available.');
             }
         }

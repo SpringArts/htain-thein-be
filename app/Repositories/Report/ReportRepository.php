@@ -60,7 +60,7 @@ class ReportRepository implements ReportInterface
     public function reportFilter(array $validatedData): LengthAwarePaginator
     {
         $query = Report::query();
-        $limit = $validatedData['limit'] ?? 3;
+        $limit = $validatedData['limit'] ?? 8;
         $page = $validatedData['page'] ?? 1;
         $generalSearch = $validatedData['generalSearch'] ?? null;
         $amount = $validatedData['amount'] ?? null;
@@ -68,43 +68,39 @@ class ReportRepository implements ReportInterface
         $confirmStatus = $validatedData['confirmStatus'] ?? null;
         $createdAt = $validatedData['createdAt'] ?? null;
 
-        try {
-            if (!empty($generalSearch)) {
-                $query->where(function ($q) use ($generalSearch) {
-                    $q->orWhere('description', 'like', '%' . $generalSearch . '%')
-                        ->whereHas('reporter', function ($q) use ($generalSearch) {
-                            $q->where('name', 'like', '%' . $generalSearch . '%');
-                        })->orWhereHas('verifier', function ($q) use ($generalSearch) {
-                            $q->where('name', 'like', '%' . $generalSearch . '%');
-                        });
-                });
-            }
 
-            if (!empty($amount)) {
-                $query->where('amount', '=', $amount);
-            }
-
-            if (!empty($confirmStatus)) {
-                $query->where('confirm_status', '=', $confirmStatus);
-            }
-
-            if (!empty($type)) {
-                $query->where('type', '=', $type);
-            }
-
-            if (!empty($createdAt)) {
-                $query->where('created_at', '=', $createdAt);
-            }
-
-            $data = $query->orderBy('created_at', 'desc')
-                ->paginate($limit, ['*'], 'page', $page)
-                ->withQueryString();
-
-
-            return $data;
-        } catch (\Exception $e) {
-            throw $e;
+        if (!empty($generalSearch)) {
+            $query->where(function ($q) use ($generalSearch) {
+                $q->orWhere('description', 'like', '%' . $generalSearch . '%')
+                    ->whereHas('reporter', function ($q) use ($generalSearch) {
+                        $q->where('name', 'like', '%' . $generalSearch . '%');
+                    })->orWhereHas('verifier', function ($q) use ($generalSearch) {
+                        $q->where('name', 'like', '%' . $generalSearch . '%');
+                    });
+            });
         }
+
+        if (!empty($amount)) {
+            $query->where('amount', '=', $amount);
+        }
+
+        if (!empty($confirmStatus)) {
+            $query->where('confirm_status', '=', $confirmStatus);
+        }
+
+        if (!empty($type)) {
+            $query->where('type', '=', $type);
+        }
+
+        if (!empty($createdAt)) {
+            $query->where('created_at', '=', $createdAt);
+        }
+
+        $data = $query->orderBy('created_at', 'desc')
+            ->paginate($limit, ['*'], 'page', $page)
+            ->withQueryString();
+
+        return $data;
     }
 
     public function userReportDownload(int $userId): Builder

@@ -49,7 +49,6 @@ class AuthenticatedSessionController extends Controller
     public function destroy(): JsonResponse
     {
         $user = getAuthUserOrFail();
-        Auth::guard('api')->logout(); // Logout from API guard
         $user->tokens()->delete(); // Revoke all tokens for the user
         return response()->json(['message' => 'Logged out successfully'], 200);
     }

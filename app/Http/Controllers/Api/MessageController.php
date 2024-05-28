@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\App\Chat\StoreMessageRequest;
 use App\Http\Resources\MessageResource;
 use App\UseCases\Message\MessageAction;
 
@@ -28,7 +29,7 @@ class MessageController extends Controller
     }
 
     //Message Storing
-    public function store(Request $request): JsonResponse
+    public function store(StoreMessageRequest $request): JsonResponse
     {
         try {
             $message = [
