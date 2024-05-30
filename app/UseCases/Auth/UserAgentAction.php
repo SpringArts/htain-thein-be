@@ -16,7 +16,7 @@ class UserAgentAction
     }
 
 
-    public function storeUserAgent(Request $request)
+    public function storeUserAgent(Request $request): void
     {
         $agent = new Agent();
         $userAgentString = $request->userAgent();

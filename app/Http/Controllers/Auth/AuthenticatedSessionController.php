@@ -2,38 +2,40 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Auth\LoginRequest;
 use App\UseCases\Auth\UserAgentAction;
+use Illuminate\Http\JsonResponse;
 
 class AuthenticatedSessionController extends Controller
 {
-    protected $userAgentAction;
+    protected UserAgentAction $userAgentAction;
 
     public function __construct(UserAgentAction $userAgentAction)
     {
         $this->userAgentAction = $userAgentAction;
     }
 
-    public function store(LoginRequest $request)
+    public function store(LoginRequest $request): JsonResponse
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
+
         if (Auth::attempt($credentials)) {
+            $authUser = getAuthUserOrFail();
             // generate an API token for the authenticated user
-            $token = auth()->user()->createToken('authToken')->plainTextToken;
+            $token = $authUser->createToken('authToken')->plainTextToken;
 
             $this->userAgentAction->storeUserAgent($request);
             // return the token as a response
             return response()->json([
-                'userId' => auth()->user()->id,
-                'userName' => auth()->user()->name,
-                'userRole' => auth()->user()->role,
+                'userId' => $authUser->id,
+                'userName' =>  $authUser->name,
+                'userRole' =>  $authUser->role,
                 'access_token' => $token,
                 'token_type' => 'Bearer'
             ]);
@@ -44,10 +46,10 @@ class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      */
-    public function destroy()
+    public function destroy(): JsonResponse
     {
-        Auth::guard('web')->logout();
-        auth()->user()->tokens()->delete();        // Revoke all tokens...
-        return ResponseHelper::success('Token revoked', null);
+        $user = getAuthUserOrFail();
+        $user->tokens()->delete(); // Revoke all tokens for the user
+        return response()->json(['message' => 'Logged out successfully'], 200);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -83,42 +84,42 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function reportedReports()
+    public function reportedReports(): HasMany
     {
         return $this->hasMany(Report::class, 'reporter_id');
     }
 
-    public function verifiedReports()
+    public function verifiedReports(): HasMany
     {
         return $this->hasMany(Report::class, 'verifier_id');
     }
 
-    public function reportHistory()
+    public function reportHistory(): HasMany
     {
         return $this->hasMany(CancelReportHistory::class, 'rejecter_id');
     }
 
-    public function editReportHistory()
+    public function editReportHistory(): HasMany
     {
         return $this->hasMany(ReportEditHistory::class, 'editor_id');
     }
 
-    public function noti()
+    public function noti(): HasMany
     {
         return $this->hasMany(NotiInfo::class, 'reporter_id');
     }
 
-    public function regularCostReport()
+    public function regularCostReport(): HasMany
     {
         return $this->hasMany(GeneralOutcome::class, 'reporter_id');
     }
 
-    public function message()
+    public function message(): HasMany
     {
         return $this->hasMany(Message::class, 'sender_id');
     }
 
-    public function announcement()
+    public function announcement(): HasMany
     {
         return $this->hasMany(Announcement::class);
     }

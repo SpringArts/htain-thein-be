@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\App\ContactInfo\ContactInfoRequest;
 use App\UseCases\HomeAction\HomeAction;
 
 class HomeController extends Controller
 {
-    private $overviewData = [];
+    private HomeAction $overviewData;
 
     public function __construct(HomeAction $overviewData)
     {
@@ -24,7 +24,7 @@ class HomeController extends Controller
         ]);
     }
 
-    public function storeContactInfo(Request $request): JsonResponse
+    public function storeContactInfo(ContactInfoRequest $request): JsonResponse
     {
         $formData = $request->safe()->all();
         $storeData = $this->overviewData->storeContactInfo($formData);

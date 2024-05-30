@@ -6,18 +6,19 @@ use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\App\Chat\StoreMessageRequest;
 use App\Http\Resources\MessageResource;
-use Illuminate\Support\Facades\Auth;
 use App\UseCases\Message\MessageAction;
 
 class MessageController extends Controller
 {
-    private $messageAction;
+    private MessageAction $messageAction;
 
     public function __construct(MessageAction $messageAction)
     {
         $this->messageAction = $messageAction;
     }
+
     //Message Fetching
     public function index(int $senderId = null): JsonResponse
     {
@@ -28,11 +29,11 @@ class MessageController extends Controller
     }
 
     //Message Storing
-    public function store(Request $request): JsonResponse
+    public function store(StoreMessageRequest $request): JsonResponse
     {
         try {
             $message = [
-                'sender_id' => Auth::user()->id,
+                'sender_id' => getAuthUserOrFail()->id,
                 'message' => $request->message,
             ];
 
@@ -42,7 +43,7 @@ class MessageController extends Controller
             }
             return ResponseHelper::success("Message is sent successfully.", null, 200, 0);
         } catch (\Throwable $th) {
-            return $this->error($th);
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
 }

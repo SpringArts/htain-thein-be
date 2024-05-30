@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,8 +18,8 @@ class MessageResource extends JsonResource
         return [
             'id' => $this->id,
             'message'      =>  $this->message ?? '',
-            'senderInfo'   =>  new UserResource($this->whenLoaded('sender')) ?? '',
-            'createdAt' => $this->created_at->diffForHumans(),
+            'senderInfo'   =>  new UserResource($this->whenLoaded('sender')),
+            'createdAt' =>  changeToDifferForHuman($this->created_at),
         ];
     }
 }

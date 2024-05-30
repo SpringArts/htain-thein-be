@@ -5,6 +5,8 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @mixin \App\Models\NotiInfo */
+
 class NotiInfoResource extends JsonResource
 {
     /**
@@ -16,11 +18,11 @@ class NotiInfoResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'userData'      =>  new UserResource($this->whenLoaded('user')) ?? '',
-            'reportData'    =>  new ReportResource($this->whenLoaded('report')) ?? '',
+            'userData'      =>  new UserResource($this->whenLoaded('user')),
+            'reportData'    =>  new ReportResource($this->whenLoaded('report')),
             'checkStatus'   => $this->check_status ?? '',
-            'createdAt' => $this->created_at->diffForHumans(),
-            'updatedAt' => $this->updated_at->format('Y-d-M h:i A'),
+            'createdAt' => $this->created_at_formatted,
+            'updatedAt' => $this->updated_at_formatted,
         ];
     }
 }

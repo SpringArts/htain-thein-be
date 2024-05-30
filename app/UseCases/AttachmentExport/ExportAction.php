@@ -14,7 +14,7 @@ class ExportAction
         $this->reportRepository = $reportRepository;
     }
 
-    public function userReportExport($userId)
+    public function userReportExport(int $userId): array
     {
         $fileName = User::where('id', $userId)->value('name');
         $query = $this->reportRepository->userReportDownload($userId);

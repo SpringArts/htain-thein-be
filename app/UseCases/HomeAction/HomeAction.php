@@ -17,7 +17,7 @@ class HomeAction
     #TODO List
     public function fetchData(): array
     {
-        $users = User::all()->count();
+        $users = User::count();
         $reports = $this->reportRepository->getAllReports();
         $data = [
             'users' => $users,

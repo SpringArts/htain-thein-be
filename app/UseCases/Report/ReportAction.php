@@ -10,13 +10,16 @@ use App\Services\ReportEditHistoryService;
 use App\Services\FinancialCalculatorService;
 use App\Interfaces\Report\ReportHistoryInterface;
 use App\Interfaces\Notification\NotificationInterface;
+use App\Models\NotiInfo;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class ReportAction
 {
     private ReportInterface $reportRepository;
     private ReportHistoryInterface $reportHistoryRepository;
     private NotificationInterface $notificationRepository;
-    private $reportEditHistoryService;
+    private ReportEditHistoryService $reportEditHistoryService;
 
     public function __construct(
         ReportInterface $reportRepository,
@@ -30,33 +33,14 @@ class ReportAction
         $this->reportEditHistoryService = $reportEditHistoryService;
     }
 
-    //fetch all reports
-    // public function fetchReports(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
-    // {
-    //     $limit = request()->limit ?? 8;
-    //     $page = request()->page ?? 1;
-    //     $data = $this->reportRepository->getAllVerifiedReports($limit, $page);
-    //     return $data;
-    // }
-
-    public function fetchAllReports(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function fetchAllReports(): Collection
     {
         return $this->reportRepository->getAllReports();
     }
 
-    public function fetchFilterData(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function fetchFilterData(array $validatedData): LengthAwarePaginator
     {
-        $limit = request()->limit ?? 6;
-        $page = request()->page ?? 1;
-        $filters = [
-            'generalSearch' => request()->generalSearch,
-            'amount' => request()->amount,
-            'type' => request()->type,
-            'confirmStatus' => request()->confirmStatus,
-            'createdAt' => request()->createdAt,
-        ];
-
-        return $this->reportRepository->reportFilter($filters, $limit, $page);
+        return $this->reportRepository->reportFilter($validatedData);
     }
 
 
@@ -65,6 +49,9 @@ class ReportAction
     {
         if ($data['type'] == FinancialType::EXPENSE) {
             if (FinancialCalculatorService::calculateAvailableBalance() < $data['amount']) {
+                if (FinancialCalculatorService::calculateAvailableBalance() <= 0) {
+                    throw new \Exception('Current Income is ( 0 ) balance.You cannot withdraw.');
+                }
                 throw new \Exception(FinancialCalculatorService::calculateAvailableBalance() . ' kyat is only available.');
             }
         }
@@ -82,21 +69,18 @@ class ReportAction
     }
 
     //uncheck report
-    public function uncheckReport(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function uncheckReport(array $formData): LengthAwarePaginator
     {
-        $limit = request()->limit ?? 6;
-        $page = request()->page ?? 1;
+        $limit = $formData['limit'] ?? 6;
+        $page = $formData['page'] ?? 1;
         return $this->reportRepository->uncheckReport($limit, $page);
     }
 
     //accept report
-    public function acceptReport(Report $report): int|null     /*TODO: return type*/
+    public function acceptReport(Report $report): bool
     {
         $this->reportRepository->acceptReport($report);
         $notification = $this->notificationRepository->getUserNotification($report);
-        if (!$notification) {
-            throw new \Exception('Notification not found');
-        }
         return $this->notificationRepository->updateNotification($notification);
     }
 
@@ -108,60 +92,55 @@ class ReportAction
     }
 
     //delete report
-    public function deleteReport(Report $report): int
+    public function deleteReport(Report $report): bool|null
     {
         return $this->reportRepository->deleteReport($report);
     }
 
     //fetch report changed history
-    public function fetchChangedHistory(int $reportId)
+    public function fetchChangedHistory(int $reportId): Collection
     {
         return $this->reportHistoryRepository->getReportChangedHistory($reportId);
     }
 
     //create notification after report created
-    public function createNotification(int $userId, int $reportId)
+    public function createNotification(int $userId, int $reportId): NotiInfo
     {
         return $this->notificationRepository->createNotification($userId, $reportId);
     }
 
     //create report history after report rejected
-    public function createReportHistory(int $id)
+    public function createReportHistory(int $id): bool|null
     {
         $report = $this->getReport($id);
         $this->rejectReport($report);
         $this->updateNotification($report);
-        return $this->reportRepository->deleteReport($report);
+        return $this->reportRepository->deleteReport($report); //TODO CHECK FUNCTION
     }
 
     //fetch single report
-    private function getReport(int $id)
+    private function getReport(int $id): Report
     {
         $report = $this->reportRepository->getReport($id);
-        if (!$report) {
-            throw new \Exception('Report not found');
-        }
         return $report;
     }
 
     //update notification after report rejected
-    private function updateNotification($report)
+    private function updateNotification(Report $report): void
     {
         $noti = $this->notificationRepository->getUserNotification($report);
-        if ($noti) {
-            $this->notificationRepository->updateNotification($noti);
-        }
+        $this->notificationRepository->updateNotification($noti);
     }
 
     //create report history after report rejected
-    private function rejectReport($report)
+    private function rejectReport(Report $report): void
     {
         $rejectReportData = [
             'amount' => $report->amount,
             'description' => $report->description,
             'type' => $report->type,
             'reporter_id' => $report->reporter_id,
-            'rejecter_id' => auth()->user()->id,
+            'rejecter_id' => getAuthUserOrFail()->id,
         ];
         // Create the cancel report history entry
         $this->reportHistoryRepository->rejectReportHistory($rejectReportData);

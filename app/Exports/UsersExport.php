@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Excel;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -12,16 +12,11 @@ class UsersExport implements FromQuery, WithHeadings, WithMapping
 {
     use Exportable;
 
-    private $query;
+    private Builder $query;
 
-    private $fileName;
-
-    private $writerType = Excel::XLSX;
-
-    public function __construct($query, $fileName)
+    public function __construct(Builder $query)
     {
         $this->query = $query;
-        $this->fileName = $fileName . '_' . now()->format('YmdHis') . '.xlsx';
     }
 
     public function headings(): array
@@ -36,12 +31,14 @@ class UsersExport implements FromQuery, WithHeadings, WithMapping
         ];
     }
 
-    public function query()
+    public function query(): Builder
     {
         return $this->query;
     }
+
     public function map($row): array
     {
+        /** @var \stdClass $row */
         return [
             $row->amount,
             $row->description,

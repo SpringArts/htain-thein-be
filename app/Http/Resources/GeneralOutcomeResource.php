@@ -5,6 +5,8 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @mixin \App\Models\GeneralOutcome */
+
 class GeneralOutcomeResource extends JsonResource
 {
     /**
@@ -16,10 +18,10 @@ class GeneralOutcomeResource extends JsonResource
     {
         return [
             'id'      => $this->id,
-            'reporter'    => $this->reporter->name ?? '',
+            'reporter'    => new UserResource($this->reporter),
             'description'   => $this->description ?? '',
             'amount' => $this->amount ?? 0,
-            'createdAt' => $this->created_at->format('Y-d-M h:i A'),
+            'createdAt' => $this->created_at ? formatDateTime($this->created_at) : '',
         ];
     }
 }
