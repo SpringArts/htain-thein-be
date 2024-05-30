@@ -5,7 +5,7 @@ namespace App\UseCases\Announcement;
 use App\Events\AnnouncementEvent;
 use App\Interfaces\Announcement\AnnouncementInterface;
 use App\Models\Announcement;
-use Log;
+use Illuminate\Support\Collection;
 
 class AnnouncementAction
 {
@@ -16,23 +16,22 @@ class AnnouncementAction
         $this->announcementRepository = $announcementRepository;
     }
 
-    public function fetchAllAnnouncements()
+    public function fetchAllAnnouncements(): Collection
     {
         return $this->announcementRepository->getAllAnnouncements();
     }
 
-    public function createAnnouncement(array $data)
+    public function createAnnouncement(array $data): Announcement
     {
-        $authUser = auth()->user();
+        $authUser = getAuthUserOrFail();
         $data['user_id'] = $authUser->id;
         $data['is_visible'] = $data['isVisible'] ?? true;
         $message = $this->announcementRepository->createAnnouncement($data);
         event(new AnnouncementEvent($message, $authUser));
-        Log::info('Announcement created by ' . $authUser->name);
         return $message;
     }
 
-    public function updateAnnouncement(array $formData, Announcement $announcement): int
+    public function updateAnnouncement(array $formData, Announcement $announcement): bool
     {
         $announcementData = $formData;
         return $this->announcementRepository->updateAnnouncement($announcementData, $announcement);
@@ -43,12 +42,12 @@ class AnnouncementAction
         return $announcement;
     }
 
-    public function deleteAnnouncement(Announcement $announcement): int
+    public function deleteAnnouncement(Announcement $announcement): bool|null
     {
         return $this->announcementRepository->deleteAnnouncement($announcement);
     }
 
-    public function batchDelete(array $ids): int
+    public function batchDelete(array $ids): mixed
     {
         return $this->announcementRepository->batchDelete($ids);
     }

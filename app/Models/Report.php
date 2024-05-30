@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\Report
@@ -50,22 +52,22 @@ class Report extends Model
         'verifier_id' => 'integer',
     ];
 
-    public function reporter()
+    public function reporter(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reporter_id');
     }
 
-    public function verifier()
+    public function verifier(): BelongsTo
     {
         return $this->belongsTo(User::class, 'verifier_id');
     }
 
-    public function noti()
+    public function noti(): HasMany
     {
         return $this->hasMany(NotiInfo::class);
     }
 
-    public function editHistory()
+    public function editHistory(): HasMany
     {
         return $this->hasMany(ReportEditHistory::class);
     }

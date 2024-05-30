@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+
+/** @mixin \App\Models\User */
 
 class UserResource extends JsonResource
 {
@@ -41,13 +42,20 @@ class UserResource extends JsonResource
                 'name'    => $this->name ?? '',
             ];
         }
+
+        if ($uri === 'api/app/general-outcome/{general_outcome}' && $request->isMethod('GET')) {
+            return [
+                'id'      => $this->id,
+                'name'    => $this->name ?? '',
+            ];
+        }
         return [
             'id'      => $this->id,
             'name'    => $this->name ?? '',
             'email'   => $this->email ?? '',
             'role' => $this->role ?? '',
             'accountStatus' => $this->account_status,
-            'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d'),
+            'createdAt' => $this->created_at ? formatDate($this->created_at) : '',
         ];
     }
 }

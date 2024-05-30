@@ -6,10 +6,11 @@ use App\Models\GeneralOutcome;
 use Illuminate\Support\Facades\DB;
 use App\Interfaces\GeneralOutcome\GeneralOutcomeInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class GeneralOutcomeRepository implements GeneralOutcomeInterface
 {
-    public function fetchData(int $limit, int $page)
+    public function fetchData(int $limit, int $page): LengthAwarePaginator
     {
         return GeneralOutcome::with('reporter')->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'page', $page)->withQueryString();
     }
@@ -19,12 +20,12 @@ class GeneralOutcomeRepository implements GeneralOutcomeInterface
         return GeneralOutcome::create($formData);
     }
 
-    public function updateGeneralOutcome(array $data, GeneralOutcome $generalOutcome): int
+    public function updateGeneralOutcome(array $data, GeneralOutcome $generalOutcome): bool
     {
         return $generalOutcome->update($data);
     }
 
-    public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): int
+    public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): bool|null
     {
         return  $generalOutcome->delete();
     }

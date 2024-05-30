@@ -6,8 +6,10 @@ use App\Models\Report;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreReportRequest;
-use App\Http\Requests\UpdateReportRequest;
+use App\Http\Requests\V1\App\Report\FetchReportFilterRequest;
+use App\Http\Requests\V1\App\Report\StoreReportRequest;
+use App\Http\Requests\V1\App\Report\UncheckReportRequest;
+use App\Http\Requests\V1\App\Report\UpdateReportRequest;
 use Illuminate\Support\Facades\Gate;
 use App\UseCases\Report\ReportAction;
 use App\Http\Resources\ReportResource;
@@ -15,16 +17,17 @@ use App\Http\Resources\ReportEditHistoryResource;
 
 class ReportController extends Controller
 {
-    private $reportAction;
+    private ReportAction $reportAction;
 
     public function __construct(ReportAction $reportAction)
     {
         $this->reportAction = $reportAction;
     }
 
-    public function index(): JsonResponse
+    public function index(FetchReportFilterRequest $request): JsonResponse
     {
-        $data = $this->reportAction->fetchFilterData();
+        $validatedData = $request->safe()->all();
+        $data = $this->reportAction->fetchFilterData($validatedData);
         $meta = ResponseHelper::getPaginationMeta($data);
         return response()->json([
             'data' => ReportResource::collection($data),
@@ -39,8 +42,9 @@ class ReportController extends Controller
     {
         // Gate::authorize('adminPermission');
         $formData = $request->safe()->all();
+        $authUserId = getAuthUserOrFail()->id;
         $storeReport = $this->reportAction->createReport($formData);
-        $this->reportAction->createNotification(auth()->user()->id, $storeReport->id);
+        $this->reportAction->createNotification($authUserId, $storeReport->id);
         return ResponseHelper::success('Successfully created', null, 201);
     }
 
@@ -63,9 +67,10 @@ class ReportController extends Controller
         return ResponseHelper::success('Successfully Updated', null, 200);
     }
 
-    public function uncheckReport(): JsonResponse
+    public function uncheckReport(UncheckReportRequest $request): JsonResponse
     {
-        $data = $this->reportAction->uncheckReport();
+        $validatedData = $request->safe()->all();
+        $data = $this->reportAction->uncheckReport($validatedData);
         $meta = ResponseHelper::getPaginationMeta($data);
         return response()->json([
             'data' => ReportResource::collection($data),

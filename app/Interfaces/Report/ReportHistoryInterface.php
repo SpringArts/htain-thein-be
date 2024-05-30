@@ -2,10 +2,13 @@
 
 namespace App\Interfaces\Report;
 
+use App\Models\ReportEditHistory;
+use Illuminate\Support\Collection;
+
 interface ReportHistoryInterface
 {
-    public function getAllReportChangedHistories();
-    public function getReportChangedHistory(int $id);
-    public function createReportChangedHistory(int $id);
-    public function rejectReportHistory(array $rejectReportData);
+    public function getAllReportChangedHistories(): Collection;
+    public function getReportChangedHistory(int $id): Collection;
+    public function createReportChangedHistory(int $id): ReportEditHistory;
+    public function rejectReportHistory(array $rejectReportData): void;
 }

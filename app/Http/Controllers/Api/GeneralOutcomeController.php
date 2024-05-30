@@ -6,24 +6,27 @@ use App\Models\GeneralOutcome;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
-use App\Http\Requests\StoreGeneralOutComeRequest;
-use App\Http\Requests\UpdateGeneralOutComeRequest;
+
+use App\Http\Requests\V1\App\GeneralOutcome\FetchGeneralOutcomeRequest;
+use App\Http\Requests\V1\App\GeneralOutcome\StoreGeneralOutcomeRequest;
+use App\Http\Requests\V1\App\GeneralOutcome\UpdateGeneralOutcomeRequest;
 use App\Http\Resources\GeneralOutcomeResource;
 use App\UseCases\GeneralOutcome\GeneralOutcomeAction;
 use Illuminate\Http\JsonResponse;
 
 class GeneralOutcomeController extends Controller
 {
-    protected $generalOutcomeAction;
+    protected GeneralOutcomeAction $generalOutcomeAction;
 
     public function __construct(GeneralOutcomeAction $generalOutcomeAction)
     {
         $this->generalOutcomeAction = $generalOutcomeAction;
     }
 
-    public function index(): JsonResponse
+    public function index(FetchGeneralOutcomeRequest $request): JsonResponse
     {
-        $data = $this->generalOutcomeAction->fetchGeneralOutcome();
+        $validatedData = $request->safe()->all();
+        $data = $this->generalOutcomeAction->fetchGeneralOutcome($validatedData);
         $meta = ResponseHelper::getPaginationMeta($data);
         return response()->json([
             'data' => GeneralOutcomeResource::collection($data),
@@ -40,16 +43,18 @@ class GeneralOutcomeController extends Controller
         );
     }
 
-    public function store(StoreGeneralOutComeRequest $request): JsonResponse
+    public function store(StoreGeneralOutcomeRequest $request): JsonResponse
     {
-        $this->generalOutcomeAction->storeGeneralOutcome($request->safe()->all());
+        $formData = $request->all();
+        $this->generalOutcomeAction->storeGeneralOutcome($formData);
         return ResponseHelper::success("Successfully Created", null);
     }
 
-    public function update(UpdateGeneralOutComeRequest $request, GeneralOutcome $generalOutcome): JsonResponse
+    public function update(UpdateGeneralOutcomeRequest $request, GeneralOutcome $generalOutcome): JsonResponse
     {
         Gate::authorize('adminPermission');
-        $this->generalOutcomeAction->updateGeneralOutcome($request->safe()->all(), $generalOutcome);
+        $formData = $request->safe()->all();
+        $this->generalOutcomeAction->updateGeneralOutcome($formData, $generalOutcome);
         return ResponseHelper::success("Successfully Updated", null);
     }
 

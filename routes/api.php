@@ -26,11 +26,7 @@ Route::get('/auth/{provider}', [ProviderController::class, 'redirectToProvider']
 Route::get('/auth/callback/{provider}', [ProviderController::class, 'handleProviderCallback']);
 
 
-Route::get('/testing', function () {
-    return response()->json([
-        'message' => 'Hello World!'
-    ]);
-});
+
 Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/reports', ReportController::class);
@@ -52,5 +48,9 @@ Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard']);
     Route::get('/message/{receiverId?}', [MessageController::class, 'index']);
     Route::post('/message/{receiverId?}', [MessageController::class, 'store']);
+
+    Route::get('/testing', function () {
+        return getAuthUserOrFail();
+    });
 });
 require __DIR__ . '/auth.php';
