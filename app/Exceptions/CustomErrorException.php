@@ -3,24 +3,29 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class CustomErrorException extends Exception
 {
-    protected $message;
-    protected $statusCode;
+    protected int $statusCode;
 
     public function __construct(string $message = "An error occurred", int $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR)
     {
-        parent::__construct($message, $statusCode);
-        $this->message = $message;
+        parent::__construct($message);
         $this->statusCode = $statusCode;
     }
 
-    public function render($request)
+    public function render(Request $request): JsonResponse
     {
         return response()->json([
-            'error' => $this->message,
+            'error' => $this->getMessage(),
         ], $this->statusCode);
+    }
+
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
     }
 }
