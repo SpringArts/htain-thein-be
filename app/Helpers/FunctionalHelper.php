@@ -1,5 +1,7 @@
 <?php
 
+use App\Exceptions\CustomErrorException;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Crypt;
 
 if (!function_exists('encryptAlgorithm')) {
@@ -7,7 +9,7 @@ if (!function_exists('encryptAlgorithm')) {
     {
         $jsonData = json_encode($value);
         if ($jsonData === false) {
-            throw new \Exception('Failed to encode value to JSON');
+            throw new CustomErrorException('Failed to encode value to JSON', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         $encryptedData = Crypt::encryptString($jsonData);
 

@@ -3,6 +3,7 @@
 // ReportEditHistoryService.php
 namespace App\Services;
 
+use App\Exceptions\CustomErrorException;
 use Carbon\Carbon;
 use App\Models\ReportEditHistory;
 
@@ -40,7 +41,7 @@ class ReportEditHistoryService
                 $history->save();
             }
         } catch (\Throwable $th) {
-            throw new \Exception($th->getMessage());
+            throw new CustomErrorException($th->getMessage(), 500);
         }
     }
 }
