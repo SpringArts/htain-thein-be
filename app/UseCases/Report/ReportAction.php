@@ -4,6 +4,7 @@ namespace App\UseCases\Report;
 
 use App\Models\Report;
 use App\Enums\FinancialType;
+use App\Exceptions\CustomErrorException;
 use Illuminate\Http\Response;
 use App\Interfaces\Report\ReportInterface;
 use App\Services\ReportEditHistoryService;
@@ -50,9 +51,9 @@ class ReportAction
         if ($data['type'] == FinancialType::EXPENSE) {
             if (FinancialCalculatorService::calculateAvailableBalance() < $data['amount']) {
                 if (FinancialCalculatorService::calculateAvailableBalance() <= 0) {
-                    throw new \Exception('Current Income is ( 0 ) balance.You cannot withdraw.');
+                    throw new CustomErrorException('Current Income is ( 0 ) balance.You cannot withdraw.', Response::HTTP_BAD_REQUEST);
                 }
-                throw new \Exception(FinancialCalculatorService::calculateAvailableBalance() . ' kyat is only available.');
+                throw new CustomErrorException(FinancialCalculatorService::calculateAvailableBalance() . ' kyat is only available.', Response::HTTP_BAD_REQUEST);
             }
         }
         return $this->reportRepository->createReport($data);
