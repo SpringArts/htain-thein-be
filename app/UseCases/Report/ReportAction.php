@@ -64,7 +64,7 @@ class ReportAction
     {
         $oldData = $report->toArray();
         $this->reportRepository->updateReport($formData, $report);
-        $newData = $report->toArray();
+        $newData = $report->toArray(); //take new data after update
         $this->reportEditHistoryService->editHistory($oldData, $newData);
         return Response::HTTP_OK;
     }

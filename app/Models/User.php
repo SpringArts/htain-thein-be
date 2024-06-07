@@ -94,12 +94,12 @@ class User extends Authenticatable
         return $this->hasMany(Report::class, 'verifier_id');
     }
 
-    public function reportHistory(): HasMany
+    public function reportHistories(): HasMany
     {
         return $this->hasMany(CancelReportHistory::class, 'rejecter_id');
     }
 
-    public function editReportHistory(): HasMany
+    public function editReportHistories(): HasMany
     {
         return $this->hasMany(ReportEditHistory::class, 'editor_id');
     }
