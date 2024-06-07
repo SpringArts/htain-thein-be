@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\App\Chat\StoreMessageRequest;
 use App\Http\Resources\MessageResource;
 use App\UseCases\Message\MessageAction;
+use Illuminate\Http\Response;
 
 class MessageController extends Controller
 {
@@ -43,7 +44,7 @@ class MessageController extends Controller
             }
             return ResponseHelper::success("Message is sent successfully.", null, 200, 0);
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th->getMessage()], 500);
+            return response()->json(['error' => $th->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

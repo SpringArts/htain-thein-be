@@ -47,7 +47,7 @@ class GeneralOutcomeController extends Controller
     {
         $formData = $request->all();
         $this->generalOutcomeAction->storeGeneralOutcome($formData);
-        return ResponseHelper::success("Successfully Created", null);
+        return ResponseHelper::success("Successfully Created", null, 201);
     }
 
     public function update(UpdateGeneralOutcomeRequest $request, GeneralOutcome $generalOutcome): JsonResponse
