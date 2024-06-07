@@ -11,7 +11,7 @@ class UserRepository implements UserInterface
 {
     public function getAllUsers(): Collection
     {
-        return User::with('reportedReports', 'reportHistory', 'editReportHistory', 'noti', 'regularCostReport', 'verifiedReports')
+        return User::with('reportedReports', 'reportHistories', 'editReportHistories', 'noti', 'regularCostReport', 'verifiedReports')
             ->get();
     }
 

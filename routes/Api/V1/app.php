@@ -25,14 +25,12 @@ use App\Http\Controllers\Api\AttachmentExportController;
 Route::get('/auth/{provider}', [ProviderController::class, 'redirectToProvider']);
 Route::get('/auth/callback/{provider}', [ProviderController::class, 'handleProviderCallback']);
 
-
-
 Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/reports', ReportController::class);
     Route::apiResource('/notis', NotiInfoController::class);
     Route::apiResource('/announcements', AnnouncementController::class);
-    Route::apiResource('/general-outcomes', GeneralOutcomeController::class);
+    Route::apiResource('/general-outcome', GeneralOutcomeController::class);
     Route::get('/all-notis', [NotiInfoController::class, 'fetchAll']);
     Route::get('/calculations', [ReportController::class, 'calculationFinancial']);
     Route::get('/reports/{report}/reject', [ReportController::class, 'cancelReportHistory']);
