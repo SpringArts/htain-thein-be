@@ -50,6 +50,7 @@ class AuthenticatedSessionController extends Controller
     {
         $user = getAuthUserOrFail();
         $user->tokens()->delete(); // Revoke all tokens for the user
+        Auth::guard('web')->logout(); //need for session logout
         return response()->json(['message' => 'Logged out successfully'], 200);
     }
 }
