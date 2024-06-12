@@ -2,12 +2,12 @@
 
 namespace App\Repositories\Firebase;
 
-use App\Interfaces\Firebase\FirebaseNotificationInterface;
+use App\Interfaces\Firebase\FirebaseChattingInterface;
 use App\Services\Firebase\FirebaseConnectionService;
 use Google\Cloud\Firestore\FirestoreClient;
 use Illuminate\Http\JsonResponse;
 
-class FirebaseRepository implements FirebaseNotificationInterface
+class FirebaseRepository implements FirebaseChattingInterface
 {
     protected FirestoreClient $fireStore;
 
@@ -21,7 +21,7 @@ class FirebaseRepository implements FirebaseNotificationInterface
         $this->fireStore->collection('messages')->add([
             'senderId' => $data['senderId'],
             'message' => $data['message'],
-            'timestamp' => now(),
+            'timestamp' => date('Y-m-d H:i:s')
         ]);
 
         return response()->json(['message' => 'Message sent successfully']);

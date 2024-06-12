@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\App\Firebase\StoreMessageRequest;
 use App\UseCases\FireBase\FirebaseAction;
 
-class FirebaseController extends Controller
+class FirebaseChattingController extends Controller
 {
     private FirebaseAction $firebaseAction;
 

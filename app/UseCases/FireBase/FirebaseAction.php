@@ -2,13 +2,13 @@
 
 namespace App\UseCases\FireBase;
 
-use App\Interfaces\Firebase\FirebaseNotificationInterface;
+use App\Interfaces\Firebase\FirebaseChattingInterface;
 
 class FirebaseAction
 {
-    private FirebaseNotificationInterface $firebaseRepository;
+    private FirebaseChattingInterface $firebaseRepository;
 
-    public function __construct(FirebaseNotificationInterface $firebaseRepository)
+    public function __construct(FirebaseChattingInterface $firebaseRepository)
     {
         $this->firebaseRepository = $firebaseRepository;
     }
