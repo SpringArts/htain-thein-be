@@ -26,9 +26,9 @@ class AnnouncementAction
         $authUser = getAuthUserOrFail();
         $data['user_id'] = $authUser->id;
         $data['is_visible'] = $data['isVisible'] ?? true;
-        $message = $this->announcementRepository->createAnnouncement($data);
-        event(new AnnouncementEvent($message, $authUser));
-        return $message;
+        $result = $this->announcementRepository->createAnnouncement($data);
+
+        return $result;
     }
 
     public function updateAnnouncement(array $formData, Announcement $announcement): bool

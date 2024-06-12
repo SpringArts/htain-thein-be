@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\NotiInfoController;
 use App\Http\Controllers\Api\Auth\ProviderController;
 use App\Http\Controllers\Api\GeneralOutcomeController;
 use App\Http\Controllers\Api\AttachmentExportController;
+use App\Http\Controllers\Api\FirebaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +25,6 @@ use App\Http\Controllers\Api\AttachmentExportController;
 
 Route::get('/auth/{provider}', [ProviderController::class, 'redirectToProvider']);
 Route::get('/auth/callback/{provider}', [ProviderController::class, 'handleProviderCallback']);
-
-
 
 Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/users', UserController::class);
@@ -48,6 +47,9 @@ Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard']);
     Route::get('/message/{receiverId?}', [MessageController::class, 'index']);
     Route::post('/message/{receiverId?}', [MessageController::class, 'store']);
+
+    Route::post('/send-message', [FirebaseController::class, 'sendMessage']);
+    Route::get('/get-messages', [FirebaseController::class, 'getMessages']);
 
     Route::get('/testing', function () {
         return getAuthUserOrFail();

@@ -1,15 +1,14 @@
 <?php
 
-use App\Models\User;
 use App\Providers\AnnouncementProvider;
 use App\Providers\ChatProvider;
+use App\Providers\FirebaseServiceProvider;
 use App\Providers\UserProvider;
 use App\Providers\UserAgentProvider;
 use Illuminate\Support\Facades\Facade;
 use App\Providers\NotificationProvider;
 use App\Providers\ReportServiceProvider;
 use App\Providers\GeneralOutcomeProvider;
-use App\Providers\RepositoryServiceProvider;
 
 return [
 
@@ -207,6 +206,9 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Jenssegers\Agent\AgentServiceProvider::class,
+        UserAgentProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
         // Custom Service Providers
         ReportServiceProvider::class,
@@ -215,10 +217,7 @@ return [
         UserProvider::class,
         ChatProvider::class,
         AnnouncementProvider::class,
-        Jenssegers\Agent\AgentServiceProvider::class,
-        UserAgentProvider::class,
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-
+        FirebaseServiceProvider::class,
     ],
 
     /*
