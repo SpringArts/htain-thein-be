@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use App\Enums\UserRoleType;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -24,7 +24,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => '$2y$10$/wQTKHDVTKcZXxqvgXHR5.yOr6vjBkHoErWrI0vhnHCs6rhF8LTRW', // password
             'remember_token' => Str::random(10),
-            'account_status' =>   $this->faker->randomElement(['ACTIVE', 'SUSPENDED']),
+            'account_status' => $this->faker->randomElement(['ACTIVE', 'SUSPENDED']),
             'role' => $this->faker->randomElement([UserRoleType::SUPER_ADMIN,  UserRoleType::ADMIN,  UserRoleType::MEMBER]),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'updated_at' => $this->faker->dateTimeBetween('-1 year', 'now'),

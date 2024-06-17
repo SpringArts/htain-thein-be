@@ -10,15 +10,15 @@ class FirebaseChattingController extends Controller
 {
     private FirebaseAction $firebaseAction;
 
-
     public function __construct(FirebaseAction $firebaseAction)
     {
         $this->firebaseAction = $firebaseAction;
     }
 
-    public function sendMessage(StoreMessageRequest $request)
+    public function sendMessage(StoreMessageRequest $request): string
     {
         $data = $request->safe()->all();
+
         return $this->firebaseAction->storeMessage($data);
     }
 }

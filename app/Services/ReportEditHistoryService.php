@@ -1,11 +1,12 @@
 <?php
 
 // ReportEditHistoryService.php
+
 namespace App\Services;
 
 use App\Exceptions\CustomErrorException;
-use Carbon\Carbon;
 use App\Models\ReportEditHistory;
+use Carbon\Carbon;
 
 class ReportEditHistoryService
 {
@@ -25,7 +26,7 @@ class ReportEditHistoryService
                     $newDataChangeFields[$key] = $value;
                 }
             }
-            if (!empty($newDataChangeFields)) {
+            if (! empty($newDataChangeFields)) {
                 // Parse 'updated_at' timestamp using Carbon to make it human-readable in new data
                 if (isset($newDataChangeFields['updated_at'])) {
                     $newDataChangeFields['updated_at'] = Carbon::parse($newDataChangeFields['updated_at'])->format('Y-d-M h:i A');
@@ -36,8 +37,11 @@ class ReportEditHistoryService
                     $oldDataChangeFields['updated_at'] = Carbon::parse($oldDataChangeFields['updated_at'])->format('Y-d-M h:i A');
                 }
 
-                $history->old_data = json_encode($oldDataChangeFields, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-                $history->new_data = json_encode($newDataChangeFields, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+                $oldDataJson = json_encode($oldDataChangeFields, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+                $newDataJson = json_encode($newDataChangeFields, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+
+                $history->old_data = $oldDataJson !== false ? $oldDataJson : null;
+                $history->new_data = $newDataJson !== false ? $newDataJson : null;
                 $history->save();
             }
         } catch (\Throwable $th) {

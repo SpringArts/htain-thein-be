@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1\App\Announcement;
+namespace App\Http\Requests\V1\App\NotificationInfo;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreAnnouncementRequest extends FormRequest
+class FetchAllNotificationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,8 @@ class StoreAnnouncementRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string',
-            'content' => 'string',
-            'isVisible' => 'boolean',
-            'priority' => 'integer|in:1,2,3',
-            'slug' => 'string|in:work,cost,alert,info,others',
-            'dueDate' => 'required|date|after:today',
+            'limit' => ['integer'],
+            'page' => ['integer'],
         ];
     }
 }

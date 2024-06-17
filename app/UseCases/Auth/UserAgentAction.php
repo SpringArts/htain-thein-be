@@ -2,9 +2,9 @@
 
 namespace App\UseCases\Auth;
 
-use Jenssegers\Agent\Agent;
-use Illuminate\Http\Request;
 use App\Interfaces\Auth\UserAgentInterface;
+use Illuminate\Http\Request;
+use Jenssegers\Agent\Agent;
 
 class UserAgentAction
 {
@@ -14,7 +14,6 @@ class UserAgentAction
     {
         $this->userAgentRepository = $userAgentRepository;
     }
-
 
     public function storeUserAgent(Request $request): void
     {

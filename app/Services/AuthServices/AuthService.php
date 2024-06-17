@@ -1,6 +1,6 @@
 <?php
 
-namespace  App\Services\AuthServices;
+namespace App\Services\AuthServices;
 
 use App\Models\User;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
@@ -9,12 +9,12 @@ class AuthService
 {
     public function handleAuthentication(SocialiteUser $socialiteUser, string $provider): string
     {
-        $newUser =  $this->store($socialiteUser, $provider);
+        $newUser = $this->store($socialiteUser, $provider);
         $this->login($newUser);
         $token = $this->createToken($newUser);
+
         return $token;
     }
-
 
     private function store(SocialiteUser $socialiteUser, string $provider): User
     {
@@ -27,7 +27,6 @@ class AuthService
             ]
         );
     }
-
 
     private function login(User $newUser): void
     {

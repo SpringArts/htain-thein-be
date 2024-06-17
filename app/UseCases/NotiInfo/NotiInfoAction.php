@@ -2,32 +2,32 @@
 
 namespace App\UseCases\NotiInfo;
 
+use App\Interfaces\Firebase\FirebaseChattingInterface;
 use App\Interfaces\Notification\NotificationInterface;
 use App\Models\NotiInfo;
 use App\Models\Report;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 class NotiInfoAction
 {
     private NotificationInterface $notiInfoResponsitory;
 
+    private FirebaseChattingInterface $firebaseRepository;
+
     public function __construct(
-        NotificationInterface $notiInfoResponsitory
+        NotificationInterface $notiInfoResponsitory,
+        FirebaseChattingInterface $firebaseRepository
     ) {
         $this->notiInfoResponsitory = $notiInfoResponsitory;
+        $this->firebaseRepository = $firebaseRepository;
     }
 
-    public function fetchAllNotifications(): Collection
+    public function fetchAllNotifications(array $formData): LengthAwarePaginator
     {
-        return $this->notiInfoResponsitory->fetchAllNotifications();
-    }
-
-    public function fetchUncheckedNotifications(array $formData, int $userId): LengthAwarePaginator
-    {
-        $limit = $formData['limit'] ?? 8;
+        $limit = $formData['limit'] ?? 5;
         $page = $formData['page'] ?? 1;
-        return $this->notiInfoResponsitory->fetchUncheckedNotifications($userId, $limit, $page);
+
+        return $this->notiInfoResponsitory->fetchAllNotifications($limit, $page);
     }
 
     public function getUserNotification(Report $report): NotiInfo
@@ -38,16 +38,15 @@ class NotiInfoAction
     public function createNotification(array $formData): NotiInfo
     {
         $userId = $formData['user_id'];
-        $reportId = $formData['report_id'];
-        return $this->notiInfoResponsitory->createNotification($userId, $reportId);
+        $reportId = $formData['report_id'] ?? null;
+        $announcementId = $formData['announcement_id'] ?? null;
+
+        $firebaseNotificationId = $this->firebaseRepository->storeNotification($formData);
+
+        return $this->notiInfoResponsitory->createNotification($userId, $reportId, $announcementId, $firebaseNotificationId);
     }
 
-    public function updateNotification(NotiInfo $notiInfo): bool
-    {
-        return $this->notiInfoResponsitory->updateNotification($notiInfo);
-    }
-
-    public function deleteNotification(NotiInfo $notiInfo): bool|null
+    public function deleteNotification(NotiInfo $notiInfo): ?bool
     {
         return $this->notiInfoResponsitory->deleteNotification($notiInfo);
     }

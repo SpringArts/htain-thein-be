@@ -17,7 +17,6 @@ class AnnouncementController extends Controller
 {
     private AnnouncementAction $announcementAction;
 
-
     public function __construct(AnnouncementAction $announcementAction)
     {
         $this->announcementAction = $announcementAction;
@@ -26,8 +25,9 @@ class AnnouncementController extends Controller
     public function index(): JsonResponse
     {
         $data = $this->announcementAction->fetchAllAnnouncements();
+
         return response()->json([
-            'data' => AnnouncementResource::collection($data)
+            'data' => AnnouncementResource::collection($data),
         ]);
     }
 
@@ -37,6 +37,7 @@ class AnnouncementController extends Controller
     public function store(StoreAnnouncementRequest $request): JsonResponse
     {
         $this->announcementAction->createAnnouncement($request->safe()->all());
+
         return ResponseHelper::success('Successfully created', null, 201);
     }
 
@@ -46,17 +47,19 @@ class AnnouncementController extends Controller
     public function show(Announcement $announcement): JsonResponse
     {
         return response()->json([
-            'data' => new AnnouncementResource($announcement)
+            'data' => new AnnouncementResource($announcement),
         ]);
     }
 
     public function update(UpdateAnnouncementRequest $request, Announcement $announcement): JsonResponse
     {
         $formData = $request->safe()->all();
-        $formData['is_visible'] = (int)$formData['isVisible'];
+        $formData['is_visible'] = (int) $formData['isVisible'];
         $this->announcementAction->updateAnnouncement($formData, $announcement);
+
         return ResponseHelper::success('Successfully Updated', null, 200);
     }
+
     /**
      * Remove the specified resource from storage.
      */
@@ -64,6 +67,7 @@ class AnnouncementController extends Controller
     {
         Gate::authorize('adminPermission');
         $this->announcementAction->deleteAnnouncement($announcement);
+
         return ResponseHelper::success('Successfully deleted', null, 200);
     }
 
@@ -71,6 +75,7 @@ class AnnouncementController extends Controller
     {
         $ids = $request->safe()->all();
         $this->announcementAction->batchDelete($ids);
+
         return ResponseHelper::success('Successfully Deleted', null, 200);
     }
 }

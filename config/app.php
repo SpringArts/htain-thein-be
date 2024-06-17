@@ -3,12 +3,12 @@
 use App\Providers\AnnouncementProvider;
 use App\Providers\ChatProvider;
 use App\Providers\FirebaseServiceProvider;
-use App\Providers\UserProvider;
-use App\Providers\UserAgentProvider;
-use Illuminate\Support\Facades\Facade;
+use App\Providers\GeneralOutcomeProvider;
 use App\Providers\NotificationProvider;
 use App\Providers\ReportServiceProvider;
-use App\Providers\GeneralOutcomeProvider;
+use App\Providers\UserAgentProvider;
+use App\Providers\UserProvider;
+use Illuminate\Support\Facades\Facade;
 
 return [
 
@@ -79,7 +79,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Tokyo',
 
     /*
     |--------------------------------------------------------------------------

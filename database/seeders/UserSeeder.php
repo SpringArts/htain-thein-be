@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use App\Enums\UserRoleType;
 use App\Models\User;
-use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             'password' => '$2y$10$/wQTKHDVTKcZXxqvgXHR5.yOr6vjBkHoErWrI0vhnHCs6rhF8LTRW',
             'remember_token' => Str::random(10),
             'account_status' => 'ACTIVE',
-            'role' =>  UserRoleType::SUPER_ADMIN,
+            'role' => UserRoleType::SUPER_ADMIN,
         ]);
         User::insert([
             'name' => 'Admin',

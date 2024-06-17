@@ -2,11 +2,11 @@
 
 namespace App\Repositories\GeneralOutcome;
 
-use App\Models\GeneralOutcome;
-use Illuminate\Support\Facades\DB;
 use App\Interfaces\GeneralOutcome\GeneralOutcomeInterface;
+use App\Models\GeneralOutcome;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class GeneralOutcomeRepository implements GeneralOutcomeInterface
 {
@@ -25,9 +25,9 @@ class GeneralOutcomeRepository implements GeneralOutcomeInterface
         return $generalOutcome->update($data);
     }
 
-    public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): bool|null
+    public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): ?bool
     {
-        return  $generalOutcome->delete();
+        return $generalOutcome->delete();
     }
 
     public function fetchMonthlyGeneralOutcome(): Collection

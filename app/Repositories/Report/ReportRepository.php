@@ -2,9 +2,9 @@
 
 namespace App\Repositories\Report;
 
-use App\Models\Report;
 use App\Enums\ConfirmStatus;
 use App\Interfaces\Report\ReportInterface;
+use App\Models\Report;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -30,7 +30,7 @@ class ReportRepository implements ReportInterface
 
     public function createReport(array $data): Report
     {
-        return  Report::create($data);
+        return Report::create($data);
     }
 
     public function updateReport(array $data, Report $report): bool
@@ -38,7 +38,7 @@ class ReportRepository implements ReportInterface
         return $report->update($data);
     }
 
-    public function deleteReport(Report $report): bool|null
+    public function deleteReport(Report $report): ?bool
     {
         return $report->delete();
     }
@@ -53,7 +53,7 @@ class ReportRepository implements ReportInterface
     {
         return $report->update([
             'verifier_id' => getAuthUserOrFail()->id,
-            'confirm_status' => ConfirmStatus::CHECKED
+            'confirm_status' => ConfirmStatus::CHECKED,
         ]);
     }
 
@@ -68,31 +68,30 @@ class ReportRepository implements ReportInterface
         $confirmStatus = $validatedData['confirmStatus'] ?? null;
         $createdAt = $validatedData['createdAt'] ?? null;
 
-
-        if (!empty($generalSearch)) {
+        if (! empty($generalSearch)) {
             $query->where(function ($q) use ($generalSearch) {
-                $q->orWhere('description', 'like', '%' . $generalSearch . '%')
+                $q->orWhere('description', 'like', '%'.$generalSearch.'%')
                     ->whereHas('reporter', function ($q) use ($generalSearch) {
-                        $q->where('name', 'like', '%' . $generalSearch . '%');
+                        $q->where('name', 'like', '%'.$generalSearch.'%');
                     })->orWhereHas('verifier', function ($q) use ($generalSearch) {
-                        $q->where('name', 'like', '%' . $generalSearch . '%');
+                        $q->where('name', 'like', '%'.$generalSearch.'%');
                     });
             });
         }
 
-        if (!empty($amount)) {
+        if (! empty($amount)) {
             $query->where('amount', '=', $amount);
         }
 
-        if (!empty($confirmStatus)) {
+        if (! empty($confirmStatus)) {
             $query->where('confirm_status', '=', $confirmStatus);
         }
 
-        if (!empty($type)) {
+        if (! empty($type)) {
             $query->where('type', '=', $type);
         }
 
-        if (!empty($createdAt)) {
+        if (! empty($createdAt)) {
             $query->where('created_at', '=', $createdAt);
         }
 
