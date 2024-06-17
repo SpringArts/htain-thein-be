@@ -28,7 +28,7 @@ class UpdateReportRequest extends FormRequest
             'type' => 'required|string',
             'confirm_status' => 'nullable|boolean',
             'reporter_id' => 'required|integer',
-            'verifier_id' => 'nullable|integer'
+            'verifier_id' => 'nullable|integer',
         ];
     }
 }

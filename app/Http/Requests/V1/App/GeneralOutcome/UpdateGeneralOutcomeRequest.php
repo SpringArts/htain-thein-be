@@ -24,7 +24,7 @@ class UpdateGeneralOutcomeRequest extends FormRequest
         return [
             'reporter_id' => ['required', 'exists:users,id'],
             'description' => ['required'],
-            'amount' => ['required', 'integer']
+            'amount' => ['required', 'integer'],
         ];
     }
 }

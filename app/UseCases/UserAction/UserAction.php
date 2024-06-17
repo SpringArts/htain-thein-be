@@ -5,8 +5,8 @@ namespace App\UseCases\UserAction;
 use App\Interfaces\User\UserInterface;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Hash;
 
 class UserAction
 {
@@ -25,6 +25,7 @@ class UserAction
     public function createUser(array $data): User
     {
         $data['password'] = Hash::make($data['password']);
+
         return $this->userRepository->createUser($data);
     }
 
@@ -39,7 +40,7 @@ class UserAction
         return $this->userRepository->updateUser($userData, $user);
     }
 
-    public function deleteUser(User $user): bool|null
+    public function deleteUser(User $user): ?bool
     {
         return $this->userRepository->deleteUser($user);
     }

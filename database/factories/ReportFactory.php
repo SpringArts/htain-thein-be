@@ -20,7 +20,7 @@ class ReportFactory extends Factory
             'amount' => $this->faker->numberBetween(500, 2500) * 2,
             'description' => $this->faker->text(),
             'type' => $this->faker->randomElement(['INCOME', 'EXPENSE']),
-            'confirm_status' =>  $this->faker->numberBetween(0, 1),
+            'confirm_status' => $this->faker->numberBetween(0, 1),
             'reporter_id' => $this->faker->unique(true)->numberBetween(1, 3),
             'verifier_id' => $this->faker->numberBetween(1, 3),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),

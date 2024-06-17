@@ -8,5 +8,6 @@ use Illuminate\Support\Collection;
 interface ChatInterface
 {
     public function fetchMessages(): Collection;
+
     public function storeMessage(array $data): Message;
 }

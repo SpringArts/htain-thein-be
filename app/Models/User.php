@@ -26,8 +26,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Announcement> $announcement
  * @property-read int|null $announcement_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ReportEditHistory> $editReportHistory
- * @property-read int|null $edit_report_history_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ReportEditHistory> $editReportHistories
+ * @property-read int|null $edit_report_histories_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message> $message
  * @property-read int|null $message_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NotiInfo> $noti
@@ -36,14 +36,15 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\GeneralOutcome> $regularCostReport
  * @property-read int|null $regular_cost_report_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CancelReportHistory> $reportHistory
- * @property-read int|null $report_history_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CancelReportHistory> $reportHistories
+ * @property-read int|null $report_histories_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Report> $reportedReports
  * @property-read int|null $reported_reports_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Report> $verifiedReports
  * @property-read int|null $verified_reports_count
+ *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -60,6 +61,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class User extends Authenticatable

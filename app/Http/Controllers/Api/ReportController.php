@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Report;
 use App\Helpers\ResponseHelper;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\App\Report\FetchReportFilterRequest;
 use App\Http\Requests\V1\App\Report\StoreReportRequest;
 use App\Http\Requests\V1\App\Report\UncheckReportRequest;
 use App\Http\Requests\V1\App\Report\UpdateReportRequest;
-use Illuminate\Support\Facades\Gate;
-use App\UseCases\Report\ReportAction;
-use App\Http\Resources\ReportResource;
 use App\Http\Resources\ReportEditHistoryResource;
+use App\Http\Resources\ReportResource;
+use App\Models\Report;
+use App\UseCases\Report\ReportAction;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class ReportController extends Controller
 {
@@ -29,6 +29,7 @@ class ReportController extends Controller
         $validatedData = $request->safe()->all();
         $data = $this->reportAction->fetchFilterData($validatedData);
         $meta = ResponseHelper::getPaginationMeta($data);
+
         return response()->json([
             'data' => ReportResource::collection($data),
             'meta' => $meta,
@@ -42,9 +43,8 @@ class ReportController extends Controller
     {
         // Gate::authorize('adminPermission');
         $formData = $request->safe()->all();
-        $authUserId = getAuthUserOrFail()->id;
-        $storeReport = $this->reportAction->createReport($formData);
-        $this->reportAction->createNotification($authUserId, $storeReport->id);
+        $this->reportAction->createReport($formData);
+
         return ResponseHelper::success('Successfully created', null, 201);
     }
 
@@ -54,7 +54,7 @@ class ReportController extends Controller
     public function show(Report $report): JsonResponse
     {
         return response()->json([
-            'data' => new ReportResource($report)
+            'data' => new ReportResource($report),
         ]);
     }
 
@@ -64,6 +64,7 @@ class ReportController extends Controller
     public function update(UpdateReportRequest $request, Report $report): JsonResponse
     {
         $this->reportAction->updateReport($request->safe()->all(), $report);
+
         return ResponseHelper::success('Successfully Updated', null, 200);
     }
 
@@ -72,6 +73,7 @@ class ReportController extends Controller
         $validatedData = $request->safe()->all();
         $data = $this->reportAction->uncheckReport($validatedData);
         $meta = ResponseHelper::getPaginationMeta($data);
+
         return response()->json([
             'data' => ReportResource::collection($data),
             'meta' => $meta,
@@ -83,9 +85,10 @@ class ReportController extends Controller
         $data = $this->reportAction->calculationFinancial();
 
         return response()->json([
-            'data' => $data
+            'data' => $data,
         ]);
     }
+
     /**
      * Remove the specified resource from storage.
      */
@@ -93,26 +96,30 @@ class ReportController extends Controller
     {
         Gate::authorize('superAdminPermission');
         $this->reportAction->deleteReport($report);
+
         return ResponseHelper::success('Successfully deleted', null, 200);
     }
 
     public function cancelReportHistory(int $id): JsonResponse //Report that Admin or SuperAdmin is rejected
     {
         $this->reportAction->createReportHistory($id);
+
         return ResponseHelper::success('Successfully Rejected', null, 201);
     }
 
     public function acceptReport(Report $report): JsonResponse
     {
         $this->reportAction->acceptReport($report);
+
         return ResponseHelper::success('Successfully Accepted', null, 201);
     }
 
     public function fetchChangedHistory(int $reportId): JsonResponse
     {
         $data = $this->reportAction->fetchChangedHistory($reportId);
+
         return response()->json([
-            'data' => ReportEditHistoryResource::collection($data)
+            'data' => ReportEditHistoryResource::collection($data),
         ]);
     }
 }

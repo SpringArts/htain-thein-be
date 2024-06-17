@@ -2,25 +2,16 @@
 
 namespace App\Repositories\Notification;
 
-use App\Models\Report;
-use App\Models\NotiInfo;
-use App\Enums\ConfirmStatus;
 use App\Interfaces\Notification\NotificationInterface;
+use App\Models\NotiInfo;
+use App\Models\Report;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 class NotificationRepository implements NotificationInterface
 {
-    public function fetchAllNotifications(): Collection
+    public function fetchAllNotifications(int $limit, int $page): LengthAwarePaginator
     {
-        $data = NotiInfo::with('user', 'report')->get();
-        return $data;
-    }
-
-    public function fetchUncheckedNotifications(int $userId, int $limit, int $page): LengthAwarePaginator
-    {
-        return NotiInfo::where('user_id', $userId)
-            ->where('check_status', ConfirmStatus::UNCHECKED)
+        return NotiInfo::with('user', 'report', 'announcement')
             ->orderBy('created_at', 'desc')
             ->paginate($limit, ['*'], 'page', $page)
             ->withQueryString();
@@ -31,22 +22,17 @@ class NotificationRepository implements NotificationInterface
         return NotiInfo::where('user_id', $report->reporter_id)->where('report_id', $report->id)->firstOrFail();
     }
 
-    public function createNotification(int $userId, int $reportId): NotiInfo
+    public function createNotification(int $userId, mixed $reportId, mixed $announcementId, string $firebaseNotificationId): NotiInfo
     {
         return NotiInfo::create([
             'user_id' => $userId,
-            'report_id' => $reportId
+            'report_id' => $reportId,
+            'announcement_id' => $announcementId,
+            'firebase_notification_id' => $firebaseNotificationId,
         ]);
     }
 
-    public function updateNotification(NotiInfo $notiInfo): bool
-    {
-        return $notiInfo->update([
-            'check_status' => ConfirmStatus::CHECKED
-        ]);
-    }
-
-    public function deleteNotification(NotiInfo $notiInfo): bool|null
+    public function deleteNotification(NotiInfo $notiInfo): ?bool
     {
         return $notiInfo->delete();
     }

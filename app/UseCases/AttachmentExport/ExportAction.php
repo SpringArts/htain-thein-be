@@ -2,8 +2,8 @@
 
 namespace App\UseCases\AttachmentExport;
 
-use App\Models\User;
 use App\Interfaces\Report\ReportInterface;
+use App\Models\User;
 
 class ExportAction
 {
@@ -18,9 +18,10 @@ class ExportAction
     {
         $fileName = User::where('id', $userId)->value('name');
         $query = $this->reportRepository->userReportDownload($userId);
+
         return [
             'query' => $query,
-            'fileName' => $fileName
+            'fileName' => $fileName,
         ];
     }
 }

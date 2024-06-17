@@ -21,7 +21,7 @@ class AnnouncementTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'data'
+                'data',
             ]);
     }
 
@@ -30,7 +30,7 @@ class AnnouncementTest extends TestCase
         $user = User::factory()->create();
         $data = [
             'title' => 'Announcement Title',
-            'slug' => "work",
+            'slug' => 'work',
             'content' => 'Content of the announcement',
             'isVisible' => 1,
             'priority' => 1,
@@ -44,7 +44,7 @@ class AnnouncementTest extends TestCase
             ->assertJson([
                 'alertVisible' => 1,
                 'msg' => 'Successfully created',
-                'data' => null
+                'data' => null,
             ]);
     }
 
@@ -72,7 +72,7 @@ class AnnouncementTest extends TestCase
         $user = User::factory()->create();
         $data = [
             'title' => 'Announcement Title',
-            'slug' => "work",
+            'slug' => 'work',
             'content' => 'Content of the announcement',
             'isVisible' => 1,
             'priority' => 1,
@@ -89,7 +89,7 @@ class AnnouncementTest extends TestCase
             ->assertJson([
                 'alertVisible' => 1,
                 'msg' => 'Successfully Updated',
-                'data' => null
+                'data' => null,
             ]);
     }
 
@@ -115,9 +115,10 @@ class AnnouncementTest extends TestCase
     {
         $user = User::factory()->create([
             'role' => UserRoleType::SUPER_ADMIN,
-            'account_status' => 'ACTIVE'
+            'account_status' => 'ACTIVE',
         ]);
         $this->actingAs($user);
+
         return $user;
     }
 }

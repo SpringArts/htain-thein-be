@@ -36,7 +36,6 @@ class MessageSending implements ShouldBroadcast
         ];
     }
 
-
     public function broadcastAs(): string
     {
         return 'keeper-event';

@@ -22,7 +22,7 @@ class GeneralOutcomeTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data',
-                'meta'
+                'meta',
             ]);
     }
 
@@ -35,13 +35,12 @@ class GeneralOutcomeTest extends TestCase
             'amount' => 1000,
         ];
 
-
         $response = $this->post('/api/app/general-outcomes', $data);
         $response->assertStatus(201)
             ->assertJson([
                 'alertVisible' => 1,
                 'msg' => 'Successfully Created',
-                'data' => null
+                'data' => null,
             ]);
     }
 
@@ -82,7 +81,7 @@ class GeneralOutcomeTest extends TestCase
             ->assertJson([
                 'alertVisible' => 1,
                 'msg' => 'Successfully Updated',
-                'data' => null
+                'data' => null,
             ]);
     }
 
@@ -108,9 +107,10 @@ class GeneralOutcomeTest extends TestCase
     {
         $user = User::factory()->create([
             'role' => UserRoleType::SUPER_ADMIN,
-            'account_status' => 'ACTIVE'
+            'account_status' => 'ACTIVE',
         ]);
         $this->actingAs($user);
+
         return $user;
     }
 }

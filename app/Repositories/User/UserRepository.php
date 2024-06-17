@@ -2,8 +2,8 @@
 
 namespace App\Repositories\User;
 
-use App\Models\User;
 use App\Interfaces\User\UserInterface;
+use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -30,7 +30,7 @@ class UserRepository implements UserInterface
         return $user->update($userData);
     }
 
-    public function deleteUser(User $user): bool|null
+    public function deleteUser(User $user): ?bool
     {
         return $user->delete();
     }
@@ -43,21 +43,20 @@ class UserRepository implements UserInterface
         $generalSearch = $validatedData['generalSearch'] ?? null;
         $role = $validatedData['role'] ?? null;
         $accountStatus = $validatedData['accountStatus'] ?? null;
-        if (!empty($generalSearch)) {
+        if (! empty($generalSearch)) {
             $query->where(function ($q) use ($generalSearch) {
-                $q->where('name', 'like', '%' . $generalSearch . '%')
-                    ->orWhere('email', 'like', '%' . $generalSearch . '%');
+                $q->where('name', 'like', '%'.$generalSearch.'%')
+                    ->orWhere('email', 'like', '%'.$generalSearch.'%');
             });
         }
 
-        if (!empty($role)) {
+        if (! empty($role)) {
             $query->where('role', '=', $role);
         }
 
-        if (!empty($accountStatus)) {
+        if (! empty($accountStatus)) {
             $query->where('account_status', '=', $accountStatus);
         }
-
 
         $data = $query->orderBy('created_at', 'desc')
             ->paginate($limit, ['*'], 'page', $page)

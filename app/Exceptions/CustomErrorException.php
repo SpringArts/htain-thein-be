@@ -11,7 +11,7 @@ class CustomErrorException extends Exception
 {
     protected int $statusCode;
 
-    public function __construct(string $message = "An error occurred", int $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR)
+    public function __construct(string $message = 'An error occurred', int $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR)
     {
         parent::__construct($message);
         $this->statusCode = $statusCode;

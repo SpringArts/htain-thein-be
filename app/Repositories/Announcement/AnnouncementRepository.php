@@ -14,9 +14,9 @@ class AnnouncementRepository implements AnnouncementInterface
         if ($authUser->role === 'SuperAdmin') {
             return Announcement::with('announcer')->orderBy('created_at', 'desc')->get();
         }
+
         return Announcement::with('announcer')->where('is_visible', 1)->orderBy('created_at', 'desc')->get();
     }
-
 
     public function createAnnouncement(array $data): Announcement
     {
@@ -28,7 +28,7 @@ class AnnouncementRepository implements AnnouncementInterface
         return $announcement->update($formData);
     }
 
-    public function deleteAnnouncement(Announcement $announcement): bool|null
+    public function deleteAnnouncement(Announcement $announcement): ?bool
     {
         return $announcement->delete();
     }

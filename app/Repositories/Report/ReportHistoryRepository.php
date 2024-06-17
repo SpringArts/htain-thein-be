@@ -2,9 +2,9 @@
 
 namespace App\Repositories\Report;
 
-use App\Models\ReportEditHistory;
-use App\Models\CancelReportHistory;
 use App\Interfaces\Report\ReportHistoryInterface;
+use App\Models\CancelReportHistory;
+use App\Models\ReportEditHistory;
 use Illuminate\Support\Collection;
 
 class ReportHistoryRepository implements ReportHistoryInterface
@@ -23,7 +23,7 @@ class ReportHistoryRepository implements ReportHistoryInterface
     {
         return ReportEditHistory::create([
             'report_id' => $id,
-            'user_id' => getAuthUserOrFail()->id
+            'user_id' => getAuthUserOrFail()->id,
         ]);
     }
 

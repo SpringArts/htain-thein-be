@@ -4,14 +4,14 @@ namespace App\Http\Requests\V1\App\NotificationInfo;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UncheckNotiInfoRequest extends FormRequest
+class MarkNotificationReadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class UncheckNotiInfoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'notificationId' => 'required',
         ];
     }
 }
