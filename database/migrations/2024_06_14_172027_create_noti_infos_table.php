@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('report_id')->nullable()->constrained('reports')->onDelete('cascade');
             $table->foreignId('announcement_id')->nullable()->constrained('announcements')->onDelete('cascade');
+            $table->string('firebase_notification_id');
             $table->timestamps();
         });
     }

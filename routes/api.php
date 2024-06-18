@@ -44,7 +44,7 @@ Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/user-report/{id}', [AttachmentExportController::class, 'userReportExport'])->name('report-export');
 
     Route::get('/announcement-batch-delete', [AnnouncementController::class, 'batchDelete']);
-    Route::get('/notifications/read', [NotiInfoController::class, 'markAsRead']);
+    Route::post('/notifications/read', [NotiInfoController::class, 'markAsRead']);
     Route::get('/dashboard', [HomeController::class, 'dashboard']);
     Route::get('/message/{receiverId?}', [MessageController::class, 'index']);
     Route::post('/message/{receiverId?}', [MessageController::class, 'store']);
@@ -55,4 +55,4 @@ Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
         return getAuthUserOrFail();
     });
 });
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
