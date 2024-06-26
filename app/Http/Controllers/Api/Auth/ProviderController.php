@@ -31,18 +31,22 @@ class ProviderController extends Controller
 
     public function handleProviderCallback(string $provider, Request $request): RedirectResponse
     {
-        $locale = $request->session()->get('locale', 'en');
-        $user = Socialite::driver($provider)->stateless()->user();
-        $token = $this->authService->handleAuthentication($user, $provider);
-        $authUser = getAuthUserOrFail();
+        try {
+            $locale = $request->session()->get('locale', 'en');
+            $user = Socialite::driver($provider)->stateless()->user();
+            $token = $this->authService->handleAuthentication($user, $provider);
+            $authUser = getAuthUserOrFail();
 
-        $encryptedUserData = encryptAlgorithm([
-            'userId' => $authUser->id,
-            'userName' => $authUser->name,
-            'userRole' => $authUser->role,
-            'token' => $token,
-        ]);
+            $encryptedUserData = encryptAlgorithm([
+                'userId' => $authUser->id,
+                'userName' => $authUser->name,
+                'userRole' => $authUser->role,
+                'token' => $token,
+            ]);
 
-        return redirect()->away(config('app.frontend_url').'/'.$locale.'/login?encrypted='.urlencode($encryptedUserData));
+            return redirect()->away(config('app.frontend_url') . '/' . $locale . '/login?encrypted=' . urlencode($encryptedUserData));
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
     }
 }

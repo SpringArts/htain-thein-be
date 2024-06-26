@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\AnnouncementController;
 use App\Http\Controllers\Api\AttachmentExportController;
-use App\Http\Controllers\Api\Auth\ProviderController;
 use App\Http\Controllers\Api\GeneralOutcomeController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\MessageController;
@@ -22,15 +21,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/auth/{provider}', [ProviderController::class, 'redirectToProvider']);
-Route::get('/auth/callback/{provider}', [ProviderController::class, 'handleProviderCallback']);
-
-Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/reports', ReportController::class);
     Route::apiResource('/notis', NotiInfoController::class);
     Route::apiResource('/announcements', AnnouncementController::class);
-    Route::apiResource('/general-outcome', GeneralOutcomeController::class);
+    Route::apiResource('/general-outcomes', GeneralOutcomeController::class);
     Route::get('/all-notis', [NotiInfoController::class, 'fetchAll']);
     Route::get('/calculations', [ReportController::class, 'calculationFinancial']);
     Route::get('/reports/{report}/reject', [ReportController::class, 'cancelReportHistory']);
@@ -51,4 +47,3 @@ Route::prefix('app')->middleware(['auth:sanctum'])->group(function () {
         return getAuthUserOrFail();
     });
 });
-require __DIR__.'/auth.php';
