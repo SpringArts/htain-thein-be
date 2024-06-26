@@ -2,36 +2,44 @@
 
 namespace App\UseCases\Report;
 
-use App\Models\Report;
 use App\Enums\FinancialType;
 use App\Exceptions\CustomErrorException;
-use Illuminate\Http\Response;
-use App\Interfaces\Report\ReportInterface;
-use App\Services\ReportEditHistoryService;
-use App\Services\FinancialCalculatorService;
-use App\Interfaces\Report\ReportHistoryInterface;
 use App\Interfaces\Notification\NotificationInterface;
+use App\Interfaces\Report\ReportHistoryInterface;
+use App\Interfaces\Report\ReportInterface;
 use App\Models\NotiInfo;
+use App\Models\Report;
+use App\Services\FinancialCalculatorService;
+use App\Services\ReportEditHistoryService;
+use App\UseCases\NotiInfo\NotiInfoAction;
+use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class ReportAction
 {
     private ReportInterface $reportRepository;
+
     private ReportHistoryInterface $reportHistoryRepository;
+
     private NotificationInterface $notificationRepository;
+
     private ReportEditHistoryService $reportEditHistoryService;
+
+    private NotiInfoAction $notiInfoAction;
 
     public function __construct(
         ReportInterface $reportRepository,
         ReportHistoryInterface $reportHistoryRepository,
         NotificationInterface $notificationRepository,
-        ReportEditHistoryService $reportEditHistoryService
+        ReportEditHistoryService $reportEditHistoryService,
+        NotiInfoAction $notiInfoAction
     ) {
         $this->reportRepository = $reportRepository;
         $this->reportHistoryRepository = $reportHistoryRepository;
         $this->notificationRepository = $notificationRepository;
         $this->reportEditHistoryService = $reportEditHistoryService;
+        $this->notiInfoAction = $notiInfoAction;
     }
 
     public function fetchAllReports(): Collection
@@ -44,19 +52,26 @@ class ReportAction
         return $this->reportRepository->reportFilter($validatedData);
     }
 
-
     //create report depend on financial condition
     public function createReport(array $data): Report
     {
+        $authUserId = getAuthUserOrFail()->id;
         if ($data['type'] == FinancialType::EXPENSE) {
             if (FinancialCalculatorService::calculateAvailableBalance() < $data['amount']) {
                 if (FinancialCalculatorService::calculateAvailableBalance() <= 0) {
                     throw new CustomErrorException('Current Income is ( 0 ) balance.You cannot withdraw.', Response::HTTP_BAD_REQUEST);
                 }
-                throw new CustomErrorException(FinancialCalculatorService::calculateAvailableBalance() . ' kyat is only available.', Response::HTTP_BAD_REQUEST);
+                throw new CustomErrorException(FinancialCalculatorService::calculateAvailableBalance().' kyat is only available.', Response::HTTP_BAD_REQUEST);
             }
         }
-        return $this->reportRepository->createReport($data);
+        $report = $this->reportRepository->createReport($data);
+        $this->notiInfoAction->createNotification([
+            'user_id' => $authUserId,
+            'report_id' => $report->id,
+            'type' => 'report',
+        ]);
+
+        return $report;
     }
 
     //update report
@@ -66,6 +81,7 @@ class ReportAction
         $this->reportRepository->updateReport($formData, $report);
         $newData = $report->toArray(); //take new data after update
         $this->reportEditHistoryService->editHistory($oldData, $newData);
+
         return Response::HTTP_OK;
     }
 
@@ -74,26 +90,29 @@ class ReportAction
     {
         $limit = $formData['limit'] ?? 6;
         $page = $formData['page'] ?? 1;
+
         return $this->reportRepository->uncheckReport($limit, $page);
     }
 
     //accept report
-    public function acceptReport(Report $report): bool
+    public function acceptReport(Report $report): NotiInfo
     {
         $this->reportRepository->acceptReport($report);
         $notification = $this->notificationRepository->getUserNotification($report);
-        return $this->notificationRepository->updateNotification($notification);
+
+        return $notification;
     }
 
     //calculation financial
     public function calculationFinancial(): array
     {
         $overviewData = FinancialCalculatorService::overviewCalculate();
+
         return $overviewData;
     }
 
     //delete report
-    public function deleteReport(Report $report): bool|null
+    public function deleteReport(Report $report): ?bool
     {
         return $this->reportRepository->deleteReport($report);
     }
@@ -104,18 +123,12 @@ class ReportAction
         return $this->reportHistoryRepository->getReportChangedHistory($reportId);
     }
 
-    //create notification after report created
-    public function createNotification(int $userId, int $reportId): NotiInfo
-    {
-        return $this->notificationRepository->createNotification($userId, $reportId);
-    }
-
     //create report history after report rejected
-    public function createReportHistory(int $id): bool|null
+    public function createReportHistory(int $id): ?bool
     {
         $report = $this->getReport($id);
         $this->rejectReport($report);
-        $this->updateNotification($report);
+
         return $this->reportRepository->deleteReport($report); //TODO CHECK FUNCTION
     }
 
@@ -123,14 +136,8 @@ class ReportAction
     private function getReport(int $id): Report
     {
         $report = $this->reportRepository->getReport($id);
-        return $report;
-    }
 
-    //update notification after report rejected
-    private function updateNotification(Report $report): void
-    {
-        $noti = $this->notificationRepository->getUserNotification($report);
-        $this->notificationRepository->updateNotification($noti);
+        return $report;
     }
 
     //create report history after report rejected

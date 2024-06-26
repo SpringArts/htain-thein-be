@@ -24,7 +24,6 @@ class StoreNotiInfoRequest extends FormRequest
         return [
             'user_id' => 'required|integer',
             'report_id' => 'required|integer',
-            'check_status' => 'nullable|boolean',
         ];
     }
 }

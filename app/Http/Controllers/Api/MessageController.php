@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\App\Chat\StoreMessageRequest;
 use App\Http\Resources\MessageResource;
 use App\UseCases\Message\MessageAction;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class MessageController extends Controller
@@ -21,9 +20,10 @@ class MessageController extends Controller
     }
 
     //Message Fetching
-    public function index(int $senderId = null): JsonResponse
+    public function index(?int $senderId = null): JsonResponse
     {
         $messages = $this->messageAction->fetchData();
+
         return response()->json([
             'messages' => MessageResource::collection($messages),
         ]);
@@ -40,9 +40,10 @@ class MessageController extends Controller
 
             $result = $this->messageAction->storeMessage($message);
             if ($result != 200) {
-                return ResponseHelper::fail("Message is not sent.", null, 400, 1);
+                return ResponseHelper::fail('Message is not sent.', null, 400, 1);
             }
-            return ResponseHelper::success("Message is sent successfully.", null, 200, 0);
+
+            return ResponseHelper::success('Message is sent successfully.', null, 200, 0);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

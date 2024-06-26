@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helpers\ResponseHelper;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\App\ContactInfo\ContactInfoRequest;
 use App\UseCases\HomeAction\HomeAction;
+use Illuminate\Http\JsonResponse;
 
 class HomeController extends Controller
 {
@@ -16,9 +16,11 @@ class HomeController extends Controller
     {
         $this->overviewData = $overviewData;
     }
+
     public function dashboard(): JsonResponse
     {
         $data = $this->overviewData->fetchData();
+
         return response()->json([
             'data' => $data,
         ]);
@@ -28,6 +30,7 @@ class HomeController extends Controller
     {
         $formData = $request->safe()->all();
         $storeData = $this->overviewData->storeContactInfo($formData);
+
         return ResponseHelper::success('Successfully Submitted', null, 201);
     }
 }

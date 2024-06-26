@@ -22,7 +22,7 @@ class ReportTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data',
-                'meta'
+                'meta',
             ]);
     }
 
@@ -31,7 +31,7 @@ class ReportTest extends TestCase
         $user = User::factory()->create();
         $data = [
             'amount' => 2000,
-            'description' => "This is a test report",
+            'description' => 'This is a test report',
             'type' => 'INCOME',
             'confirm_status' => 1,
             'reporter_id' => $user->id,
@@ -45,7 +45,7 @@ class ReportTest extends TestCase
             ->assertJson([
                 'alertVisible' => 1,
                 'msg' => 'Successfully created',
-                'data' => null
+                'data' => null,
             ]);
     }
 
@@ -53,12 +53,12 @@ class ReportTest extends TestCase
     {
         $authUser = $this->auth_user_create();
         $user = User::factory()->create([
-            'role' => UserRoleType::SUPER_ADMIN
+            'role' => UserRoleType::SUPER_ADMIN,
         ]);
         $report = Report::factory()->create(
             [
                 'reporter_id' => $user->id,
-                'verifier_id' => $authUser->id
+                'verifier_id' => $authUser->id,
             ]
         );
 
@@ -74,9 +74,10 @@ class ReportTest extends TestCase
     {
         $user = User::factory()->create([
             'role' => UserRoleType::SUPER_ADMIN,
-            'account_status' => 'ACTIVE'
+            'account_status' => 'ACTIVE',
         ]);
         $this->actingAs($user);
+
         return $user;
     }
 
@@ -86,7 +87,7 @@ class ReportTest extends TestCase
         $user = User::factory()->create();
         $data = [
             'amount' => 3000,
-            'description' => "This is a test report Update",
+            'description' => 'This is a test report Update',
             'type' => 'INCOME',
             'confirm_status' => 1,
             'reporter_id' => $authUser->id,
@@ -95,7 +96,7 @@ class ReportTest extends TestCase
         $report = Report::factory()->create(
             [
                 'reporter_id' => $authUser->id,
-                'verifier_id' => $user->id
+                'verifier_id' => $user->id,
             ]
         );
 
@@ -104,7 +105,7 @@ class ReportTest extends TestCase
             ->assertJson([
                 'alertVisible' => 1,
                 'msg' => 'Successfully Updated',
-                'data' => null
+                'data' => null,
             ]);
     }
 
@@ -115,7 +116,7 @@ class ReportTest extends TestCase
         $report = Report::factory()->create(
             [
                 'reporter_id' => User::factory()->create()->id,
-                'verifier_id' => User::factory()->create()->id
+                'verifier_id' => User::factory()->create()->id,
             ]
         );
         $response = $this->delete("/api/app/reports/{$report->id}");

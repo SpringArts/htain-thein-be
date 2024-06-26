@@ -15,10 +15,11 @@ class MessageAction
         $this->chatRepository = $chatRepository;
     }
 
-    #TODO List
+    //TODO List
     public function fetchData(): Collection
     {
         $messages = $this->chatRepository->fetchMessages();
+
         return $messages;
     }
 
@@ -26,6 +27,7 @@ class MessageAction
     {
         $message = $this->chatRepository->storeMessage($message);
         event(new MessageSending($message));
+
         return 200;
     }
 }

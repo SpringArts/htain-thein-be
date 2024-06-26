@@ -9,8 +9,12 @@ use Illuminate\Pagination\LengthAwarePaginator;
 interface GeneralOutcomeInterface
 {
     public function fetchData(int $limit, int $page): LengthAwarePaginator;
+
     public function storeGeneralOutcome(array $formData): GeneralOutcome;
+
     public function updateGeneralOutcome(array $data, GeneralOutcome $generalOutcome): bool;
-    public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): bool|null;
+
+    public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): ?bool;
+
     public function fetchMonthlyGeneralOutcome(): Collection;
 }

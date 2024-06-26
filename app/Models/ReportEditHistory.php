@@ -12,12 +12,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $editor_id
  * @property int $report_id
- * @property mixed|null $old_data
- * @property mixed|null $new_data
+ * @property string|null $old_data
+ * @property string|null $new_data
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $editUser
  * @property-read \App\Models\Report $report
+ *
  * @method static \Database\Factories\ReportEditHistoryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ReportEditHistory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ReportEditHistory newQuery()
@@ -29,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|ReportEditHistory whereOldData($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ReportEditHistory whereReportId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ReportEditHistory whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class ReportEditHistory extends Model
@@ -36,7 +38,6 @@ class ReportEditHistory extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-
 
     public function report(): BelongsTo
     {

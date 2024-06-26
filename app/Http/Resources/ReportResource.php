@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin \App\Models\Report */
-
 class ReportResource extends JsonResource
 {
-
     /**
      * Transform the resource into an array.
      *
@@ -19,7 +17,9 @@ class ReportResource extends JsonResource
     {
         /** @var string|null $uri */
         $uri = $request->route()?->uri;
-        if (!$uri) return [];
+        if (! $uri) {
+            return [];
+        }
 
         // Only include companyName and companyStatus for /api/org
         if ($uri === 'api/app/uncheck-reports') {
@@ -42,6 +42,7 @@ class ReportResource extends JsonResource
                 'createdAt' => $this->created_at ? formatDateTime($this->created_at) : '',
             ];
         }
+
         return [
             'id' => $this->id,
             'amount' => $this->amount ?? 0,
@@ -51,7 +52,7 @@ class ReportResource extends JsonResource
             'reporter' => new UserResource($this->reporter),
             'verifier' => new UserResource($this->verifier),
             'createdAt' => $this->created_at ? formatDateTime($this->created_at) : '',
-            'updatedAt' =>  $this->updated_at ? formatDateTime($this->updated_at) : '',
+            'updatedAt' => $this->updated_at ? formatDateTime($this->updated_at) : '',
         ];
     }
 }

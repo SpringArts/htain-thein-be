@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin \App\Models\GeneralOutcome */
-
 class GeneralOutcomeResource extends JsonResource
 {
     /**
@@ -17,9 +16,9 @@ class GeneralOutcomeResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'      => $this->id,
-            'reporter'    => new UserResource($this->reporter),
-            'description'   => $this->description ?? '',
+            'id' => $this->id,
+            'reporter' => new UserResource($this->reporter),
+            'description' => $this->description ?? '',
             'amount' => $this->amount ?? 0,
             'createdAt' => $this->created_at ? formatDateTime($this->created_at) : '',
         ];

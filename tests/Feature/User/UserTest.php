@@ -15,9 +15,10 @@ class UserTest extends TestCase
     private function auth_user_create()
     {
         $user = User::factory()->create([
-            'role' => UserRoleType::SUPER_ADMIN
+            'role' => UserRoleType::SUPER_ADMIN,
         ]);
         $this->actingAs($user);
+
         return $user;
     }
 
@@ -40,8 +41,8 @@ class UserTest extends TestCase
             'email_verified_at' => now(),
             'password' => '$2y$10$/wQTKHDVTKcZXxqvgXHR5.yOr6vjBkHoErWrI0vhnHCs6rhF8LTRW',
             'remember_token' => Str::random(10),
-            'accountStatus' =>  'ACTIVE',
-            'role' => UserRoleType::ADMIN
+            'accountStatus' => 'ACTIVE',
+            'role' => UserRoleType::ADMIN,
         ];
 
         $this->auth_user_create();
@@ -67,12 +68,12 @@ class UserTest extends TestCase
             ->assertJson([
                 'data' => [
                     'id' => $user->id,
-                    'name' =>  $user->name,
+                    'name' => $user->name,
                     'email' => $user->email,
                     'role' => $user->role,
                     'accountStatus' => $user->account_status,
-                    'createdAt' => $createdAt
-                ]
+                    'createdAt' => $createdAt,
+                ],
             ]);
     }
 
@@ -84,7 +85,7 @@ class UserTest extends TestCase
             'name' => 'Jane Doe',
             'email' => 'jane@example.com',
             'role' => 'Admin',
-            'accountStatus' => 'ACTIVE'
+            'accountStatus' => 'ACTIVE',
         ];
 
         $response = $this->put("/api/app/users/{$user->id}", $data);

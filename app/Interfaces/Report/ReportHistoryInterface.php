@@ -8,7 +8,10 @@ use Illuminate\Support\Collection;
 interface ReportHistoryInterface
 {
     public function getAllReportChangedHistories(): Collection;
+
     public function getReportChangedHistory(int $id): Collection;
+
     public function createReportChangedHistory(int $id): ReportEditHistory;
+
     public function rejectReportHistory(array $rejectReportData): void;
 }

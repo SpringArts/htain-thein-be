@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\GeneralOutcome;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Gate;
-
 use App\Http\Requests\V1\App\GeneralOutcome\FetchGeneralOutcomeRequest;
 use App\Http\Requests\V1\App\GeneralOutcome\StoreGeneralOutcomeRequest;
 use App\Http\Requests\V1\App\GeneralOutcome\UpdateGeneralOutcomeRequest;
 use App\Http\Resources\GeneralOutcomeResource;
+use App\Models\GeneralOutcome;
 use App\UseCases\GeneralOutcome\GeneralOutcomeAction;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class GeneralOutcomeController extends Controller
 {
@@ -28,6 +27,7 @@ class GeneralOutcomeController extends Controller
         $validatedData = $request->safe()->all();
         $data = $this->generalOutcomeAction->fetchGeneralOutcome($validatedData);
         $meta = ResponseHelper::getPaginationMeta($data);
+
         return response()->json([
             'data' => GeneralOutcomeResource::collection($data),
             'meta' => $meta,
@@ -38,7 +38,7 @@ class GeneralOutcomeController extends Controller
     {
         return response()->json(
             [
-                'data' => new GeneralOutcomeResource($generalOutcome)
+                'data' => new GeneralOutcomeResource($generalOutcome),
             ],
         );
     }
@@ -47,7 +47,8 @@ class GeneralOutcomeController extends Controller
     {
         $formData = $request->all();
         $this->generalOutcomeAction->storeGeneralOutcome($formData);
-        return ResponseHelper::success("Successfully Created", null, 201);
+
+        return ResponseHelper::success('Successfully Created', null, 201);
     }
 
     public function update(UpdateGeneralOutcomeRequest $request, GeneralOutcome $generalOutcome): JsonResponse
@@ -55,22 +56,25 @@ class GeneralOutcomeController extends Controller
         Gate::authorize('adminPermission');
         $formData = $request->safe()->all();
         $this->generalOutcomeAction->updateGeneralOutcome($formData, $generalOutcome);
-        return ResponseHelper::success("Successfully Updated", null);
+
+        return ResponseHelper::success('Successfully Updated', null);
     }
 
     public function destroy(GeneralOutcome $generalOutcome): JsonResponse
     {
         Gate::authorize('superAdminPermission');
         $this->generalOutcomeAction->deleteGeneralOutcome($generalOutcome);
-        return ResponseHelper::success("Successfully Deleted", null);
+
+        return ResponseHelper::success('Successfully Deleted', null);
     }
 
     public function getMonthlyGeneralOutcome(): JsonResponse
     {
         $data = $this->generalOutcomeAction->fetchMonthlyGeneralOutcome();
+
         return response()->json(
             [
-                'data' => $data
+                'data' => $data,
             ],
         );
     }

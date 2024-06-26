@@ -14,21 +14,24 @@ class HomeAction
     {
         $this->reportRepository = $reportRepository;
     }
-    #TODO List
+
+    //TODO List
     public function fetchData(): array
     {
         $users = User::count();
         $reports = $this->reportRepository->getAllReports();
         $data = [
             'users' => $users,
-            'reports' => $reports
+            'reports' => $reports,
         ];
+
         return $data;
     }
 
     public function storeContactInfo(array $formData): int
     {
         $storeData = ContactInfo::create($formData);
+
         return 201;
     }
 }

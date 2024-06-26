@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Enums\ConfirmStatus;
 use App\Enums\FinancialType;
-use App\Models\Report;
 use App\Models\GeneralOutcome;
+use App\Models\Report;
 use Illuminate\Support\Facades\DB;
 
 class FinancialCalculatorService
@@ -29,8 +29,9 @@ class FinancialCalculatorService
             'regularCost' => $regularCost,
             'availableBalance' => $availableBalance,
             'mostDepositPerson' => $mostDepositPerson?->reporter->name,
-            'mostWithdrawPerson' => $mostWithdrawPerson?->reporter->name
+            'mostWithdrawPerson' => $mostWithdrawPerson?->reporter->name,
         ];
+
         return $data;
     }
 
@@ -46,6 +47,7 @@ class FinancialCalculatorService
         $reportOutcome = self::calculateSum(FinancialType::EXPENSE, 1);
         $regularOutcome = self::calculateRegularCost();
         $totalOutcome = $reportOutcome + $regularOutcome;
+
         return $totalOutcome;
     }
 
@@ -59,10 +61,11 @@ class FinancialCalculatorService
         $income = self::calculateSum(FinancialType::INCOME, 1);
         $outcome = self::calculateSum(FinancialType::EXPENSE, 1);
         $regularCost = self::calculateRegularCost();
+
         return $income - $outcome - $regularCost;
     }
 
-    private static function findMostPerson(string $type): Report|null
+    private static function findMostPerson(string $type): ?Report
     {
         return Report::where('type', $type)
             ->where('confirm_status', ConfirmStatus::CHECKED)

@@ -19,8 +19,9 @@ class GeneralOutcomeAction
     public function fetchGeneralOutcome(array $validateData): LengthAwarePaginator
     {
         $limit = $validateData['limit'] ?? 8;
-        $page =  $validateData['page'] ?? 1;
+        $page = $validateData['page'] ?? 1;
         $data = $this->generalOutcomeRepository->fetchData($limit, $page);
+
         return $data;
     }
 
@@ -34,7 +35,7 @@ class GeneralOutcomeAction
         return $this->generalOutcomeRepository->updateGeneralOutcome($data, $generalOutcome);
     }
 
-    public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): bool|null
+    public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): ?bool
     {
         return $this->generalOutcomeRepository->deleteGeneralOutcome($generalOutcome);
     }

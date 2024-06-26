@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\App\User\FetchUserRequest;
 use App\Http\Requests\V1\App\User\StoreUserRequest;
 use App\Http\Requests\V1\App\User\UpdateUserRequest;
 use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 use App\UseCases\UserAction\UserAction;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -28,9 +28,10 @@ class UserController extends Controller
         $validatedData = $request->safe()->all();
         $data = $this->userAction->fetchUsers($validatedData);
         $meta = ResponseHelper::getPaginationMeta($data);
+
         return response()->json([
             'data' => UserResource::collection($data),
-            'meta' => $meta
+            'meta' => $meta,
         ]);
     }
 
@@ -39,13 +40,14 @@ class UserController extends Controller
         Gate::authorize('adminPermission');
         $formData = $request->safe()->all();
         $this->userAction->createUser($formData);
+
         return ResponseHelper::success('Successfully created', null, 201);
     }
 
     public function show(User $user): JsonResponse
     {
         return response()->json([
-            'data' => new UserResource($user)
+            'data' => new UserResource($user),
         ]);
     }
 
@@ -53,6 +55,7 @@ class UserController extends Controller
     {
         Gate::authorize('adminPermission');
         $this->userAction->updateUser($request->safe()->all(), $user);
+
         return ResponseHelper::success('Successfully Updated', null, 200);
     }
 
@@ -60,12 +63,14 @@ class UserController extends Controller
     {
         Gate::authorize('superAdminPermission');
         $this->userAction->deleteUser($user);
+
         return ResponseHelper::success('Successfully Deleted', null, 200);
     }
 
     public function saveLocation(Request $request): int
     {
         $saveLocation = $this->userAction->saveLocation($request);
+
         return 200;
     }
 }
