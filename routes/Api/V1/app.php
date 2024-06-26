@@ -25,10 +25,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/reports', ReportController::class);
-    Route::apiResource('/notis', NotiInfoController::class);
+    Route::apiResource('/notifications', NotiInfoController::class);
     Route::apiResource('/announcements', AnnouncementController::class);
     Route::apiResource('/general-outcomes', GeneralOutcomeController::class);
-    Route::get('/all-notis', [NotiInfoController::class, 'fetchAll']);
+
     Route::get('/calculations', [ReportController::class, 'calculationFinancial']);
     Route::get('/reports/{report}/reject', [ReportController::class, 'cancelReportHistory']);
     Route::put('/reports/{report}/accept', [ReportController::class, 'acceptReport']);
@@ -42,7 +42,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/announcement-batch-delete', [AnnouncementController::class, 'batchDelete']);
     Route::get('/dashboard', [HomeController::class, 'dashboard']);
     Route::post('/send-message', [FirebaseChattingController::class, 'sendMessage']);
-
+    Route::post('/notifications/read', [NotiInfoController::class, 'markAsRead']);
+    Route::get('/all-notifications', [NotiInfoController::class, 'index']);
     Route::get('/testing', function () {
         return getAuthUserOrFail();
     });
