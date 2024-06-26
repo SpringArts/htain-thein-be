@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AnnouncementController;
 use App\Http\Controllers\Api\AttachmentExportController;
+use App\Http\Controllers\Api\FirebaseChattingController;
 use App\Http\Controllers\Api\GeneralOutcomeController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\MessageController;
@@ -40,8 +41,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/announcement-batch-delete', [AnnouncementController::class, 'batchDelete']);
     Route::get('/dashboard', [HomeController::class, 'dashboard']);
-    Route::get('/message/{receiverId?}', [MessageController::class, 'index']);
-    Route::post('/message/{receiverId?}', [MessageController::class, 'store']);
+    Route::post('/send-message', [FirebaseChattingController::class, 'sendMessage']);
 
     Route::get('/testing', function () {
         return getAuthUserOrFail();
