@@ -7,7 +7,6 @@ use App\Http\Requests\V1\App\ContactInfo\FetchContactInfoRequest;
 use App\Http\Requests\V1\App\ContactInfo\StoreContactInfoRequest;
 use App\Models\ContactInfo;
 use App\UseCases\ContactInfo\ContactInfoAction;
-use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\JsonResponse;
 
 class ContactInfoController extends Controller

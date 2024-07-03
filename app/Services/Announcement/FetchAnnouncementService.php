@@ -3,7 +3,7 @@
 namespace App\Services\Announcement;
 
 use App\Helpers\ResponseHelper;
-use App\Http\Resources\GeneralOutcomeResource;
+use App\Http\Resources\AnnouncementResource;
 use App\Interfaces\Announcement\AnnouncementInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -18,7 +18,7 @@ class FetchAnnouncementService
             $data = $announcementRepository->getAllAnnouncements($limit, $page);
             $meta = ResponseHelper::getPaginationMeta($data);
             return response()->json([
-                'data' => GeneralOutcomeResource::collection($data),
+                'data' => AnnouncementResource::collection($data),
                 'meta' => $meta,
             ]);
         } catch (\Throwable $th) {
