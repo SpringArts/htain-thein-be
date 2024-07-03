@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\App\User\FetchUserRequest;
 use App\Http\Requests\V1\App\User\StoreUserRequest;
@@ -26,22 +25,14 @@ class UserController extends Controller
     public function index(FetchUserRequest $request): JsonResponse
     {
         $validatedData = $request->safe()->all();
-        $data = $this->userAction->fetchUsers($validatedData);
-        $meta = ResponseHelper::getPaginationMeta($data);
-
-        return response()->json([
-            'data' => UserResource::collection($data),
-            'meta' => $meta,
-        ]);
+        return $this->userAction->fetchUsers($validatedData);
     }
 
     public function store(StoreUserRequest $request): JsonResponse
     {
         Gate::authorize('adminPermission');
         $formData = $request->safe()->all();
-        $this->userAction->createUser($formData);
-
-        return ResponseHelper::success('Successfully created', null, 201);
+        return $this->userAction->createUser($formData);
     }
 
     public function show(User $user): JsonResponse
@@ -54,17 +45,13 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user): JsonResponse
     {
         Gate::authorize('adminPermission');
-        $this->userAction->updateUser($request->safe()->all(), $user);
-
-        return ResponseHelper::success('Successfully Updated', null, 200);
+        return $this->userAction->updateUser($request->safe()->all(), $user);
     }
 
     public function destroy(User $user): JsonResponse
     {
         Gate::authorize('superAdminPermission');
-        $this->userAction->deleteUser($user);
-
-        return ResponseHelper::success('Successfully Deleted', null, 200);
+        return $this->userAction->deleteUser($user);
     }
 
     public function saveLocation(Request $request): int

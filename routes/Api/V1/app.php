@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\Api\AnnouncementController;
 use App\Http\Controllers\Api\AttachmentExportController;
+use App\Http\Controllers\Api\ContactInfoController;
 use App\Http\Controllers\Api\FirebaseChattingController;
 use App\Http\Controllers\Api\GeneralOutcomeController;
 use App\Http\Controllers\Api\HomeController;
-use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\NotiInfoController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\UserController;
@@ -28,13 +28,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/notifications', NotiInfoController::class);
     Route::apiResource('/announcements', AnnouncementController::class);
     Route::apiResource('/general-outcomes', GeneralOutcomeController::class);
+    Route::apiResource('/contact-infos', ContactInfoController::class);
 
     Route::get('/calculations', [ReportController::class, 'calculationFinancial']);
     Route::get('/reports/{report}/reject', [ReportController::class, 'cancelReportHistory']);
     Route::put('/reports/{report}/accept', [ReportController::class, 'acceptReport']);
     Route::get('/uncheck-reports', [ReportController::class, 'uncheckReport']);
     Route::get('/changed-histories/{id}', [ReportController::class, 'fetchChangedHistory']);
-    Route::post('/contact', [HomeController::class, 'storeContactInfo']);
     Route::get('/monthly-total', [GeneralOutcomeController::class, 'getMonthlyGeneralOutcome']);
     Route::post('/user-location', [UserController::class, 'saveLocation']);
     Route::get('/user-report/{id}', [AttachmentExportController::class, 'userReportExport'])->name('report-export');

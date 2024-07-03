@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\App\ContactInfo\ContactInfoRequest;
 use App\UseCases\HomeAction\HomeAction;
 use Illuminate\Http\JsonResponse;
 
@@ -24,13 +22,5 @@ class HomeController extends Controller
         return response()->json([
             'data' => $data,
         ]);
-    }
-
-    public function storeContactInfo(ContactInfoRequest $request): JsonResponse
-    {
-        $formData = $request->safe()->all();
-        $storeData = $this->overviewData->storeContactInfo($formData);
-
-        return ResponseHelper::success('Successfully Submitted', null, 201);
     }
 }

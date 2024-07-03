@@ -3,11 +3,11 @@
 namespace App\Interfaces\Announcement;
 
 use App\Models\Announcement;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface AnnouncementInterface
 {
-    public function getAllAnnouncements(): Collection;
+    public function getAllAnnouncements(int $limit, int $page): LengthAwarePaginator;
 
     public function createAnnouncement(array $data): Announcement;
 

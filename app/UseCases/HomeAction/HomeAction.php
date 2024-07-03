@@ -3,7 +3,6 @@
 namespace App\UseCases\HomeAction;
 
 use App\Interfaces\Report\ReportInterface;
-use App\Models\ContactInfo;
 use App\Models\User;
 
 class HomeAction
@@ -26,12 +25,5 @@ class HomeAction
         ];
 
         return $data;
-    }
-
-    public function storeContactInfo(array $formData): int
-    {
-        $storeData = ContactInfo::create($formData);
-
-        return 201;
     }
 }

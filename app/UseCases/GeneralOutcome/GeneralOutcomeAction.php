@@ -2,10 +2,17 @@
 
 namespace App\UseCases\GeneralOutcome;
 
+use App\Helpers\ResponseHelper;
 use App\Interfaces\GeneralOutcome\GeneralOutcomeInterface;
 use App\Models\GeneralOutcome;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
+use App\Services\GeneralOutCome\DeleteGeneralOutComeService;
+use App\Services\GeneralOutCome\FetchGeneralOutComeService;
+use App\Services\GeneralOutCome\FetchMonthlyGeneralOutcomeService;
+use App\Services\GeneralOutCome\StoreGeneralOutcomeService;
+use App\Services\GeneralOutCome\UpdateGeneralOutComeService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Throwable;
 
 class GeneralOutcomeAction
 {
@@ -16,32 +23,48 @@ class GeneralOutcomeAction
         $this->generalOutcomeRepository = $generalOutcomeRepository;
     }
 
-    public function fetchGeneralOutcome(array $validateData): LengthAwarePaginator
+    public function fetchGeneralOutcome(array $validateData): JsonResponse
     {
-        $limit = $validateData['limit'] ?? 8;
-        $page = $validateData['page'] ?? 1;
-        $data = $this->generalOutcomeRepository->fetchData($limit, $page);
-
-        return $data;
+        try {
+            return (new FetchGeneralOutComeService())($this->generalOutcomeRepository, $validateData);
+        } catch (Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function storeGeneralOutcome(array $data): GeneralOutcome
+    public function storeGeneralOutcome(array $data): JsonResponse
     {
-        return $this->generalOutcomeRepository->storeGeneralOutcome($data);
+        try {
+            return (new StoreGeneralOutcomeService())($this->generalOutcomeRepository, $data);
+        } catch (Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function updateGeneralOutcome(array $data, GeneralOutcome $generalOutcome): bool
+    public function updateGeneralOutcome(array $data, GeneralOutcome $generalOutcome): JsonResponse
     {
-        return $this->generalOutcomeRepository->updateGeneralOutcome($data, $generalOutcome);
+        try {
+            return (new UpdateGeneralOutComeService())($this->generalOutcomeRepository, $data, $generalOutcome);
+        } catch (Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): ?bool
+    public function deleteGeneralOutcome(GeneralOutcome $generalOutcome): JsonResponse
     {
-        return $this->generalOutcomeRepository->deleteGeneralOutcome($generalOutcome);
+        try {
+            return (new DeleteGeneralOutComeService())($this->generalOutcomeRepository, $generalOutcome);
+        } catch (Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function fetchMonthlyGeneralOutcome(): Collection
+    public function fetchMonthlyGeneralOutcome(): JsonResponse
     {
-        return $this->generalOutcomeRepository->fetchMonthlyGeneralOutcome();
+        try {
+            return (new FetchMonthlyGeneralOutcomeService())($this->generalOutcomeRepository);
+        } catch (Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

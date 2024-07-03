@@ -2,7 +2,7 @@
 
 // ReportEditHistoryService.php
 
-namespace App\Services;
+namespace App\Services\Reports;
 
 use App\Exceptions\CustomErrorException;
 use App\Models\ReportEditHistory;
@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class ReportEditHistoryService
 {
-    public function editHistory(array $oldData, array $newData): void
+    public static function editHistory(array $oldData, array $newData): void
     {
         try {
             $history = new ReportEditHistory();
@@ -26,7 +26,7 @@ class ReportEditHistoryService
                     $newDataChangeFields[$key] = $value;
                 }
             }
-            if (! empty($newDataChangeFields)) {
+            if (!empty($newDataChangeFields)) {
                 // Parse 'updated_at' timestamp using Carbon to make it human-readable in new data
                 if (isset($newDataChangeFields['updated_at'])) {
                     $newDataChangeFields['updated_at'] = Carbon::parse($newDataChangeFields['updated_at'])->format('Y-d-M h:i A');

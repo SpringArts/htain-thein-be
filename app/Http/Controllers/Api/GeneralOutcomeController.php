@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\App\GeneralOutcome\FetchGeneralOutcomeRequest;
 use App\Http\Requests\V1\App\GeneralOutcome\StoreGeneralOutcomeRequest;
@@ -25,13 +24,7 @@ class GeneralOutcomeController extends Controller
     public function index(FetchGeneralOutcomeRequest $request): JsonResponse
     {
         $validatedData = $request->safe()->all();
-        $data = $this->generalOutcomeAction->fetchGeneralOutcome($validatedData);
-        $meta = ResponseHelper::getPaginationMeta($data);
-
-        return response()->json([
-            'data' => GeneralOutcomeResource::collection($data),
-            'meta' => $meta,
-        ]);
+        return $this->generalOutcomeAction->fetchGeneralOutcome($validatedData);
     }
 
     public function show(GeneralOutcome $generalOutcome): JsonResponse
@@ -46,36 +39,24 @@ class GeneralOutcomeController extends Controller
     public function store(StoreGeneralOutcomeRequest $request): JsonResponse
     {
         $formData = $request->all();
-        $this->generalOutcomeAction->storeGeneralOutcome($formData);
-
-        return ResponseHelper::success('Successfully Created', null, 201);
+        return $this->generalOutcomeAction->storeGeneralOutcome($formData);
     }
 
     public function update(UpdateGeneralOutcomeRequest $request, GeneralOutcome $generalOutcome): JsonResponse
     {
         Gate::authorize('adminPermission');
         $formData = $request->safe()->all();
-        $this->generalOutcomeAction->updateGeneralOutcome($formData, $generalOutcome);
-
-        return ResponseHelper::success('Successfully Updated', null);
+        return $this->generalOutcomeAction->updateGeneralOutcome($formData, $generalOutcome);
     }
 
     public function destroy(GeneralOutcome $generalOutcome): JsonResponse
     {
         Gate::authorize('superAdminPermission');
-        $this->generalOutcomeAction->deleteGeneralOutcome($generalOutcome);
-
-        return ResponseHelper::success('Successfully Deleted', null);
+        return $this->generalOutcomeAction->deleteGeneralOutcome($generalOutcome);
     }
 
     public function getMonthlyGeneralOutcome(): JsonResponse
     {
-        $data = $this->generalOutcomeAction->fetchMonthlyGeneralOutcome();
-
-        return response()->json(
-            [
-                'data' => $data,
-            ],
-        );
+        return $this->generalOutcomeAction->fetchMonthlyGeneralOutcome();
     }
 }

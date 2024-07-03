@@ -19,10 +19,10 @@ class NotificationRepository implements NotificationInterface
 
     public function getUserNotification(Report $report): NotiInfo
     {
-        return NotiInfo::where('user_id', $report->reporter_id)->where('report_id', $report->id)->firstOrFail();
+        return NotiInfo::with('user', 'report', 'announcement')->where('user_id', $report->reporter_id)->where('report_id', $report->id)->firstOrFail();
     }
 
-    public function createNotification(int $userId, mixed $reportId, mixed $announcementId, string $firebaseNotificationId): NotiInfo
+    public function createNotification(int $userId, mixed $reportId = null, mixed $announcementId = null, string $firebaseNotificationId): NotiInfo
     {
         return NotiInfo::create([
             'user_id' => $userId,

@@ -40,7 +40,7 @@ class MessageController extends Controller
 
             $result = $this->messageAction->storeMessage($message);
             if ($result != 200) {
-                return ResponseHelper::fail('Message is not sent.', null, 400, 1);
+                return ResponseHelper::fail('Message is not sent.', 400);
             }
 
             return ResponseHelper::success('Message is sent successfully.', null, 200, 0);

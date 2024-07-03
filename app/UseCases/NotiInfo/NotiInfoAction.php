@@ -2,11 +2,17 @@
 
 namespace App\UseCases\NotiInfo;
 
+use App\Helpers\ResponseHelper;
 use App\Interfaces\Firebase\FirebaseChattingInterface;
 use App\Interfaces\Notification\NotificationInterface;
 use App\Models\NotiInfo;
 use App\Models\Report;
-use Illuminate\Pagination\LengthAwarePaginator;
+use App\Services\NotificationInfo\DeleteNotificationInfoService;
+use App\Services\NotificationInfo\FetchNotificationInfoService;
+use App\Services\NotificationInfo\FetchUserNotificationInfoService;
+use App\Services\NotificationInfo\StoreNotificationInfoService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class NotiInfoAction
 {
@@ -22,32 +28,39 @@ class NotiInfoAction
         $this->firebaseRepository = $firebaseRepository;
     }
 
-    public function fetchAllNotifications(array $formData): LengthAwarePaginator
+    public function fetchAllNotifications(array $formData): JsonResponse
     {
-        $limit = $formData['limit'] ?? 5;
-        $page = $formData['page'] ?? 1;
-
-        return $this->notiInfoResponsitory->fetchAllNotifications($limit, $page);
+        try {
+            return (new FetchNotificationInfoService())($this->notiInfoResponsitory, $formData);
+        } catch (\Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function getUserNotification(Report $report): NotiInfo
+    public function getUserNotification(Report $report): JsonResponse
     {
-        return $this->notiInfoResponsitory->getUserNotification($report);
+        try {
+            return (new FetchUserNotificationInfoService())($this->notiInfoResponsitory, $report);
+        } catch (\Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function createNotification(array $formData): NotiInfo
+    public function createNotification(array $formData): JsonResponse
     {
-        $userId = $formData['user_id'];
-        $reportId = $formData['report_id'] ?? null;
-        $announcementId = $formData['announcement_id'] ?? null;
-
-        $firebaseNotificationId = $this->firebaseRepository->storeNotification($formData);
-
-        return $this->notiInfoResponsitory->createNotification($userId, $reportId, $announcementId, $firebaseNotificationId);
+        try {
+            return (new StoreNotificationInfoService())($this->notiInfoResponsitory, $this->firebaseRepository, $formData);
+        } catch (\Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function deleteNotification(NotiInfo $notiInfo): ?bool
+    public function deleteNotification(NotiInfo $notiInfo): JsonResponse
     {
-        return $this->notiInfoResponsitory->deleteNotification($notiInfo);
+        try {
+            return (new DeleteNotificationInfoService())($this->notiInfoResponsitory, $notiInfo);
+        } catch (\Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }
