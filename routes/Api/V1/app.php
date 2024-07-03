@@ -30,6 +30,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/general-outcomes', GeneralOutcomeController::class);
     Route::apiResource('/contact-infos', ContactInfoController::class);
 
+
     Route::get('/calculations', [ReportController::class, 'calculationFinancial']);
     Route::get('/reports/{report}/reject', [ReportController::class, 'cancelReportHistory']);
     Route::put('/reports/{report}/accept', [ReportController::class, 'acceptReport']);
