@@ -2,15 +2,21 @@
 
 namespace App\UseCases\Announcement;
 
+use App\Helpers\ResponseHelper;
 use App\Interfaces\Announcement\AnnouncementInterface;
 use App\Models\Announcement;
+use App\Services\Announcement\BatchDeleteAnnouncementService;
+use App\Services\Announcement\DeleteAnnouncementService;
+use App\Services\Announcement\FetchAnnouncementService;
+use App\Services\Announcement\StoreAnnouncementService;
+use App\Services\Announcement\UpdateAnnouncementService;
 use App\UseCases\NotiInfo\NotiInfoAction;
-use Illuminate\Support\Collection;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class AnnouncementAction
 {
     private AnnouncementInterface $announcementRepository;
-
     private NotiInfoAction $notiInfoAction;
 
     public function __construct(AnnouncementInterface $announcementRepository, NotiInfoAction $notiInfoAction)
@@ -19,34 +25,31 @@ class AnnouncementAction
         $this->notiInfoAction = $notiInfoAction;
     }
 
-    public function fetchAllAnnouncements(): Collection
+    public function fetchAllAnnouncements(array $validateData): JsonResponse
     {
-        return $this->announcementRepository->getAllAnnouncements();
+        try {
+            return (new FetchAnnouncementService())($this->announcementRepository, $validateData);
+        } catch (\Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function createAnnouncement(array $data): Announcement
+    public function createAnnouncement(array $data): JsonResponse
     {
-        $authUser = getAuthUserOrFail();
-        $data['user_id'] = $authUser->id;
-        $data['is_visible'] = $data['isVisible'] ?? true;
-        $data['due_date'] = $data['dueDate'];
-
-        $result = $this->announcementRepository->createAnnouncement($data);
-
-        $this->notiInfoAction->createNotification([
-            'user_id' => $authUser->id,
-            'announcement_id' => $result->id,
-            'type' => 'announcement',
-        ]);
-
-        return $result;
+        try {
+            return (new StoreAnnouncementService())($this->announcementRepository, $this->notiInfoAction, $data);
+        } catch (\Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function updateAnnouncement(array $formData, Announcement $announcement): bool
+    public function updateAnnouncement(array $formData, Announcement $announcement): JsonResponse
     {
-        $announcementData = $formData;
-
-        return $this->announcementRepository->updateAnnouncement($announcementData, $announcement);
+        try {
+            return (new UpdateAnnouncementService())($this->announcementRepository, $announcement, $formData);
+        } catch (\Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function fetchAnnouncement(Announcement $announcement): Announcement
@@ -54,13 +57,21 @@ class AnnouncementAction
         return $announcement;
     }
 
-    public function deleteAnnouncement(Announcement $announcement): ?bool
+    public function deleteAnnouncement(Announcement $announcement): JsonResponse
     {
-        return $this->announcementRepository->deleteAnnouncement($announcement);
+        try {
+            return (new DeleteAnnouncementService())($this->announcementRepository, $announcement);
+        } catch (\Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function batchDelete(array $ids): mixed
+    public function batchDelete(array $ids): JsonResponse
     {
-        return $this->announcementRepository->batchDelete($ids);
+        try {
+            return (new BatchDeleteAnnouncementService())($this->announcementRepository, $ids);
+        } catch (\Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

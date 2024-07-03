@@ -87,6 +87,6 @@ class LoginRequest extends FormRequest
             throw new InvalidArgumentException('The email input must be a string.');
         }
 
-        return Str::transliterate($this->input('email').'|'.$this->ip());
+        return Str::transliterate($this->input('email') . '|' . $this->ip());
     }
 }

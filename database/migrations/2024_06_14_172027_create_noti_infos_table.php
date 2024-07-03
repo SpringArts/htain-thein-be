@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('noti_infos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('report_id')->nullable()->constrained('reports')->onDelete('cascade');
-            $table->foreignId('announcement_id')->nullable()->constrained('announcements')->onDelete('cascade');
+            $table->foreignId('report_id')->nullable()->constrained('reports')->onDelete('cascade')->default(null);
+            $table->foreignId('announcement_id')->nullable()->constrained('announcements')->onDelete('cascade')->default(null);
             $table->string('firebase_notification_id');
             $table->timestamps();
         });

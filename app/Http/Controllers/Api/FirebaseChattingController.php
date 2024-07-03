@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\App\Firebase\StoreMessageRequest;
 use App\UseCases\FireBase\FirebaseAction;
+use Illuminate\Http\JsonResponse;
 
 class FirebaseChattingController extends Controller
 {
@@ -15,7 +16,7 @@ class FirebaseChattingController extends Controller
         $this->firebaseAction = $firebaseAction;
     }
 
-    public function sendMessage(StoreMessageRequest $request): string
+    public function sendMessage(StoreMessageRequest $request): JsonResponse
     {
         $data = $request->safe()->all();
 

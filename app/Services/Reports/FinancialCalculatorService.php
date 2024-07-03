@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Reports;
 
 use App\Enums\ConfirmStatus;
 use App\Enums\FinancialType;
@@ -56,13 +56,28 @@ class FinancialCalculatorService
         return GeneralOutcome::sum('amount');
     }
 
-    public static function calculateAvailableBalance(): float
+    private static function calculateAvailableBalance(): float
     {
         $income = self::calculateSum(FinancialType::INCOME, 1);
         $outcome = self::calculateSum(FinancialType::EXPENSE, 1);
         $regularCost = self::calculateRegularCost();
 
         return $income - $outcome - $regularCost;
+    }
+
+    public static function checkExpensePossible(array $data): void
+    {
+        if ($data['type'] == FinancialType::EXPENSE) {
+            $availableBalance = FinancialCalculatorService::calculateAvailableBalance();
+            $amount = $data['amount'];
+
+            if ($availableBalance < $amount) {
+                if ($availableBalance <= 0) {
+                    throw new \InvalidArgumentException('Current Income is 0 balance. You cannot withdraw.');
+                }
+                throw new \InvalidArgumentException("$availableBalance kyat is only available.");
+            }
+        }
     }
 
     private static function findMostPerson(string $type): ?Report

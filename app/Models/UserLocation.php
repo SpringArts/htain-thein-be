@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $longitude
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- *
  * @method static \Illuminate\Database\Eloquent\Builder|UserLocation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserLocation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserLocation query()
@@ -24,7 +23,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|UserLocation whereLongitude($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserLocation whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserLocation whereUserId($value)
- *
  * @mixin \Eloquent
  */
 class UserLocation extends Model

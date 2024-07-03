@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\App\Report\FetchReportFilterRequest;
 use App\Http\Requests\V1\App\Report\StoreReportRequest;
 use App\Http\Requests\V1\App\Report\UncheckReportRequest;
 use App\Http\Requests\V1\App\Report\UpdateReportRequest;
-use App\Http\Resources\ReportEditHistoryResource;
 use App\Http\Resources\ReportResource;
 use App\Models\Report;
 use App\UseCases\Report\ReportAction;
@@ -27,30 +25,16 @@ class ReportController extends Controller
     public function index(FetchReportFilterRequest $request): JsonResponse
     {
         $validatedData = $request->safe()->all();
-        $data = $this->reportAction->fetchFilterData($validatedData);
-        $meta = ResponseHelper::getPaginationMeta($data);
-
-        return response()->json([
-            'data' => ReportResource::collection($data),
-            'meta' => $meta,
-        ]);
+        return $this->reportAction->fetchFilterData($validatedData);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreReportRequest $request): JsonResponse
     {
-        // Gate::authorize('adminPermission');
         $formData = $request->safe()->all();
-        $this->reportAction->createReport($formData);
-
-        return ResponseHelper::success('Successfully created', null, 201);
+        return $this->reportAction->createReport($formData);
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(Report $report): JsonResponse
     {
         return response()->json([
@@ -58,26 +42,16 @@ class ReportController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateReportRequest $request, Report $report): JsonResponse
     {
-        $this->reportAction->updateReport($request->safe()->all(), $report);
-
-        return ResponseHelper::success('Successfully Updated', null, 200);
+        $formData = $request->safe()->all();
+        return $this->reportAction->updateReport($formData, $report);
     }
 
     public function uncheckReport(UncheckReportRequest $request): JsonResponse
     {
         $validatedData = $request->safe()->all();
-        $data = $this->reportAction->uncheckReport($validatedData);
-        $meta = ResponseHelper::getPaginationMeta($data);
-
-        return response()->json([
-            'data' => ReportResource::collection($data),
-            'meta' => $meta,
-        ]);
+        return $this->reportAction->uncheckReport($validatedData);
     }
 
     public function calculationFinancial(): JsonResponse
@@ -89,37 +63,24 @@ class ReportController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Report $report): JsonResponse
     {
         Gate::authorize('superAdminPermission');
-        $this->reportAction->deleteReport($report);
-
-        return ResponseHelper::success('Successfully deleted', null, 200);
+        return $this->reportAction->deleteReport($report);
     }
 
     public function cancelReportHistory(int $id): JsonResponse //Report that Admin or SuperAdmin is rejected
     {
-        $this->reportAction->createReportHistory($id);
-
-        return ResponseHelper::success('Successfully Rejected', null, 201);
+        return $this->reportAction->createReportHistory($id);
     }
 
     public function acceptReport(Report $report): JsonResponse
     {
-        $this->reportAction->acceptReport($report);
-
-        return ResponseHelper::success('Successfully Accepted', null, 201);
+        return $this->reportAction->acceptReport($report);
     }
 
     public function fetchChangedHistory(int $reportId): JsonResponse
     {
-        $data = $this->reportAction->fetchChangedHistory($reportId);
-
-        return response()->json([
-            'data' => ReportEditHistoryResource::collection($data),
-        ]);
+        return $this->reportAction->fetchChangedHistory($reportId);
     }
 }

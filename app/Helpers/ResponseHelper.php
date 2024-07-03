@@ -19,7 +19,7 @@ class ResponseHelper
         );
     }
 
-    public static function fail(string $message, mixed $data = null, int $status = 502, int $alertVisible = 1): JsonResponse
+    public static function fail(string $message, int $status = 502, int $alertVisible = 1): JsonResponse
     {
         return response()->json(
             [

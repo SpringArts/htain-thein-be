@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $editUser
  * @property-read \App\Models\Report $report
- *
  * @method static \Database\Factories\ReportEditHistoryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ReportEditHistory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ReportEditHistory newQuery()
@@ -30,7 +29,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|ReportEditHistory whereOldData($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ReportEditHistory whereReportId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ReportEditHistory whereUpdatedAt($value)
- *
  * @mixin \Eloquent
  */
 class ReportEditHistory extends Model

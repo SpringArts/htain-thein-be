@@ -2,11 +2,17 @@
 
 namespace App\UseCases\UserAction;
 
+use App\Helpers\ResponseHelper;
 use App\Interfaces\User\UserInterface;
 use App\Models\User;
+use App\Services\User\CreateUserService;
+use App\Services\User\DeleteUserService;
+use App\Services\User\FetchUserService;
+use App\Services\User\UpdateUserService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Response;
+use Throwable;
 
 class UserAction
 {
@@ -17,48 +23,44 @@ class UserAction
         $this->userRepository = $userRepository;
     }
 
-    public function fetchUsers(array $validatedData): LengthAwarePaginator
+    public function fetchUsers(array $validatedData): JsonResponse
     {
-        return $this->userRepository->userFilter($validatedData);
-    }
-
-    public function createUser(array $data): User
-    {
-        $data['password'] = Hash::make($data['password']);
-
-        return $this->userRepository->createUser($data);
-    }
-
-    public function updateUser(array $formData, User $user): bool
-    {
-        $userData = $formData;
-
-        if (isset($formData['password'])) {
-            $userData['password'] = Hash::make($formData['password']);
+        try {
+            return (new FetchUserService())($this->userRepository, $validatedData);
+        } catch (Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        return $this->userRepository->updateUser($userData, $user);
     }
 
-    public function deleteUser(User $user): ?bool
+    public function createUser(array $data): JsonResponse
     {
-        return $this->userRepository->deleteUser($user);
+        try {
+            return (new CreateUserService())($this->userRepository, $data);
+        } catch (Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function updateUser(array $formData, User $user): JsonResponse
+    {
+        try {
+            return (new UpdateUserService())($this->userRepository, $formData, $user);
+        } catch (Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function deleteUser(User $user): JsonResponse
+    {
+        try {
+            return (new DeleteUserService())($this->userRepository, $user);
+        } catch (Throwable $th) {
+            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function saveLocation(Request $req): int
     {
         return 200;
-        // DB::beginTransaction();
-        // try {
-        //     $saveLocation = new UserLocation();
-        //     $saveLocation->latitude = $req->latitude;
-        //     $saveLocation->longitude = $req->longitude;
-        //     $saveLocation->save();
-        //     DB::commit();
-        //     return 200;
-        // } catch (QueryException $e) {
-        //     DB::rollBack();
-        //     throw new \Exception($e->getMessage());
-        // }
     }
 }

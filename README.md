@@ -24,7 +24,7 @@ php artisan ide-helper:generate
 php artisan ide-helper:models -RW
 ```
 
-### [PHP Code Sniffer](https://github.com/squizlabs/PHP_CodeSniffer)
+### [PHP Code Sniffer](https://laravel-news.com/php-codesniffer-with-laravel)
 
 To run testing
 

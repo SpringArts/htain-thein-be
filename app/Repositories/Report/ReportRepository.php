@@ -68,30 +68,30 @@ class ReportRepository implements ReportInterface
         $confirmStatus = $validatedData['confirmStatus'] ?? null;
         $createdAt = $validatedData['createdAt'] ?? null;
 
-        if (! empty($generalSearch)) {
+        if (!empty($generalSearch)) {
             $query->where(function ($q) use ($generalSearch) {
-                $q->orWhere('description', 'like', '%'.$generalSearch.'%')
+                $q->orWhere('description', 'like', '%' . $generalSearch . '%')
                     ->whereHas('reporter', function ($q) use ($generalSearch) {
-                        $q->where('name', 'like', '%'.$generalSearch.'%');
+                        $q->where('name', 'like', '%' . $generalSearch . '%');
                     })->orWhereHas('verifier', function ($q) use ($generalSearch) {
-                        $q->where('name', 'like', '%'.$generalSearch.'%');
+                        $q->where('name', 'like', '%' . $generalSearch . '%');
                     });
             });
         }
 
-        if (! empty($amount)) {
+        if (!empty($amount)) {
             $query->where('amount', '=', $amount);
         }
 
-        if (! empty($confirmStatus)) {
+        if (!empty($confirmStatus)) {
             $query->where('confirm_status', '=', $confirmStatus);
         }
 
-        if (! empty($type)) {
+        if (!empty($type)) {
             $query->where('type', '=', $type);
         }
 
-        if (! empty($createdAt)) {
+        if (!empty($createdAt)) {
             $query->where('created_at', '=', $createdAt);
         }
 

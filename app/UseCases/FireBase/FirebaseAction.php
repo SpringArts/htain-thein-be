@@ -3,6 +3,7 @@
 namespace App\UseCases\FireBase;
 
 use App\Interfaces\Firebase\FirebaseChattingInterface;
+use Illuminate\Http\JsonResponse;
 
 class FirebaseAction
 {
@@ -13,26 +14,18 @@ class FirebaseAction
         $this->firebaseRepository = $firebaseRepository;
     }
 
-    public function storeMessage(array $data): string
+    public function storeMessage(array $data): JsonResponse
     {
         $data['senderId'] = getAuthUserOrFail()->id;
 
         return $this->firebaseRepository->storeMessage($data);
     }
 
-    public function markNotificationAsRead(array $formData): string
+    public function markNotificationAsRead(array $formData): JsonResponse
     {
         $notificationId = $formData['notificationId'];
         $userId = getAuthUserOrFail()->id;
 
         return $this->firebaseRepository->markNotificationAsRead($userId, $notificationId);
-    }
-
-    public function createFirebaseNotification(int $authUserId, string $type): string
-    {
-        return $this->firebaseRepository->storeNotification([
-            'userId' => $authUserId,
-            'type' => $type,
-        ]);
     }
 }

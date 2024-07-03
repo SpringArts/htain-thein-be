@@ -25,10 +25,7 @@ class UpdateReportRequest extends FormRequest
         return [
             'amount' => ['required', 'integer', 'gt:50', new EvenOddCheckRule()],
             'description' => 'required|max:255',
-            'type' => 'required|string',
-            'confirm_status' => 'nullable|boolean',
-            'reporter_id' => 'required|integer',
-            'verifier_id' => 'nullable|integer',
+            'type' => ['required', 'string', 'in:INCOME,EXPENSE'],
         ];
     }
 }
