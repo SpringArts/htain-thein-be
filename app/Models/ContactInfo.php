@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $message
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- *
+ * @property string $subject
  * @method static \Illuminate\Database\Eloquent\Builder|ContactInfo newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ContactInfo newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ContactInfo query()
@@ -23,8 +23,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|ContactInfo whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContactInfo whereMessage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContactInfo whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ContactInfo whereSubject($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContactInfo whereUpdatedAt($value)
- *
  * @mixin \Eloquent
  */
 class ContactInfo extends Model

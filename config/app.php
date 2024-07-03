@@ -2,6 +2,7 @@
 
 use App\Providers\AnnouncementProvider;
 use App\Providers\ChatProvider;
+use App\Providers\ContactProvider;
 use App\Providers\FirebaseServiceProvider;
 use App\Providers\GeneralOutcomeProvider;
 use App\Providers\NotificationProvider;
@@ -218,6 +219,7 @@ return [
         ChatProvider::class,
         AnnouncementProvider::class,
         FirebaseServiceProvider::class,
+        ContactProvider::class
     ],
 
     /*

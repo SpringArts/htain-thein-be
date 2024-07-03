@@ -28,7 +28,7 @@ class AttachmentExportController extends Controller
 
     private function fileNameChanger(string $fileName): string
     {
-        $fileName = $fileName.'_'.now()->format('YmdHis').'.xlsx';
+        $fileName = $fileName . '_' . now()->format('YmdHis') . '.xlsx';
 
         return $fileName;
     }

@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $rejecter
- *
  * @method static \Database\Factories\CancelReportHistoryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CancelReportHistory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CancelReportHistory newQuery()
@@ -31,7 +30,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|CancelReportHistory whereReporterId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CancelReportHistory whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CancelReportHistory whereUpdatedAt($value)
- *
  * @mixin \Eloquent
  */
 class CancelReportHistory extends Model

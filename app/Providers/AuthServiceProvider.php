@@ -34,7 +34,7 @@ class AuthServiceProvider extends ServiceProvider
                 throw new InvalidArgumentException('The notifiable object must implement CanResetPassword interface.');
             }
 
-            return config('app.frontend_url')."/password-reset/$token?email={$notifiable->getEmailForPasswordReset()}";
+            return config('app.frontend_url') . "/password-reset/$token?email={$notifiable->getEmailForPasswordReset()}";
         });
 
         //

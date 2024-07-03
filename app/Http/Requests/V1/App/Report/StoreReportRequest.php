@@ -25,7 +25,7 @@ class StoreReportRequest extends FormRequest
         return [
             'amount' => ['required', 'integer', 'gt:50', new EvenOddCheckRule()],
             'description' => 'required|max:255',
-            'type' => 'required|string',
+            'type' => ['required', 'string', 'in:INCOME,EXPENSE'],
             'confirm_status' => 'nullable|boolean',
             'reporter_id' => 'required|integer',
             'verifier_id' => 'nullable|integer',

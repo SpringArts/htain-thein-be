@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use DB;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
     //TODO Refactor
-    public function verifyToken(Request $request)
+    public function verifyToken(Request $request): JsonResponse
     {
         $token = $request->bearerToken();
 

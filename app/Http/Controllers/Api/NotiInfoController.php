@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\App\NotificationInfo\FetchAllNotificationRequest;
 use App\Http\Requests\V1\App\NotificationInfo\MarkNotificationReadRequest;
@@ -28,46 +27,31 @@ class NotiInfoController extends Controller
     public function index(FetchAllNotificationRequest $request): JsonResponse
     {
         $formData = $request->safe()->all();
-        $data = $this->notiInfoAction->fetchAllNotifications($formData);
-        $meta = ResponseHelper::getPaginationMeta($data);
-
-        return response()->json([
-            'data' => NotiInfoResource::collection($data),
-            'meta' => $meta,
-        ]);
+        return $this->notiInfoAction->fetchAllNotifications($formData);
     }
 
     public function store(StoreNotiInfoRequest $request): JsonResponse
     {
         $formData = $request->safe()->all();
-        try {
-            $this->notiInfoAction->createNotification($formData);
-
-            return ResponseHelper::success('Successfully created', null, 201);
-        } catch (\Exception $e) {
-            return ResponseHelper::fail($e->getMessage(), null);
-        }
+        return $this->notiInfoAction->createNotification($formData);
     }
 
-    public function show(NotiInfo $noti): JsonResponse
+    public function show(NotiInfo $notification): JsonResponse
     {
+        $notification->load('report', 'user', 'announcement');
         return response()->json([
-            'data' => new NotiInfoResource($noti),
+            'data' => new NotiInfoResource($notification),
         ]);
     }
 
-    public function destroy(NotiInfo $noti): JsonResponse
+    public function destroy(NotiInfo $notification): JsonResponse
     {
-        $this->notiInfoAction->deleteNotification($noti);
-
-        return ResponseHelper::success('Successfully Deleted', null, 200);
+        return $this->notiInfoAction->deleteNotification($notification);
     }
 
     public function markAsRead(MarkNotificationReadRequest $request): JsonResponse
     {
         $formData = $request->safe()->all();
-        $this->firebaseAction->markNotificationAsRead($formData);
-
-        return ResponseHelper::success('Successfully Marked as Read', null, 200);
+        return $this->firebaseAction->markNotificationAsRead($formData);
     }
 }

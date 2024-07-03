@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $ip_address
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- *
  * @method static \Illuminate\Database\Eloquent\Builder|LoginLog newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|LoginLog newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|LoginLog query()
@@ -28,7 +27,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|LoginLog wherePlatform($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LoginLog whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|LoginLog whereUserAgent($value)
- *
  * @mixin \Eloquent
  */
 class LoginLog extends Model

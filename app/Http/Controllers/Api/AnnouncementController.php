@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\App\Announcement\BatchDeleteRequest;
+use App\Http\Requests\V1\App\Announcement\FetchAnnouncementRequest;
 use App\Http\Requests\V1\App\Announcement\StoreAnnouncementRequest;
 use App\Http\Requests\V1\App\Announcement\UpdateAnnouncementRequest;
 use App\Http\Resources\AnnouncementResource;
@@ -22,13 +22,10 @@ class AnnouncementController extends Controller
         $this->announcementAction = $announcementAction;
     }
 
-    public function index(): JsonResponse
+    public function index(FetchAnnouncementRequest $request): JsonResponse
     {
-        $data = $this->announcementAction->fetchAllAnnouncements();
-
-        return response()->json([
-            'data' => AnnouncementResource::collection($data),
-        ]);
+        $validatedData = $request->safe()->all();
+        return $this->announcementAction->fetchAllAnnouncements($validatedData);
     }
 
     /**
@@ -36,9 +33,8 @@ class AnnouncementController extends Controller
      */
     public function store(StoreAnnouncementRequest $request): JsonResponse
     {
-        $this->announcementAction->createAnnouncement($request->safe()->all());
-
-        return ResponseHelper::success('Successfully created', null, 201);
+        $validatedData = $request->safe()->all();
+        return $this->announcementAction->createAnnouncement($validatedData);
     }
 
     /**
@@ -46,6 +42,8 @@ class AnnouncementController extends Controller
      */
     public function show(Announcement $announcement): JsonResponse
     {
+        $announcement->load('announcer');
+
         return response()->json([
             'data' => new AnnouncementResource($announcement),
         ]);
@@ -55,9 +53,7 @@ class AnnouncementController extends Controller
     {
         $formData = $request->safe()->all();
         $formData['is_visible'] = (int) $formData['isVisible'];
-        $this->announcementAction->updateAnnouncement($formData, $announcement);
-
-        return ResponseHelper::success('Successfully Updated', null, 200);
+        return $this->announcementAction->updateAnnouncement($formData, $announcement);
     }
 
     /**
@@ -66,16 +62,13 @@ class AnnouncementController extends Controller
     public function destroy(Announcement $announcement): JsonResponse
     {
         Gate::authorize('adminPermission');
-        $this->announcementAction->deleteAnnouncement($announcement);
-
-        return ResponseHelper::success('Successfully deleted', null, 200);
+        return $this->announcementAction->deleteAnnouncement($announcement);
     }
 
     public function batchDelete(BatchDeleteRequest $request): JsonResponse
     {
+        Gate::authorize('adminPermission');
         $ids = $request->safe()->all();
-        $this->announcementAction->batchDelete($ids);
-
-        return ResponseHelper::success('Successfully Deleted', null, 200);
+        return $this->announcementAction->batchDelete($ids);
     }
 }

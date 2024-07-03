@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Services\AuthServices\AuthService;
 use App\UseCases\Auth\UserAgentAction;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -29,7 +30,7 @@ class ProviderController extends Controller
         return Socialite::driver($provider)->redirect();
     }
 
-    public function handleProviderCallback(string $provider, Request $request): RedirectResponse
+    public function handleProviderCallback(string $provider, Request $request): RedirectResponse|JsonResponse
     {
         try {
             $locale = $request->session()->get('locale', 'en');
@@ -45,8 +46,8 @@ class ProviderController extends Controller
             ]);
 
             return redirect()->away(config('app.frontend_url') . '/' . $locale . '/login?encrypted=' . urlencode($encryptedUserData));
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()]);
         }
     }
 }

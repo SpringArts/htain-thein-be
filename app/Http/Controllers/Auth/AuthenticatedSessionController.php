@@ -40,7 +40,7 @@ class AuthenticatedSessionController extends Controller
                 'token_type' => 'Bearer',
             ]);
         }
-        abort(401, 'Unauthorized');
+        return response()->json(['message' => 'Your credentials is incorrect'], 403);
     }
 
     /**

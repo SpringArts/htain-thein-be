@@ -17,7 +17,7 @@ class UserResource extends JsonResource
     {
         /** @var string|null $uri */
         $uri = $request->route()?->uri;
-        if (! $uri) {
+        if (!$uri) {
             return [];
         }
 
@@ -50,7 +50,6 @@ class UserResource extends JsonResource
                 'name' => $this->name ?? '',
             ];
         }
-
         return [
             'id' => $this->id,
             'name' => $this->name ?? '',

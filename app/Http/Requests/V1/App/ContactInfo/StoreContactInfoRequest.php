@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1\App\ContactInfo;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ContactInfoRequest extends FormRequest
+class StoreContactInfoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,6 +24,7 @@ class ContactInfoRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'email' => ['required', 'email'],
+            'subject' => ['required', 'string'],
             'message' => ['required', 'string'],
         ];
     }

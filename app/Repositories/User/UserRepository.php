@@ -43,18 +43,18 @@ class UserRepository implements UserInterface
         $generalSearch = $validatedData['generalSearch'] ?? null;
         $role = $validatedData['role'] ?? null;
         $accountStatus = $validatedData['accountStatus'] ?? null;
-        if (! empty($generalSearch)) {
+        if (!empty($generalSearch)) {
             $query->where(function ($q) use ($generalSearch) {
-                $q->where('name', 'like', '%'.$generalSearch.'%')
-                    ->orWhere('email', 'like', '%'.$generalSearch.'%');
+                $q->where('name', 'like', '%' . $generalSearch . '%')
+                    ->orWhere('email', 'like', '%' . $generalSearch . '%');
             });
         }
 
-        if (! empty($role)) {
+        if (!empty($role)) {
             $query->where('role', '=', $role);
         }
 
-        if (! empty($accountStatus)) {
+        if (!empty($accountStatus)) {
             $query->where('account_status', '=', $accountStatus);
         }
 
