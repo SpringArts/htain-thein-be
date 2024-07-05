@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('account_status', ['ACTIVE', 'SUSPENDED'])->default('ACTIVE');
-            $table->string('role')->default('Member')->nullable();
+            $table->enum('role', ['ADMIN', 'MEMBER', 'SUPER_ADMIN'])->default('MEMBER')->nullable();
             $table->string('provider_name')->nullable();
             $table->string('provider_id')->nullable();
             $table->rememberToken();

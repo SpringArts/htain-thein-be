@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::insert([
-            'name' => 'SuperAdmin',
+            'name' => 'SUPER ADMIN',
             'email' => 'superadmin@gmail.com',
             'email_verified_at' => now(),
             'password' => '$2y$10$/wQTKHDVTKcZXxqvgXHR5.yOr6vjBkHoErWrI0vhnHCs6rhF8LTRW',
@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             'role' => UserRoleType::SUPER_ADMIN,
         ]);
         User::insert([
-            'name' => 'Admin',
+            'name' => 'ADMIN',
             'email' => 'admin@gmail.com',
             'email_verified_at' => now(),
             'password' => '$2y$10$/wQTKHDVTKcZXxqvgXHR5.yOr6vjBkHoErWrI0vhnHCs6rhF8LTRW',

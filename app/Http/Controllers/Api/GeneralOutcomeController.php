@@ -39,6 +39,7 @@ class GeneralOutcomeController extends Controller
     public function store(StoreGeneralOutcomeRequest $request): JsonResponse
     {
         $formData = $request->all();
+        $formData['reporter_id'] = getAuthUserOrFail()->id;
         return $this->generalOutcomeAction->storeGeneralOutcome($formData);
     }
 
