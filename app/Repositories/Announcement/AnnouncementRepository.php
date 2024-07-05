@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Announcement;
 
+use App\Enums\UserRoleType;
 use App\Interfaces\Announcement\AnnouncementInterface;
 use App\Models\Announcement;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -11,7 +12,7 @@ class AnnouncementRepository implements AnnouncementInterface
     public function getAllAnnouncements(int $limit, int $page): LengthAwarePaginator
     {
         $authUser = getAuthUserOrFail();
-        if ($authUser->role === 'SuperAdmin') {
+        if ($authUser->role === UserRoleType::SUPER_ADMIN) {
             return Announcement::with('announcer')->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'page', $page)->withQueryString();
         }
         return Announcement::with('announcer')->where('is_visible', 1)->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'page', $page)->withQueryString();

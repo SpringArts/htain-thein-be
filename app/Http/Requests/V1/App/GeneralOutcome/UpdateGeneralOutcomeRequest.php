@@ -23,7 +23,6 @@ class UpdateGeneralOutcomeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'reporter_id' => ['required', 'exists:users,id'],
             'description' => ['required'],
             'amount' => ['required', 'integer', 'gt:50', new EvenOddCheckRule()],
         ];

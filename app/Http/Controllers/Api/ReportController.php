@@ -31,6 +31,7 @@ class ReportController extends Controller
     public function store(StoreReportRequest $request): JsonResponse
     {
         $formData = $request->safe()->all();
+        $formData['reporter_id'] = getAuthUserOrFail()->id;
         return $this->reportAction->createReport($formData);
     }
 

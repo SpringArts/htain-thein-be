@@ -84,7 +84,7 @@ class UserTest extends TestCase
         $data = [
             'name' => 'Jane Doe',
             'email' => 'jane@example.com',
-            'role' => 'Admin',
+            'role' => 'ADMIN',
             'accountStatus' => 'ACTIVE',
         ];
 
