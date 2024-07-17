@@ -1,65 +1,40 @@
-# Use the latest Composer image as a builder
-FROM php:8.2-fpm AS build
+# Use the official PHP image as the base image
+FROM php:8.2-fpm
 
-# Set the working directory to /app
-WORKDIR /var/www/html
+# Set working directory
+WORKDIR /var/www
 
-# Install Linux Library
-RUN apt-get update && apt-get install -y \
-    libicu-dev \
-    unzip \
-    zip
-
-# Install PHP and necessary extensions
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
-    openssl \
-    nginx \
-    libfreetype6-dev \
-    libjpeg-dev \
     libpng-dev \
-    libicu-dev \
-    libwebp-dev \
-    zlib1g-dev \
-    libzip-dev \
-    gcc \
-    g++ \
-    make \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    locales \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
     vim \
     unzip \
-    curl \
     git \
-    jpegoptim \
-    optipng \
-    pngquant \
-    gifsicle \
-    locales \
+    curl \
+    libzip-dev \
     libonig-dev \
-    nodejs
+    autoconf \
+    zlib1g-dev \
+    libicu-dev
 
 # Install PHP extensions
-RUN docker-php-ext-configure gd \
-    && docker-php-ext-install -j$(nproc) \
-    gd \
-    gmp \
-    pdo_mysql \
-    mbstring \
-    intl \
-    sockets \
-    pcntl \
-    bcmath \
-    zip \
-    # Clean up
-    && apt-get autoclean -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /tmp/pear/
-
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip -j$(nproc)
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Run Laravel specific commands
-RUN php artisan key:generate \
-    && php artisan config:clear \
-    && php artisan config:cache \
-    && php artisan storage:link
+# Copy existing application directory contents
+COPY . /var/www
+
+# Copy existing application directory permissions
+COPY --chown=www-data:www-data . /var/www
+
+# Change current user to www
+USER www-data
