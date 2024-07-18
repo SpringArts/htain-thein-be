@@ -10,7 +10,6 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
-    locales \
     zip \
     jpegoptim optipng pngquant gifsicle \
     vim \
@@ -21,7 +20,13 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     autoconf \
     zlib1g-dev \
-    libicu-dev
+    libicu-dev \
+    pkg-config \
+    libc-ares-dev \
+    libprotobuf-dev \
+    protobuf-compiler \
+    protobuf-c-compiler \
+    libprotoc-dev
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -29,6 +34,10 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Install gRPC and protobuf PHP extensions
+RUN pecl install grpc protobuf \
+    && docker-php-ext-enable grpc protobuf
 
 # Copy existing application directory contents
 COPY . /var/www
