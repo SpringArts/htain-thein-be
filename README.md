@@ -1,5 +1,30 @@
 # Htain Thein Backend
 
+## What can you check in here 
+
+You can check following my skill in this project
+
+1. Coding skill
+2. Design architecture
+3. my experiences
+
+
+## Functions
+
+The functions that already implemented are as  below.
+
+-   CRUD
+-   Firebase Chatting.
+-   Monthly Expire Record Deleted Function with Laravel Command
+-   Docker
+-   Excel Download
+-   Laravel Breeze
+-   Sanctum
+-   2FA login with Laravel Socialite
+-   Mail Implementation
+-   Authorization and so on
+
+
 ## Policy
 
 The codes need to satisfy the requirements down below.
