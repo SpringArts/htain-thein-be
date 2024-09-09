@@ -22,6 +22,7 @@ The functions that already implemented are as  below.
 -   Sanctum
 -   2FA login with Laravel Socialite
 -   Mail Implementation
+-   observer
 -   Authorization and so on
 
 
