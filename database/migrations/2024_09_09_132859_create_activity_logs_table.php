@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('activity_logs', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
+            $table->string('email');
+            $table->enum('type', [
+                'USER_LOGIN',
+                'USER_LOGOUT',
+                'USER_CREATE',
+                'USER_UPDATE',
+                'USER_DELETE',
+                'USER_RESET_PASSWORD',
+            ]);
+            $table->string('ip_address');
+            $table->string('user_agent');
+            $table->text('meta')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('activity_logs');
+    }
+};
