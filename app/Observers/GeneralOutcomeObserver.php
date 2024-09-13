@@ -4,39 +4,40 @@ namespace App\Observers;
 
 use App\Enums\ActivityLogType;
 use App\Models\ActivityLog;
+use App\Models\GeneralOutcome;
 use App\Models\User;
 
-class UserObserver
+class GeneralOutcomeObserver
 {
     protected User $authUser;
     public function __construct()
     {
         $this->authUser = getAuthUserOrFail();
     }
-    public function created(User $user): void
+    public function created(GeneralOutcome $generalOutcome): void
     {
         ActivityLog::create([
             'user_id' => $this->authUser->id,
             'email' => $this->authUser->email,
-            'type' => ActivityLogType::USER_CREATE,
+            'type' => ActivityLogType::REGULAR_OUTCOME_CREATE,
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
-            'meta' => json_encode($user)
+            'meta' => json_encode($generalOutcome)
         ]);
     }
 
     /**
-     * Handle the User "updated" event.
+     * Handle the GeneralOutcome "updated" event.
      */
-    public function updated(User $user): void
+    public function updated(GeneralOutcome $generalOutcome): void
     {
-        $original = $user->getOriginal();
-        $changes = $user->getChanges();
+        $original = $generalOutcome->getOriginal();
+        $changes = $generalOutcome->getChanges();
 
         ActivityLog::create([
             'user_id' => $this->authUser->id,
             'email' => $this->authUser->email,
-            'type' =>  ActivityLogType::USER_UPDATE,
+            'type' => ActivityLogType::REGULAR_OUTCOME_UPDATE,
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
             'meta' => json_encode([
@@ -47,17 +48,17 @@ class UserObserver
     }
 
     /**
-     * Handle the User "deleted" event.
+     * Handle the GeneralOutcome "deleted" event.
      */
-    public function deleted(User $user): void
+    public function deleted(GeneralOutcome $generalOutcome): void
     {
         ActivityLog::create([
             'user_id' => $this->authUser->id,
             'email' => $this->authUser->email,
-            'type' => ActivityLogType::USER_DELETE,
+            'type' => ActivityLogType::REGULAR_OUTCOME_DELETE,
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
-            'meta' => json_encode($user)
+            'meta' => json_encode($generalOutcome)
         ]);
     }
 }

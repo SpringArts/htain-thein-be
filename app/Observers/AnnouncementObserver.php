@@ -4,16 +4,17 @@ namespace App\Observers;
 
 use App\Enums\ActivityLogType;
 use App\Models\ActivityLog;
+use App\Models\Announcement;
 use App\Models\User;
 
-class UserObserver
+class AnnouncementObserver
 {
     protected User $authUser;
     public function __construct()
     {
         $this->authUser = getAuthUserOrFail();
     }
-    public function created(User $user): void
+    public function created(Announcement $announcement): void
     {
         ActivityLog::create([
             'user_id' => $this->authUser->id,
@@ -21,17 +22,17 @@ class UserObserver
             'type' => ActivityLogType::USER_CREATE,
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
-            'meta' => json_encode($user)
+            'meta' => json_encode($announcement)
         ]);
     }
 
     /**
-     * Handle the User "updated" event.
+     * Handle the Announcement "updated" event.
      */
-    public function updated(User $user): void
+    public function updated(Announcement $announcement): void
     {
-        $original = $user->getOriginal();
-        $changes = $user->getChanges();
+        $original = $announcement->getOriginal();
+        $changes = $announcement->getChanges();
 
         ActivityLog::create([
             'user_id' => $this->authUser->id,
@@ -47,17 +48,17 @@ class UserObserver
     }
 
     /**
-     * Handle the User "deleted" event.
+     * Handle the Announcement "deleted" event.
      */
-    public function deleted(User $user): void
+    public function deleted(Announcement $announcement): void
     {
         ActivityLog::create([
             'user_id' => $this->authUser->id,
             'email' => $this->authUser->email,
-            'type' => ActivityLogType::USER_DELETE,
+            'type' => ActivityLogType::ANNOUNCEMENT_DELETE,
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
-            'meta' => json_encode($user)
+            'meta' => json_encode($announcement)
         ]);
     }
 }
