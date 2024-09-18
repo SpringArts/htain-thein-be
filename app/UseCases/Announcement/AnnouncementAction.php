@@ -27,29 +27,17 @@ class AnnouncementAction
 
     public function fetchAllAnnouncements(array $validateData): JsonResponse
     {
-        try {
-            return (new FetchAnnouncementService())($this->announcementRepository, $validateData);
-        } catch (\Throwable $th) {
-            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        return (new FetchAnnouncementService())($this->announcementRepository, $validateData);
     }
 
     public function createAnnouncement(array $data): JsonResponse
     {
-        try {
-            return (new StoreAnnouncementService())($this->announcementRepository, $this->notiInfoAction, $data);
-        } catch (\Throwable $th) {
-            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        return (new StoreAnnouncementService())($this->announcementRepository, $this->notiInfoAction, $data);
     }
 
     public function updateAnnouncement(array $formData, Announcement $announcement): JsonResponse
     {
-        try {
-            return (new UpdateAnnouncementService())($this->announcementRepository, $announcement, $formData);
-        } catch (\Throwable $th) {
-            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        return (new UpdateAnnouncementService())($this->announcementRepository, $announcement, $formData);
     }
 
     public function fetchAnnouncement(Announcement $announcement): Announcement
@@ -59,19 +47,11 @@ class AnnouncementAction
 
     public function deleteAnnouncement(Announcement $announcement): JsonResponse
     {
-        try {
-            return (new DeleteAnnouncementService())($this->announcementRepository, $announcement);
-        } catch (\Throwable $th) {
-            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        return (new DeleteAnnouncementService())($this->announcementRepository, $announcement);
     }
 
     public function batchDelete(array $ids): JsonResponse
     {
-        try {
-            return (new BatchDeleteAnnouncementService())($this->announcementRepository, $ids);
-        } catch (\Throwable $th) {
-            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        return (new BatchDeleteAnnouncementService())($this->announcementRepository, $ids);
     }
 }

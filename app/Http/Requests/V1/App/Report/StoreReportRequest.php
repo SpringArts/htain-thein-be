@@ -27,7 +27,6 @@ class StoreReportRequest extends FormRequest
             'description' => 'required|max:255',
             'type' => ['required', 'string', 'in:INCOME,EXPENSE'],
             'confirm_status' => 'nullable|boolean',
-            'reporter_id' => 'required|integer',
             'verifier_id' => 'nullable|integer',
         ];
     }

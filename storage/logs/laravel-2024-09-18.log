@@ -1,0 +1,9 @@
+[2024-09-18 10:34:55] local.INFO: Announcement created  
+[2024-09-18 10:39:15] local.INFO: Announcement created  
+[2024-09-18 10:40:38] local.INFO: Announcement created  
+[2024-09-18 10:40:45] local.INFO: Notification Firebase ID:   
+[2024-09-18 10:43:08] local.INFO: Announcement created  
+[2024-09-18 10:44:08] local.INFO: Announcement created  
+[2024-09-18 10:44:15] local.INFO:   
+[2024-09-18 10:55:58] local.INFO: {"id":5,"user_id":1,"report_id":null,"announcement_id":5,"firebase_notification_id":"57d9ad9bff984dd0a1e4","created_at":"2024-09-18T01:55:51.000000Z","updated_at":"2024-09-18T01:55:51.000000Z"}  
+[2024-09-18 10:55:58] local.INFO: Announcement is about to be deleted {"announcement":{"App\\Models\\Announcement":{"id":5,"title":"This is title","slug":"info","content":"In this example, I've used a div element instead of a textarea. I've added the overflow-auto class to enable scrolling if the content exceeds the container size. Additionally, I've set the height of the div to auto using inline CSS (style=\"height: auto;\") to allow it to adjust automatically based on the content.","is_visible":1,"priority":"2","user_id":1,"due_date":"2024-09-20","created_at":"2024-09-18T01:55:51.000000Z","updated_at":"2024-09-18T01:55:51.000000Z"}}} 

@@ -1,7 +1,6 @@
 <?php
 
 use App\Providers\AnnouncementProvider;
-use App\Providers\ChatProvider;
 use App\Providers\ContactProvider;
 use App\Providers\FirebaseServiceProvider;
 use App\Providers\GeneralOutcomeProvider;
@@ -216,7 +215,6 @@ return [
         GeneralOutcomeProvider::class,
         NotificationProvider::class,
         UserProvider::class,
-        ChatProvider::class,
         AnnouncementProvider::class,
         FirebaseServiceProvider::class,
         ContactProvider::class

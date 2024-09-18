@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\App\User\CreateUserRequest;
+use App\Http\Requests\V1\App\User\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Response;
@@ -17,7 +17,7 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(CreateUserRequest $request): Response
+    public function store(StoreUserRequest $request): Response
     {
 
         $formData = $request->safe()->all();
