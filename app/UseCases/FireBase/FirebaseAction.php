@@ -2,14 +2,14 @@
 
 namespace App\UseCases\FireBase;
 
-use App\Interfaces\Firebase\FirebaseChattingInterface;
+use App\Interfaces\Firebase\FirebaseInterface;
 use Illuminate\Http\JsonResponse;
 
 class FirebaseAction
 {
-    private FirebaseChattingInterface $firebaseRepository;
+    private FirebaseInterface $firebaseRepository;
 
-    public function __construct(FirebaseChattingInterface $firebaseRepository)
+    public function __construct(FirebaseInterface $firebaseRepository)
     {
         $this->firebaseRepository = $firebaseRepository;
     }

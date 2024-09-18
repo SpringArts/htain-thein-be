@@ -2,13 +2,13 @@
 
 namespace App\Repositories\Firebase;
 
-use App\Interfaces\Firebase\FirebaseChattingInterface;
+use App\Interfaces\Firebase\FirebaseInterface;
 use App\Services\Firebase\FirebaseConnectionService;
 use Google\Cloud\Firestore\FieldValue;
 use Google\Cloud\Firestore\FirestoreClient;
 use Illuminate\Http\JsonResponse;
 
-class FirebaseRepository implements FirebaseChattingInterface
+class FirebaseRepository implements FirebaseInterface
 {
     protected FirestoreClient $fireStore;
 
@@ -48,5 +48,10 @@ class FirebaseRepository implements FirebaseChattingInterface
         ], ['merge' => true]);
 
         return response()->json(['message' => 'Notification marked as read successfully']);
+    }
+
+    public function deleteNotificationDocument(string $notificationId, string $collectionType): void
+    {
+        $this->fireStore->collection($collectionType)->document($notificationId)->delete();
     }
 }

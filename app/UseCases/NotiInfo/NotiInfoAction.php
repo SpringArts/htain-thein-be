@@ -2,7 +2,7 @@
 
 namespace App\UseCases\NotiInfo;
 
-use App\Interfaces\Firebase\FirebaseChattingInterface;
+use App\Interfaces\Firebase\FirebaseInterface;
 use App\Interfaces\Notification\NotificationInterface;
 use App\Models\NotiInfo;
 use App\Models\Report;
@@ -16,11 +16,11 @@ class NotiInfoAction
 {
     private NotificationInterface $notiInfoResponsitory;
 
-    private FirebaseChattingInterface $firebaseRepository;
+    private FirebaseInterface $firebaseRepository;
 
     public function __construct(
         NotificationInterface $notiInfoResponsitory,
-        FirebaseChattingInterface $firebaseRepository
+        FirebaseInterface $firebaseRepository
     ) {
         $this->notiInfoResponsitory = $notiInfoResponsitory;
         $this->firebaseRepository = $firebaseRepository;

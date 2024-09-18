@@ -16,14 +16,18 @@ class GeneralOutcomeObserver
     }
     public function created(GeneralOutcome $generalOutcome): void
     {
-        ActivityLog::create([
-            'user_id' => $this->authUser->id,
-            'email' => $this->authUser->email,
-            'type' => ActivityLogType::REGULAR_OUTCOME_CREATE,
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-            'meta' => json_encode($generalOutcome)
-        ]);
+        try {
+            ActivityLog::create([
+                'user_id' => $this->authUser->id,
+                'email' => $this->authUser->email,
+                'type' => ActivityLogType::REGULAR_OUTCOME_CREATE,
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'meta' => json_encode($generalOutcome)
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
@@ -31,20 +35,24 @@ class GeneralOutcomeObserver
      */
     public function updated(GeneralOutcome $generalOutcome): void
     {
-        $original = $generalOutcome->getOriginal();
-        $changes = $generalOutcome->getChanges();
+        try {
+            $original = $generalOutcome->getOriginal();
+            $changes = $generalOutcome->getChanges();
 
-        ActivityLog::create([
-            'user_id' => $this->authUser->id,
-            'email' => $this->authUser->email,
-            'type' => ActivityLogType::REGULAR_OUTCOME_UPDATE,
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-            'meta' => json_encode([
-                'original' => $original,
-                'changes' => $changes
-            ])
-        ]);
+            ActivityLog::create([
+                'user_id' => $this->authUser->id,
+                'email' => $this->authUser->email,
+                'type' => ActivityLogType::REGULAR_OUTCOME_UPDATE,
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'meta' => json_encode([
+                    'original' => $original,
+                    'changes' => $changes
+                ])
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
@@ -52,13 +60,17 @@ class GeneralOutcomeObserver
      */
     public function deleted(GeneralOutcome $generalOutcome): void
     {
-        ActivityLog::create([
-            'user_id' => $this->authUser->id,
-            'email' => $this->authUser->email,
-            'type' => ActivityLogType::REGULAR_OUTCOME_DELETE,
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-            'meta' => json_encode($generalOutcome)
-        ]);
+        try {
+            ActivityLog::create([
+                'user_id' => $this->authUser->id,
+                'email' => $this->authUser->email,
+                'type' => ActivityLogType::REGULAR_OUTCOME_DELETE,
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'meta' => json_encode($generalOutcome)
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

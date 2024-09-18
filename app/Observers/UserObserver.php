@@ -15,14 +15,18 @@ class UserObserver
     }
     public function created(User $user): void
     {
-        ActivityLog::create([
-            'user_id' => $this->authUser->id,
-            'email' => $this->authUser->email,
-            'type' => ActivityLogType::USER_CREATE,
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-            'meta' => json_encode($user)
-        ]);
+        try {
+            ActivityLog::create([
+                'user_id' => $this->authUser->id,
+                'email' => $this->authUser->email,
+                'type' => ActivityLogType::USER_CREATE,
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'meta' => json_encode($user)
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
@@ -30,20 +34,24 @@ class UserObserver
      */
     public function updated(User $user): void
     {
-        $original = $user->getOriginal();
-        $changes = $user->getChanges();
+        try {
+            $original = $user->getOriginal();
+            $changes = $user->getChanges();
 
-        ActivityLog::create([
-            'user_id' => $this->authUser->id,
-            'email' => $this->authUser->email,
-            'type' =>  ActivityLogType::USER_UPDATE,
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-            'meta' => json_encode([
-                'original' => $original,
-                'changes' => $changes
-            ])
-        ]);
+            ActivityLog::create([
+                'user_id' => $this->authUser->id,
+                'email' => $this->authUser->email,
+                'type' =>  ActivityLogType::USER_UPDATE,
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'meta' => json_encode([
+                    'original' => $original,
+                    'changes' => $changes
+                ])
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
@@ -51,13 +59,17 @@ class UserObserver
      */
     public function deleted(User $user): void
     {
-        ActivityLog::create([
-            'user_id' => $this->authUser->id,
-            'email' => $this->authUser->email,
-            'type' => ActivityLogType::USER_DELETE,
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-            'meta' => json_encode($user)
-        ]);
+        try {
+            ActivityLog::create([
+                'user_id' => $this->authUser->id,
+                'email' => $this->authUser->email,
+                'type' => ActivityLogType::USER_DELETE,
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'meta' => json_encode($user)
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }
