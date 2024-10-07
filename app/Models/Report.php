@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Observers\ReportObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -40,6 +42,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereVerifierId($value)
  * @mixin \Eloquent
  */
+
+#[ObservedBy([ReportObserver::class])]
 class Report extends Model
 {
     use HasFactory;

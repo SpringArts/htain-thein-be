@@ -15,14 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->string('email');
-            $table->enum('type', [
-                'USER_LOGIN',
-                'USER_LOGOUT',
-                'USER_CREATE',
-                'USER_UPDATE',
-                'USER_DELETE',
-                'USER_RESET_PASSWORD',
-            ]);
+            $table->string('type');
             $table->string('ip_address');
             $table->string('user_agent');
             $table->text('meta')->nullable();

@@ -3,26 +3,31 @@
 namespace App\Observers;
 
 use App\Enums\ActivityLogType;
+use App\Interfaces\Firebase\FirebaseInterface;
 use App\Models\ActivityLog;
+use App\Models\NotiInfo;
+use App\Models\Report;
 use App\Models\User;
 
-class UserObserver
+class ReportObserver
 {
     protected User $authUser;
-    public function __construct()
+    protected FirebaseInterface $firebaseRepository;
+    public function __construct(FirebaseInterface $firebaseRepository)
     {
+        $this->firebaseRepository = $firebaseRepository;
         $this->authUser = getAuthUserOrFail();
     }
-    public function created(User $user): void
+    public function created(Report $report): void
     {
         try {
             ActivityLog::create([
                 'user_id' => $this->authUser->id,
                 'email' => $this->authUser->email,
-                'type' => ActivityLogType::USER_CREATE,
+                'type' => ActivityLogType::REPORT_CREATE,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
-                'meta' => json_encode($user)
+                'meta' => json_encode($report)
             ]);
         } catch (\Throwable $th) {
             throw $th;
@@ -30,18 +35,18 @@ class UserObserver
     }
 
     /**
-     * Handle the User "updated" event.
+     * Handle the Report "updated" event.
      */
-    public function updated(User $user): void
+    public function updated(Report $report): void
     {
         try {
-            $original = $user->getOriginal();
-            $changes = $user->getChanges();
+            $original = $report->getOriginal();
+            $changes = $report->getChanges();
 
             ActivityLog::create([
                 'user_id' => $this->authUser->id,
                 'email' => $this->authUser->email,
-                'type' =>  ActivityLogType::USER_UPDATE,
+                'type' => ActivityLogType::REPORT_UPDATE,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
                 'meta' => json_encode([
@@ -54,19 +59,32 @@ class UserObserver
         }
     }
 
+    public function deleting(Report $report): void
+    {
+        try {
+            $notificationDocumentId = NotiInfo::where('report_id', $report->id)
+                ->where('user_id', $this->authUser->id)
+                ->first()->firebase_notification_id;
+
+            $this->firebaseRepository->deleteNotificationDocument($notificationDocumentId, 'notifications');
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     /**
-     * Handle the User "deleted" event.
+     * Handle the Report "deleted" event.
      */
-    public function deleted(User $user): void
+    public function deleted(Report $report): void
     {
         try {
             ActivityLog::create([
                 'user_id' => $this->authUser->id,
                 'email' => $this->authUser->email,
-                'type' => ActivityLogType::USER_DELETE,
+                'type' => ActivityLogType::REPORT_DELETE,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
-                'meta' => json_encode($user)
+                'meta' => json_encode($report)
             ]);
         } catch (\Throwable $th) {
             throw $th;

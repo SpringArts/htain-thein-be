@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Observers\GeneralOutcomeObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,6 +30,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|GeneralOutcome whereUpdatedAt($value)
  * @mixin \Eloquent
  */
+
+#[ObservedBy([GeneralOutcomeObserver::class])]
 class GeneralOutcome extends Model
 {
     use HasFactory;

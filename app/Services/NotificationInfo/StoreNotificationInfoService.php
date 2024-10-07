@@ -3,14 +3,14 @@
 namespace App\Services\NotificationInfo;
 
 use App\Helpers\ResponseHelper;
-use App\Interfaces\Firebase\FirebaseChattingInterface;
+use App\Interfaces\Firebase\FirebaseInterface;
 use App\Interfaces\Notification\NotificationInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class StoreNotificationInfoService
 {
-    public function __invoke(NotificationInterface $notiInfoResponsitory, FirebaseChattingInterface $firebaseRepository, array $formData): JsonResponse
+    public function __invoke(NotificationInterface $notiInfoResponsitory, FirebaseInterface $firebaseRepository, array $formData): JsonResponse
     {
         try {
             $firebaseNotificationId = $this->createNotification($firebaseRepository, $formData);
@@ -26,7 +26,7 @@ class StoreNotificationInfoService
         }
     }
 
-    private function createNotification(FirebaseChattingInterface $firebaseRepository, array $formData): string
+    private function createNotification(FirebaseInterface $firebaseRepository, array $formData): string
     {
         return $firebaseRepository->storeNotification($formData);
     }

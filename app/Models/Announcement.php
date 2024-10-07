@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Observers\AnnouncementObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -39,6 +41,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Announcement whereUserId($value)
  * @mixin \Eloquent
  */
+
+#[ObservedBy([AnnouncementObserver::class])]
 class Announcement extends Model
 {
     use HasFactory;
