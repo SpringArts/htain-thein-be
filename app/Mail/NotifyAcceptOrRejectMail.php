@@ -16,6 +16,7 @@ class NotifyAcceptOrRejectMail extends Mailable
     /**
      * Create a new message instance.
      */
+
     public function __construct(string $status)
     {
         $this->status = $status;
@@ -32,6 +33,7 @@ class NotifyAcceptOrRejectMail extends Mailable
     }
 
     /**
+
      * Get the attachments for the message.
      *
      * @return array<int, \Illuminate\Mail\Mailables\Attachment>
