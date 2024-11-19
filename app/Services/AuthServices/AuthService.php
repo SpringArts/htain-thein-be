@@ -2,39 +2,82 @@
 
 namespace App\Services\AuthServices;
 
-use App\Models\User;
-use Laravel\Socialite\Contracts\User as SocialiteUser;
+use Illuminate\Support\Facades\Http;
+use Log;
+
 
 class AuthService
 {
-    public function handleAuthentication(SocialiteUser $socialiteUser, string $provider): string
+    public function fetchUserDetails(string $provider, string $accessToken): ?array
     {
-        $newUser = $this->store($socialiteUser, $provider);
-        $this->login($newUser);
-        $token = $this->createToken($newUser);
-
-        return $token;
+        switch ($provider) {
+            case 'google':
+                return $this->fetchGoogleUserDetails($accessToken);
+            case 'github':
+                return $this->fetchGitHubUserDetails($accessToken);
+            default:
+                return null;
+        }
     }
 
-    private function store(SocialiteUser $socialiteUser, string $provider): User
+    private function fetchGoogleUserDetails(string $accessToken): ?array
     {
-        return User::updateOrCreate(
-            ['email' => $socialiteUser->getEmail()], // Use getEmail() method
-            [
-                'name' => $socialiteUser->getName(), // Use getName() method
-                'provider_id' => $socialiteUser->getId(), // Use getId() method
-                'provider_name' => $provider,
-            ]
-        );
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->get('https://www.googleapis.com/oauth2/v3/userinfo');
+
+        if ($response->successful()) {
+            $data = $response->json();
+            return [
+                'id' => $data['sub'],
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'access_token' => $accessToken,
+                'username' => $data['email'],
+            ];
+        }
+
+        return null;
     }
 
-    private function login(User $newUser): void
+    private function fetchGitHubUserDetails(string $accessToken): ?array
     {
-        auth()->login($newUser);
+        $userResponse = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->get('https://api.github.com/user');
+
+        if (!$userResponse->successful()) {
+            return null;
+        }
+
+        $data = $userResponse->json();
+        Log::info('GitHub User Data:', $data);
+
+        // Attempt to get the email from the initial response or fetch primary email if missing.
+        $email = $data['email'] ?? $this->fetchPrimaryEmail($accessToken) ?? $data['login'] . '@example.com';
+
+        return [
+            'id' => $data['id'],
+            'name' => $data['name'] ?? $data['login'],
+            'email' => $email,
+            'access_token' => $accessToken,
+            'username' => $data['login'],
+        ];
     }
 
-    public function createToken(User $newUser): string
+    private function fetchPrimaryEmail(string $accessToken): ?string
     {
-        return $newUser->createToken('authToken')->plainTextToken;
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->get('https://api.github.com/user/emails');
+
+        if ($response->failed()) {
+            return null;
+        }
+
+        $emails = $response->json();
+        Log::info('GitHub User Emails:', $emails);
+
+        return collect($emails)->firstWhere('primary', true)['email'] ?? null;
     }
 }

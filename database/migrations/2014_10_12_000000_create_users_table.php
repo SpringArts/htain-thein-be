@@ -21,6 +21,7 @@ return new class extends Migration
             $table->enum('role', ['ADMIN', 'MEMBER', 'SUPER_ADMIN'])->default('MEMBER')->nullable();
             $table->string('provider_name')->nullable();
             $table->string('provider_id')->nullable();
+            $table->string('provider_username')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

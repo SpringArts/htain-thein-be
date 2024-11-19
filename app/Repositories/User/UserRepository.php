@@ -25,6 +25,20 @@ class UserRepository implements UserInterface
         return User::create($data);
     }
 
+    public function findOrCreateUser(array $userDetails, string $provider)
+    {
+        return User::updateOrCreate(
+            ['provider_id' => $userDetails['id'], 'provider_name' => $provider],
+            [
+                'name' => $userDetails['name'],
+                'email' => $userDetails['email'],
+                'provider_name' => $provider,
+                'provider_id' => $userDetails['id'],
+                'provider_username' => $userDetails['username'],
+            ]
+        );
+    }
+
     public function updateUser(array $userData, User $user): bool
     {
         return $user->update($userData);

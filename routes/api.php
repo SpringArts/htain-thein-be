@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/auth/{provider}', [ProviderController::class, 'redirectToProvider']);
-Route::get('/auth/callback/{provider}', [ProviderController::class, 'handleProviderCallback']);
+Route::post('/auth/oauth-login', [ProviderController::class, 'loginWithOAuth']);
+
 Route::get('/verify-token', [AuthController::class, 'verifyToken']);
 
 require __DIR__ . '/auth.php';

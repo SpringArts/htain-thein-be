@@ -3,51 +3,58 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Repositories\User\UserRepository;
 use App\Services\AuthServices\AuthService;
 use App\UseCases\Auth\UserAgentAction;
+use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Laravel\Socialite\Facades\Socialite;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Log;
 
 class ProviderController extends Controller
 {
     protected AuthService $authService;
 
     protected UserAgentAction $userAgentAction;
+    protected UserRepository $userRepository;
 
-    public function __construct(AuthService $authService, UserAgentAction $userAgentAction)
+    public function __construct(AuthService $authService, UserAgentAction $userAgentAction, UserRepository $userRepository)
     {
         $this->authService = $authService;
         $this->userAgentAction = $userAgentAction;
+        $this->userRepository = $userRepository;
     }
 
-    public function redirectToProvider(string $provider, Request $request): RedirectResponse
+    public function loginWithOAuth(Request $request): JsonResponse
     {
-        $locale = $request->input('locale', 'en'); // Default to 'en' if not provided
-        $request->session()->put('locale', $locale); // Store locale in session
+        $request->validate([
+            'access_token' => 'required|string',
+            'provider' => 'required|string|in:google,github',
+        ]);
 
-        return Socialite::driver($provider)->redirect();
-    }
+        $provider = $request->provider;
+        $accessToken = $request->access_token;
 
-    public function handleProviderCallback(string $provider, Request $request): RedirectResponse|JsonResponse
-    {
-        try {
-            $locale = $request->session()->get('locale', 'en');
-            $user = Socialite::driver($provider)->stateless()->user();
-            $token = $this->authService->handleAuthentication($user, $provider);
-            $authUser = getAuthUserOrFail();
+        $userDetails = $this->authService->fetchUserDetails($provider, $accessToken);
 
-            $encryptedUserData = encryptAlgorithm([
-                'userId' => $authUser->id,
-                'userName' => $authUser->name,
-                'userRole' => $authUser->role,
-                'token' => $token,
-            ]);
-
-            return redirect()->away(config('app.frontend_url') . '/' . $locale . '/login?encrypted=' . urlencode($encryptedUserData));
-        } catch (\Throwable $th) {
-            return response()->json(['error' => $th->getMessage()]);
+        if (!$userDetails) {
+            return response()->json(['message' => 'Invalid or expired access token'], 401);
         }
+
+        // Find or create the user using the OAuth details
+        $user = $this->userRepository->findOrCreateUser($userDetails, $provider);
+
+        // Log in the user and create a Sanctum token
+        Auth::login($user);
+        $token = $user->createToken('authToken')->plainTextToken;
+
+        return response()->json([
+            'userId' => $user->id,
+            'userName' => $user->name,
+            'userRole' => $user->role,
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ]);
     }
 }
