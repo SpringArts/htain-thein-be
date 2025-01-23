@@ -24,6 +24,7 @@ class GeneralOutcomeController extends Controller
     public function index(FetchGeneralOutcomeRequest $request): JsonResponse
     {
         $validatedData = $request->safe()->all();
+
         return $this->generalOutcomeAction->fetchGeneralOutcome($validatedData);
     }
 
@@ -40,6 +41,7 @@ class GeneralOutcomeController extends Controller
     {
         $formData = $request->all();
         $formData['reporter_id'] = getAuthUserOrFail()->id;
+
         return $this->generalOutcomeAction->storeGeneralOutcome($formData);
     }
 
@@ -47,12 +49,14 @@ class GeneralOutcomeController extends Controller
     {
         Gate::authorize('adminPermission');
         $formData = $request->safe()->all();
+
         return $this->generalOutcomeAction->updateGeneralOutcome($formData, $generalOutcome);
     }
 
     public function destroy(GeneralOutcome $generalOutcome): JsonResponse
     {
         Gate::authorize('superAdminPermission');
+
         return $this->generalOutcomeAction->deleteGeneralOutcome($generalOutcome);
     }
 

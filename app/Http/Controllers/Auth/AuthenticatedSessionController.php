@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\AccountType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\UseCases\Auth\UserAgentAction;
@@ -26,6 +27,9 @@ class AuthenticatedSessionController extends Controller
 
         if (Auth::attempt($credentials)) {
             $authUser = getAuthUserOrFail();
+            if ($authUser->account_status !== AccountType::ACTIVE) {
+                return response()->json(['message' => 'Your account is ' . AccountType::SUSPENDED . '.Please contact to Admin .'], 403);
+            }
             // generate an API token for the authenticated user
             $token = $authUser->createToken('authToken')->plainTextToken;
 
@@ -36,10 +40,12 @@ class AuthenticatedSessionController extends Controller
                 'userId' => $authUser->id,
                 'userName' => $authUser->name,
                 'userRole' => $authUser->role,
+                'accountStatus' => $authUser->account_status,
                 'access_token' => $token,
                 'token_type' => 'Bearer',
             ]);
         }
+
         return response()->json(['message' => 'Your credentials is incorrect'], 403);
     }
 
@@ -50,7 +56,7 @@ class AuthenticatedSessionController extends Controller
     {
         $user = getAuthUserOrFail();
         $user->tokens()->delete(); // Revoke all tokens for the user
-        Auth::guard('web')->logout(); //need for session logout
+        Auth::guard('web')->logout(); // need for session logout
 
         return response()->json(['message' => 'Logged out successfully'], 200);
     }

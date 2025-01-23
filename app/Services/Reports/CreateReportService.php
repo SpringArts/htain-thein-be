@@ -6,7 +6,6 @@ use App\Helpers\ResponseHelper;
 use App\Http\Resources\ReportResource;
 use App\Interfaces\Report\ReportInterface;
 use App\Models\Report;
-use App\Services\Reports\FinancialCalculatorService;
 use App\UseCases\NotiInfo\NotiInfoAction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -20,6 +19,7 @@ class CreateReportService
             FinancialCalculatorService::checkExpensePossible($data);
             $report = $reportRepository->createReport($data);
             $this->createNotification($notiInfoAction, $report);
+
             return ResponseHelper::success('Successfully created', new ReportResource($report), Response::HTTP_CREATED);
         } catch (InvalidArgumentException $e) {
             return ResponseHelper::fail($e->getMessage(), Response::HTTP_BAD_REQUEST);

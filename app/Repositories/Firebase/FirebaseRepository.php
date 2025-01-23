@@ -22,6 +22,7 @@ class FirebaseRepository implements FirebaseInterface
         $this->fireStore->collection('messages')->add([
             'senderId' => $data['senderId'],
             'message' => $data['message'],
+            'senderName' => $data['senderName'],
             'timestamp' => date('Y-m-d H:i:s'),
         ]);
 

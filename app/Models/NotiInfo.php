@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Observers\NotiInfoObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\NotiInfo
@@ -16,9 +19,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $firebase_notification_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $last_viewed_at
  * @property-read \App\Models\Announcement|null $announcement
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NotificationRead> $readStatues
+ * @property-read int|null $read_statues_count
  * @property-read \App\Models\Report|null $report
  * @property-read \App\Models\User $user
+ *
  * @method static \Database\Factories\NotiInfoFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo newQuery()
@@ -27,16 +34,25 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo whereFirebaseNotificationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo whereLastViewedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo whereReportId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|NotiInfo whereUserId($value)
+ *
  * @mixin \Eloquent
  */
+#[ObservedBy(NotiInfoObserver::class)]
 class NotiInfo extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'last_viewed_at' => 'datetime',
+    ];
+
+    protected $with = ['user', 'report', 'announcement'];
 
     public function user(): BelongsTo
     {
@@ -51,5 +67,15 @@ class NotiInfo extends Model
     public function announcement(): BelongsTo
     {
         return $this->belongsTo(Announcement::class);
+    }
+
+    public function readStatues(): HasMany
+    {
+        return $this->hasMany(NotificationRead::class, 'noti_info_id');
+    }
+
+    public function updateLastViewed()
+    {
+        $this->update(['last_viewed_at' => now()]);
     }
 }

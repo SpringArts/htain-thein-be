@@ -23,11 +23,21 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:255',
-            'email' => ['required', 'email', Rule::unique('users')->ignore($this->user)],
+            'name' => 'sometimes|required|max:255',
+            'email' => ['sometimes', 'required', 'email', Rule::unique('users')->ignore($this->user)],
             'password' => 'nullable|min:8',
-            'role' => 'required|in:ADMIN,MEMBER,SUPER_ADMIN',
-            'accountStatus' => 'required|in:ACTIVE,SUSPENDED',
+            'role' => 'sometimes|required|in:ADMIN,MEMBER,SUPER_ADMIN',
+            'accountStatus' => 'sometimes|required|in:ACTIVE,SUSPENDED',
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'account_status' => $this->accountStatus ?? $this->account_status ?? null,
+        ]);
     }
 }

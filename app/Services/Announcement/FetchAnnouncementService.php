@@ -17,6 +17,7 @@ class FetchAnnouncementService
             $page = $data['page'] ?? 1;
             $data = $announcementRepository->getAllAnnouncements($limit, $page);
             $meta = ResponseHelper::getPaginationMeta($data);
+
             return response()->json([
                 'data' => AnnouncementResource::collection($data),
                 'meta' => $meta,

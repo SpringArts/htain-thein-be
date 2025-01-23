@@ -14,6 +14,7 @@ class FetchReportHistoryService
     {
         try {
             $reportHistories = $reportHistoryRepository->getReportChangedHistory($reportId);
+
             return response()->json([
                 'data' => ReportEditHistoryResource::collection($reportHistories),
             ]);

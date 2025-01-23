@@ -24,6 +24,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string|null $role
  * @property string|null $provider_name
  * @property string|null $provider_id
+ * @property string|null $provider_username
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -47,6 +48,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read int|null $tokens_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Report> $verifiedReports
  * @property-read int|null $verified_reports_count
+ *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -60,13 +62,13 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereProviderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereProviderName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereProviderUsername($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
-
-
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
 {
@@ -74,12 +76,23 @@ class User extends Authenticatable
     use HasFactory;
     use Notifiable;
 
+    public static $snakeAttributes = false;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'provider_name',
+        'provider_id',
+        'provider_username',
+        'account_status',
+        'email_verified_at',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.

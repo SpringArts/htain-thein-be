@@ -3,7 +3,6 @@
 namespace App\Http\Requests\V1\App\Firebase;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Log;
 
 class StoreMessageRequest extends FormRequest
 {
@@ -22,7 +21,6 @@ class StoreMessageRequest extends FormRequest
      */
     public function rules(): array
     {
-        Log::info($this->message);
         return [
             'message' => ['required', 'string', 'max:255'],
         ];

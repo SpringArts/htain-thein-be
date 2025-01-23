@@ -14,6 +14,7 @@ class DeleteContactInfoService
     {
         try {
             $contactInfoRepository->deleteContact($contactInfo);
+
             return ResponseHelper::success('Contact deleted successfully', null, Response::HTTP_OK);
         } catch (\Throwable $th) {
             return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

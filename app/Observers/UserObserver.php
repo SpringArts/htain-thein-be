@@ -9,10 +9,12 @@ use App\Models\User;
 class UserObserver
 {
     protected User $authUser;
+
     public function __construct()
     {
         $this->authUser = getAuthUserOrFail();
     }
+
     public function created(User $user): void
     {
         try {
@@ -22,7 +24,7 @@ class UserObserver
                 'type' => ActivityLogType::USER_CREATE,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
-                'meta' => json_encode($user)
+                'meta' => json_encode($user),
             ]);
         } catch (\Throwable $th) {
             throw $th;
@@ -41,13 +43,13 @@ class UserObserver
             ActivityLog::create([
                 'user_id' => $this->authUser->id,
                 'email' => $this->authUser->email,
-                'type' =>  ActivityLogType::USER_UPDATE,
+                'type' => ActivityLogType::USER_UPDATE,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
                 'meta' => json_encode([
                     'original' => $original,
-                    'changes' => $changes
-                ])
+                    'changes' => $changes,
+                ]),
             ]);
         } catch (\Throwable $th) {
             throw $th;
@@ -66,7 +68,7 @@ class UserObserver
                 'type' => ActivityLogType::USER_DELETE,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
-                'meta' => json_encode($user)
+                'meta' => json_encode($user),
             ]);
         } catch (\Throwable $th) {
             throw $th;

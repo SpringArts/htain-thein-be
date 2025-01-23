@@ -10,10 +10,12 @@ use App\Models\User;
 class GeneralOutcomeObserver
 {
     protected User $authUser;
+
     public function __construct()
     {
         $this->authUser = getAuthUserOrFail();
     }
+
     public function created(GeneralOutcome $generalOutcome): void
     {
         try {
@@ -23,7 +25,7 @@ class GeneralOutcomeObserver
                 'type' => ActivityLogType::REGULAR_OUTCOME_CREATE,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
-                'meta' => json_encode($generalOutcome)
+                'meta' => json_encode($generalOutcome),
             ]);
         } catch (\Throwable $th) {
             throw $th;
@@ -47,8 +49,8 @@ class GeneralOutcomeObserver
                 'user_agent' => request()->userAgent(),
                 'meta' => json_encode([
                     'original' => $original,
-                    'changes' => $changes
-                ])
+                    'changes' => $changes,
+                ]),
             ]);
         } catch (\Throwable $th) {
             throw $th;
@@ -67,7 +69,7 @@ class GeneralOutcomeObserver
                 'type' => ActivityLogType::REGULAR_OUTCOME_DELETE,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
-                'meta' => json_encode($generalOutcome)
+                'meta' => json_encode($generalOutcome),
             ]);
         } catch (\Throwable $th) {
             throw $th;

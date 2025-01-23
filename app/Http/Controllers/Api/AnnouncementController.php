@@ -10,8 +10,8 @@ use App\Http\Requests\V1\App\Announcement\UpdateAnnouncementRequest;
 use App\Http\Resources\AnnouncementResource;
 use App\Models\Announcement;
 use App\UseCases\Announcement\AnnouncementAction;
-use Gate;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class AnnouncementController extends Controller
 {
@@ -25,6 +25,7 @@ class AnnouncementController extends Controller
     public function index(FetchAnnouncementRequest $request): JsonResponse
     {
         $validatedData = $request->safe()->all();
+
         return $this->announcementAction->fetchAllAnnouncements($validatedData);
     }
 
@@ -34,6 +35,7 @@ class AnnouncementController extends Controller
     public function store(StoreAnnouncementRequest $request): JsonResponse
     {
         $validatedData = $request->safe()->all();
+
         return $this->announcementAction->createAnnouncement($validatedData);
     }
 
@@ -53,6 +55,7 @@ class AnnouncementController extends Controller
     {
         $formData = $request->safe()->all();
         $formData['is_visible'] = (int) $formData['isVisible'];
+
         return $this->announcementAction->updateAnnouncement($formData, $announcement);
     }
 
@@ -62,6 +65,7 @@ class AnnouncementController extends Controller
     public function destroy(Announcement $announcement): JsonResponse
     {
         Gate::authorize('adminPermission');
+
         return $this->announcementAction->deleteAnnouncement($announcement);
     }
 
@@ -69,6 +73,7 @@ class AnnouncementController extends Controller
     {
         Gate::authorize('adminPermission');
         $ids = $request->safe()->all();
+
         return $this->announcementAction->batchDelete($ids);
     }
 }

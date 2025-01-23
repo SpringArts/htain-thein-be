@@ -17,6 +17,7 @@ class FirebaseAction
     public function storeMessage(array $data): JsonResponse
     {
         $data['senderId'] = getAuthUserOrFail()->id;
+        $data['senderName'] = getAuthUserOrFail()->name;
 
         return $this->firebaseRepository->storeMessage($data);
     }

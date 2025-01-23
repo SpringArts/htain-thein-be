@@ -17,6 +17,7 @@ class UncheckReportService
             $page = $formData['page'] ?? 1;
             $data = $reportRepository->uncheckReport($limit, $page);
             $meta = ResponseHelper::getPaginationMeta($data);
+
             return response()->json([
                 'data' => ReportResource::collection($data),
                 'meta' => $meta,

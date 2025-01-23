@@ -12,12 +12,15 @@ use App\Models\User;
 class ReportObserver
 {
     protected User $authUser;
+
     protected FirebaseInterface $firebaseRepository;
+
     public function __construct(FirebaseInterface $firebaseRepository)
     {
         $this->firebaseRepository = $firebaseRepository;
         $this->authUser = getAuthUserOrFail();
     }
+
     public function created(Report $report): void
     {
         try {
@@ -27,7 +30,7 @@ class ReportObserver
                 'type' => ActivityLogType::REPORT_CREATE,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
-                'meta' => json_encode($report)
+                'meta' => json_encode($report),
             ]);
         } catch (\Throwable $th) {
             throw $th;
@@ -51,8 +54,8 @@ class ReportObserver
                 'user_agent' => request()->userAgent(),
                 'meta' => json_encode([
                     'original' => $original,
-                    'changes' => $changes
-                ])
+                    'changes' => $changes,
+                ]),
             ]);
         } catch (\Throwable $th) {
             throw $th;
@@ -64,7 +67,7 @@ class ReportObserver
         try {
             $notificationDocumentId = NotiInfo::where('report_id', $report->id)
                 ->where('user_id', $this->authUser->id)
-                ->first()->firebase_notification_id;
+                ->firstOrFail()->firebase_notification_id;
 
             $this->firebaseRepository->deleteNotificationDocument($notificationDocumentId, 'notifications');
         } catch (\Throwable $th) {
@@ -84,7 +87,7 @@ class ReportObserver
                 'type' => ActivityLogType::REPORT_DELETE,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
-                'meta' => json_encode($report)
+                'meta' => json_encode($report),
             ]);
         } catch (\Throwable $th) {
             throw $th;

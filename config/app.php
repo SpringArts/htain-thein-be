@@ -208,7 +208,6 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         UserAgentProvider::class,
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
         // Custom Service Providers
         ReportServiceProvider::class,
@@ -217,7 +216,7 @@ return [
         UserProvider::class,
         AnnouncementProvider::class,
         FirebaseServiceProvider::class,
-        ContactProvider::class
+        ContactProvider::class,
     ],
 
     /*

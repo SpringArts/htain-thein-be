@@ -9,12 +9,12 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    //TODO Refactor
+    // TODO Refactor
     public function verifyToken(Request $request): JsonResponse
     {
         $token = $request->bearerToken();
 
-        if (!$token) {
+        if (! $token) {
             return response()->json(['message' => 'Token not provided'], 400);
         }
 

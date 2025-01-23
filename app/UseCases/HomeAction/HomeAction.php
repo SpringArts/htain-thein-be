@@ -14,7 +14,7 @@ class HomeAction
         $this->reportRepository = $reportRepository;
     }
 
-    //TODO List
+    // TODO List
     public function fetchData(): array
     {
         $users = User::count();

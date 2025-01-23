@@ -32,7 +32,7 @@ class NewPasswordController extends Controller
         // database. Otherwise we will parse the error and return the response.
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user) use ($request) {
+            function ($user) use ($request): void {
                 $password = is_string($request->password) ? $request->password : Str::random(60);
                 $user->forceFill([
                     'password' => Hash::make($password),

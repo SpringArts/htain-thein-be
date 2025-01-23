@@ -17,6 +17,7 @@ class FetchContactInfoService
             $page = $data['page'] ?? 1;
             $data = $contactInfoRepository->fetchData($limit, $page);
             $meta = ResponseHelper::getPaginationMeta($data);
+
             return response()->json([
                 'data' => ContactInfoResource::collection($data),
                 'meta' => $meta,

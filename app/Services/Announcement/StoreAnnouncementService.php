@@ -20,6 +20,7 @@ class StoreAnnouncementService
             $data['user_id'] = $this->getAuthUser();
             $announcement = $announcementRepository->createAnnouncement($data);
             $this->createNotification($notificationAction, $announcement);
+
             return ResponseHelper::success('Announcement created successfully', new AnnouncementResource($announcement), Response::HTTP_CREATED);
         } catch (\Throwable $th) {
             return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -29,7 +30,7 @@ class StoreAnnouncementService
     private function createNotification(NotiInfoAction $notificationAction, Announcement $announcement): void
     {
         $notificationAction->createNotification([
-            'user_id' =>  $this->getAuthUser(),
+            'user_id' => $this->getAuthUser(),
             'announcement_id' => $announcement->id,
             'type' => 'announcement',
         ]);

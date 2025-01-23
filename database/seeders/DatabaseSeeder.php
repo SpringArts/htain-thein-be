@@ -15,12 +15,14 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            // ReportSeeder::class,
-            // NotiInfoSeeder::class,
+            ReportSeeder::class,
+            AnnouncementSeeder::class,
+
+            NotiInfoSeeder::class,
             // CancelReportHistorySeeder::class,
             // ReportEditHistorySeeder::class,
             // GeneralOutcomeSeeder::class,
-            // AnnouncementSeeder::class,
+            NotificationReadSeeder::class
         ]);
     }
 }

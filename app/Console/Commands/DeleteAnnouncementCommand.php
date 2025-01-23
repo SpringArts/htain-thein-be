@@ -29,6 +29,7 @@ class DeleteAnnouncementCommand extends Command
         $now = now();
         Announcement::where('due_date', '<', $now)->delete();
         $this->info('Expired records deleted successfully.');
+
         return 0;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services\User;
 
+use App\Enums\AccountType;
 use App\Helpers\ResponseHelper;
 use App\Interfaces\User\UserInterface;
 use App\Models\User;
@@ -13,15 +14,19 @@ class UpdateUserService
 {
     public function __invoke(UserInterface $userRepository, array $formData, User $user): JsonResponse
     {
-        try {
-            if (isset($formData['password'])) {
-                $formData['password'] = Hash::make($formData['password']);
-            }
-            $userRepository->updateUser($formData, $user);
-
-            return ResponseHelper::success('User updated successfully', null, Response::HTTP_OK);
-        } catch (\Throwable $th) {
-            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        // Only update password if it's provided and not empty
+        if (isset($formData['password']) && ! empty($formData['password'])) {
+            $formData['password'] = Hash::make($formData['password']);
+        } else {
+            unset($formData['password']); // Remove password from update data if not provided
         }
+
+        $userRepository->updateUser($formData, $user);
+
+        if ($user->account_status == AccountType::SUSPENDED) {
+            $user->tokens()->delete();
+        }
+
+        return ResponseHelper::success('User updated successfully', null, Response::HTTP_OK);
     }
 }

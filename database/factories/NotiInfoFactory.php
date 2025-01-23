@@ -19,8 +19,11 @@ class NotiInfoFactory extends Factory
         return [
             'user_id' => $this->faker->unique(true)->numberBetween(1, 5),
             'report_id' => $this->faker->unique(true)->numberBetween(1, 30),
+            'announcement_id' => $this->faker->unique(true)->numberBetween(1, 10),
+            'firebase_notification_id' => $this->faker->unique(true)->numberBetween(1, 10),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'updated_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            'last_viewed_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
         ];
     }
 }

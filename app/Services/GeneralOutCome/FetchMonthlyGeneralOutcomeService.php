@@ -13,9 +13,10 @@ class FetchMonthlyGeneralOutcomeService
     {
         try {
             $data = $generalOutcomeRepository->fetchMonthlyGeneralOutcome();
+
             return response()->json([
                 'data' => $data,
-            ],);
+            ], );
         } catch (\Throwable $th) {
             return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

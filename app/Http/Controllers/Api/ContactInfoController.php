@@ -21,12 +21,14 @@ class ContactInfoController extends Controller
     public function index(FetchContactInfoRequest $request): JsonResponse
     {
         $validatedData = $request->safe()->all();
+
         return $this->contactInfoAction->fetchData($validatedData);
     }
 
     public function store(StoreContactInfoRequest $request): JsonResponse
     {
         $validatedData = $request->safe()->all();
+
         return $this->contactInfoAction->createContact($validatedData);
     }
 

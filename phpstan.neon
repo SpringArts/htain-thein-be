@@ -1,22 +1,17 @@
 includes:
-    - ./vendor/nunomaduro/larastan/extension.neon
+    - vendor/larastan/larastan/extension.neon
+    - vendor/nesbot/carbon/extension.neon
 
 parameters:
-    universalObjectCratesClasses:
-        - Illuminate\Http\Resources\Json\JsonResource
 
     paths:
         - app/
 
-    # Level 9 is the highest level
-    level: 9
+    # Level 10 is the highest level
+    level: 5
 
 #    ignoreErrors:
 #        - '#PHPDoc tag @var#'
 #
-    excludePaths:
-
-#
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
-    treatPhpDocTypesAsCertain: false
+#    excludePaths:
+#        - ./*/*/FileToBeExcluded.php

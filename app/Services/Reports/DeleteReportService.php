@@ -14,6 +14,7 @@ class DeleteReportService
     {
         try {
             $reportRepository->deleteReport($report);
+
             return ResponseHelper::success('Report deleted successfully', null, Response::HTTP_OK);
         } catch (\Throwable $th) {
             return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

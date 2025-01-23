@@ -8,13 +8,13 @@ use App\Models\ActivityLog;
 use App\Models\Announcement;
 use App\Models\NotiInfo;
 use App\Models\User;
-use Log;
 
 class AnnouncementObserver
 {
     protected User $authUser;
 
     protected FirebaseInterface $firebaseRepository;
+
     public function __construct(FirebaseInterface $firebaseRepository)
     {
         $this->firebaseRepository = $firebaseRepository;
@@ -30,7 +30,7 @@ class AnnouncementObserver
                 'type' => ActivityLogType::USER_CREATE,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
-                'meta' => json_encode($announcement)
+                'meta' => json_encode($announcement),
             ]);
         } catch (\Throwable $th) {
             throw $th;
@@ -49,13 +49,13 @@ class AnnouncementObserver
             ActivityLog::create([
                 'user_id' => $this->authUser->id,
                 'email' => $this->authUser->email,
-                'type' =>  ActivityLogType::USER_UPDATE,
+                'type' => ActivityLogType::USER_UPDATE,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
                 'meta' => json_encode([
                     'original' => $original,
-                    'changes' => $changes
-                ])
+                    'changes' => $changes,
+                ]),
             ]);
         } catch (\Throwable $th) {
             throw $th;
@@ -71,7 +71,7 @@ class AnnouncementObserver
         try {
             $notificationDocumentId = NotiInfo::where('announcement_id', $announcement->id)
                 ->where('user_id', $this->authUser->id)
-                ->first()->firebase_notification_id;
+                ->firstOrFail()->firebase_notification_id;
 
             $this->firebaseRepository->deleteNotificationDocument($notificationDocumentId, 'notifications');
         } catch (\Throwable $th) {
@@ -91,7 +91,7 @@ class AnnouncementObserver
                 'type' => ActivityLogType::ANNOUNCEMENT_DELETE,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
-                'meta' => json_encode($announcement)
+                'meta' => json_encode($announcement),
             ]);
         } catch (\Throwable $th) {
             throw $th;

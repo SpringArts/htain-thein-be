@@ -13,7 +13,7 @@ class AnnouncementSeeder extends Seeder
     public function run(): void
     {
         // Announcement::truncate();
-        $data = Announcement::factory(5)->make();
+        $data = Announcement::factory(30)->make();
         $chunks = $data->chunk(30);
         $chunks->each(function ($chunk) {
             Announcement::insert($chunk->toArray());

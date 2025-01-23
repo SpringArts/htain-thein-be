@@ -15,6 +15,7 @@ class AnnouncementRepository implements AnnouncementInterface
         if ($authUser->role === UserRoleType::SUPER_ADMIN) {
             return Announcement::with('announcer')->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'page', $page)->withQueryString();
         }
+
         return Announcement::with('announcer')->where('is_visible', 1)->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'page', $page)->withQueryString();
     }
 

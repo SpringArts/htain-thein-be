@@ -12,6 +12,7 @@ use Illuminate\Http\Response;
 class CreateReportHistoryService
 {
     private ReportInterface $reportRepository;
+
     private ReportHistoryInterface $reportHistoryRepository;
 
     public function __construct(ReportInterface $reportRepository, ReportHistoryInterface $reportHistoryRepository)
@@ -25,7 +26,8 @@ class CreateReportHistoryService
         try {
             $report = $this->getReport($reportId);
             $this->rejectReport($report);
-            $this->reportRepository->deleteReport($report); //TODO CHECK FUNCTION
+            $this->reportRepository->deleteReport($report); // TODO CHECK FUNCTION
+
             return ResponseHelper::success('Report deleted successfully', null, Response::HTTP_CREATED);
         } catch (\Throwable $th) {
             return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -39,7 +41,7 @@ class CreateReportHistoryService
         return $report;
     }
 
-    //create report history after report rejected
+    // create report history after report rejected
     private function rejectReport(Report $report): void
     {
         $rejectReportData = [

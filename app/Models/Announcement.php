@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \App\Models\User $announcer
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NotiInfo> $noti
  * @property-read int|null $noti_count
+ *
  * @method static \Database\Factories\AnnouncementFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Announcement newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Announcement newQuery()
@@ -39,9 +40,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Announcement whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Announcement whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Announcement whereUserId($value)
+ *
  * @mixin \Eloquent
  */
-
 #[ObservedBy([AnnouncementObserver::class])]
 class Announcement extends Model
 {
@@ -55,6 +56,11 @@ class Announcement extends Model
         'priority',
         'user_id',
         'due_date',
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function announcer(): BelongsTo

@@ -109,7 +109,7 @@ class ReportTest extends TestCase
             ]);
     }
 
-    public function testDestroy()
+    public function test_destroy()
     {
         $this->auth_user_create();
 

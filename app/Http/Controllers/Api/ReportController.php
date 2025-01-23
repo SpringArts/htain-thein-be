@@ -25,6 +25,7 @@ class ReportController extends Controller
     public function index(FetchReportFilterRequest $request): JsonResponse
     {
         $validatedData = $request->safe()->all();
+
         return $this->reportAction->fetchFilterData($validatedData);
     }
 
@@ -32,9 +33,9 @@ class ReportController extends Controller
     {
         $formData = $request->safe()->all();
         $formData['reporter_id'] = getAuthUserOrFail()->id;
+
         return $this->reportAction->createReport($formData);
     }
-
 
     public function show(Report $report): JsonResponse
     {
@@ -46,12 +47,14 @@ class ReportController extends Controller
     public function update(UpdateReportRequest $request, Report $report): JsonResponse
     {
         $formData = $request->safe()->all();
+
         return $this->reportAction->updateReport($formData, $report);
     }
 
     public function uncheckReport(UncheckReportRequest $request): JsonResponse
     {
         $validatedData = $request->safe()->all();
+
         return $this->reportAction->uncheckReport($validatedData);
     }
 
@@ -67,10 +70,11 @@ class ReportController extends Controller
     public function destroy(Report $report): JsonResponse
     {
         Gate::authorize('superAdminPermission');
+
         return $this->reportAction->deleteReport($report);
     }
 
-    public function cancelReportHistory(int $id): JsonResponse //Report that Admin or SuperAdmin is rejected
+    public function cancelReportHistory(int $id): JsonResponse // Report that Admin or SuperAdmin is rejected
     {
         return $this->reportAction->createReportHistory($id);
     }

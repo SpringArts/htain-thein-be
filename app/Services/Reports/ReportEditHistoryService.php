@@ -26,7 +26,7 @@ class ReportEditHistoryService
                     $newDataChangeFields[$key] = $value;
                 }
             }
-            if (!empty($newDataChangeFields)) {
+            if (! empty($newDataChangeFields)) {
                 // Parse 'updated_at' timestamp using Carbon to make it human-readable in new data
                 if (isset($newDataChangeFields['updated_at'])) {
                     $newDataChangeFields['updated_at'] = Carbon::parse($newDataChangeFields['updated_at'])->format('Y-d-M h:i A');

@@ -17,6 +17,7 @@ class FetchGeneralOutComeService
             $page = $data['page'] ?? 1;
             $data = $generalOutcomeRepository->fetchData($limit, $page);
             $meta = ResponseHelper::getPaginationMeta($data);
+
             return response()->json([
                 'data' => GeneralOutcomeResource::collection($data),
                 'meta' => $meta,

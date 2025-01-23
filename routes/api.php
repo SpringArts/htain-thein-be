@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\Auth\ProviderController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,8 +13,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::post('/auth/oauth-login', [ProviderController::class, 'loginWithOAuth']);
 
 Route::get('/verify-token', [AuthController::class, 'verifyToken']);
 

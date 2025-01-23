@@ -25,6 +25,7 @@ class UserController extends Controller
     public function index(FetchUserRequest $request): JsonResponse
     {
         $validatedData = $request->safe()->all();
+
         return $this->userAction->fetchUsers($validatedData);
     }
 
@@ -32,6 +33,7 @@ class UserController extends Controller
     {
         Gate::authorize('adminPermission');
         $formData = $request->safe()->all();
+
         return $this->userAction->createUser($formData);
     }
 
@@ -45,12 +47,14 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user): JsonResponse
     {
         Gate::authorize('adminPermission');
+
         return $this->userAction->updateUser($request->safe()->all(), $user);
     }
 
     public function destroy(User $user): JsonResponse
     {
         Gate::authorize('superAdminPermission');
+
         return $this->userAction->deleteUser($user);
     }
 

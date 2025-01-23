@@ -14,6 +14,7 @@ class StoreContactInfoService
     {
         try {
             $contact = $contactInfoRepository->createContact($data);
+
             return ResponseHelper::success('Record Successfully', new ContactInfoResource($contact), Response::HTTP_CREATED);
         } catch (\Throwable $th) {
             return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

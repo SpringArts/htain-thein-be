@@ -12,18 +12,15 @@ class StoreNotificationInfoService
 {
     public function __invoke(NotificationInterface $notiInfoResponsitory, FirebaseInterface $firebaseRepository, array $formData): JsonResponse
     {
-        try {
-            $firebaseNotificationId = $this->createNotification($firebaseRepository, $formData);
-            $notiInfoResponsitory->createNotification(
-                $formData['user_id'],
-                $formData['report_id'] ?? null,
-                $formData['announcement_id'] ?? null,
-                $firebaseNotificationId
-            );
-            return ResponseHelper::success('Notification created successfully', null, Response::HTTP_CREATED);
-        } catch (\Throwable $th) {
-            return ResponseHelper::fail($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        $firebaseNotificationId = $this->createNotification($firebaseRepository, $formData);
+        $notiInfoResponsitory->createNotification(
+            $formData['user_id'],
+            $formData['report_id'] ?? null,
+            $formData['announcement_id'] ?? null,
+            $firebaseNotificationId
+        );
+
+        return ResponseHelper::success('Notification created successfully', null, Response::HTTP_CREATED);
     }
 
     private function createNotification(FirebaseInterface $firebaseRepository, array $formData): string

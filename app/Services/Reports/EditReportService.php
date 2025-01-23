@@ -5,7 +5,6 @@ namespace App\Services\Reports;
 use App\Helpers\ResponseHelper;
 use App\Interfaces\Report\ReportInterface;
 use App\Models\Report;
-use App\Services\Reports\FinancialCalculatorService;
 use App\UseCases\NotiInfo\NotiInfoAction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -22,7 +21,7 @@ class EditReportService
             }
             $oldData = $report->toArray();
             $reportRepository->updateReport($data, $report);
-            $newData = $report->toArray(); //take new data after update
+            $newData = $report->toArray(); // take new data after update
             ReportEditHistoryService::editHistory($oldData, $newData);
             $notiInfoAction->createNotification([
                 'user_id' => $authUserId,

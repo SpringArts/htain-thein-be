@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $reporter
+ *
  * @method static \Database\Factories\GeneralOutcomeFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|GeneralOutcome newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|GeneralOutcome newQuery()
@@ -28,15 +29,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|GeneralOutcome whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|GeneralOutcome whereReporterId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|GeneralOutcome whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
-
 #[ObservedBy([GeneralOutcomeObserver::class])]
 class GeneralOutcome extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 
     public function reporter(): BelongsTo
     {

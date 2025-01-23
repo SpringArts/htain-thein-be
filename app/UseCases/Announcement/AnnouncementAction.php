@@ -2,7 +2,6 @@
 
 namespace App\UseCases\Announcement;
 
-use App\Helpers\ResponseHelper;
 use App\Interfaces\Announcement\AnnouncementInterface;
 use App\Models\Announcement;
 use App\Services\Announcement\BatchDeleteAnnouncementService;
@@ -12,11 +11,11 @@ use App\Services\Announcement\StoreAnnouncementService;
 use App\Services\Announcement\UpdateAnnouncementService;
 use App\UseCases\NotiInfo\NotiInfoAction;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 
 class AnnouncementAction
 {
     private AnnouncementInterface $announcementRepository;
+
     private NotiInfoAction $notiInfoAction;
 
     public function __construct(AnnouncementInterface $announcementRepository, NotiInfoAction $notiInfoAction)

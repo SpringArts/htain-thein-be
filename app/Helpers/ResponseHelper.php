@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ResponseHelper
@@ -38,6 +39,15 @@ class ResponseHelper
             'startOffset' => $data->firstItem(),
             'endOffset' => $data->lastItem(),
             'totalItems' => $data->total(),
+        ];
+    }
+
+    public static function getCursorPaginationMeta(CursorPaginator $data): array
+    {
+        return [
+            'perPage' => $data->perPage(),
+            'next_cursor' => $data->hasMorePages() ? $data->nextCursor()->encode() : null,
+            'hasMorePages' => $data->hasMorePages(),
         ];
     }
 }

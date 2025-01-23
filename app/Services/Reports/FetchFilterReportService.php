@@ -15,6 +15,7 @@ class FetchFilterReportService
         try {
             $data = $reportRepository->reportFilter($validatedData);
             $meta = ResponseHelper::getPaginationMeta($data);
+
             return response()->json([
                 'data' => ReportResource::collection($data),
                 'meta' => $meta,

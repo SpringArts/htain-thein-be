@@ -4,11 +4,14 @@ namespace App\Repositories\User;
 
 use App\Interfaces\User\UserInterface;
 use App\Models\User;
+use App\Traits\ConvertCaseTrait;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class UserRepository implements UserInterface
 {
+    use ConvertCaseTrait;
+
     public function getAllUsers(): Collection
     {
         return User::with('reportedReports', 'reportHistories', 'editReportHistories', 'noti', 'regularCostReport', 'verifiedReports')
@@ -22,11 +25,13 @@ class UserRepository implements UserInterface
 
     public function createUser(array $data): User
     {
-        return User::create($data);
+        return User::create($this->convertKeysToSnakeCase($data));
     }
 
-    public function findOrCreateUser(array $userDetails, string $provider)
+    public function findOrCreateUser(array $userDetails, string $provider): User
     {
+        $userDetails = $this->convertKeysToSnakeCase($userDetails);
+
         return User::updateOrCreate(
             ['provider_id' => $userDetails['id'], 'provider_name' => $provider],
             [
@@ -41,7 +46,7 @@ class UserRepository implements UserInterface
 
     public function updateUser(array $userData, User $user): bool
     {
-        return $user->update($userData);
+        return $user->update($this->convertKeysToSnakeCase($userData));
     }
 
     public function deleteUser(User $user): ?bool
@@ -57,18 +62,18 @@ class UserRepository implements UserInterface
         $generalSearch = $validatedData['generalSearch'] ?? null;
         $role = $validatedData['role'] ?? null;
         $accountStatus = $validatedData['accountStatus'] ?? null;
-        if (!empty($generalSearch)) {
-            $query->where(function ($q) use ($generalSearch) {
+        if (! empty($generalSearch)) {
+            $query->where(function ($q) use ($generalSearch): void {
                 $q->where('name', 'like', '%' . $generalSearch . '%')
                     ->orWhere('email', 'like', '%' . $generalSearch . '%');
             });
         }
 
-        if (!empty($role)) {
+        if (! empty($role)) {
             $query->where('role', '=', $role);
         }
 
-        if (!empty($accountStatus)) {
+        if (! empty($accountStatus)) {
             $query->where('account_status', '=', $accountStatus);
         }
 
