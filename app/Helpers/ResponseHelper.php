@@ -46,7 +46,8 @@ class ResponseHelper
     {
         return [
             'perPage' => $data->perPage(),
-            'next_cursor' => $data->hasMorePages() ? $data->nextCursor()->encode() : null,
+            'nextCursor' => $data->nextCursor()?->encode(),
+            'prevCursor' => $data->previousCursor()?->encode(),
             'hasMorePages' => $data->hasMorePages(),
         ];
     }

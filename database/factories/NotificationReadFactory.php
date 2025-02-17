@@ -17,9 +17,11 @@ class NotificationReadFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => $this->faker->numberBetween(1, 5),
+            'user_id' => $this->faker->numberBetween(1, 3),
             'noti_info_id' => $this->faker->unique(true)->numberBetween(1, 10),
             'read_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

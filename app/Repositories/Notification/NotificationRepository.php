@@ -10,6 +10,7 @@ use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class NotificationRepository implements NotificationInterface
 {
@@ -67,11 +68,12 @@ class NotificationRepository implements NotificationInterface
         return NotiInfo::where('user_id', $userId)->update(['last_viewed_at' => Carbon::now()]);
     }
 
-    public function getAllNotifications(int $userId, ?string $cursor = null): CursorPaginator
+    public function getAllNotifications(int $userId, ?string $cursor = null, int $limit = 10): CursorPaginator
     {
-        return NotificationRead::with('notiInfo')->where('user_id', $userId)
-            ->orderBy('created_at', 'desc')
-            ->cursorPaginate($cursor);
+        return NotificationRead::with('notiInfo')
+            ->where('user_id', $userId)
+            ->orderBy('id', 'desc')          // Secondary sort by id
+            ->cursorPaginate($limit, ['*'], 'cursor', $cursor);
     }
 
     public function updateNotificationReads(int $userId): int

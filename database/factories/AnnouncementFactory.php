@@ -22,7 +22,7 @@ class AnnouncementFactory extends Factory
             'content' => $this->faker->text(),
             'is_visible' => $this->faker->boolean(),
             'priority' => $this->faker->randomElement([1, 2, 3]),
-            'user_id' => $this->faker->numberBetween(1, 5),
+            'user_id' => $this->faker->numberBetween(1, 3),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'updated_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
         ];

@@ -37,7 +37,7 @@ class ReportResource extends JsonResource
                 'id' => $this->id,
                 'amount' => $this->amount ?? 0,
                 'type' => $this->type ?? '',
-                'reporter' => $this->reporter?->name ?? '',
+                'reporter' => $this->reporter?->name,
                 'verifier' => $this->verifier?->name ?? '',
                 'createdAt' => $this->created_at ? formatDateTime($this->created_at) : '',
             ];

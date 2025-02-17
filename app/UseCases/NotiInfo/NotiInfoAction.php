@@ -15,7 +15,6 @@ use App\Services\NotificationInfo\GetAllNotificationsService;
 use App\Services\NotificationInfo\StoreNotificationInfoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 
 class NotiInfoAction
 {
@@ -36,7 +35,7 @@ class NotiInfoAction
         $limit = 10;
         $page = 1;
 
-        return (new FetchNotificationInfoService())($this->notiInfoReponsitory, $formData, $userId, $limit, $page);
+        return (new FetchNotificationInfoService())($this->notiInfoReponsitory, $formData, $userId);
     }
 
     public function getUserNotification(Report $report): JsonResponse

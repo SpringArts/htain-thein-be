@@ -20,5 +20,5 @@ interface NotificationInterface
 
     public function updateViewAndRead(NotificationRead $notificationRead): void;
 
-    public function getAllNotifications(int $userId, ?string $cursor = null): CursorPaginator;
+    public function getAllNotifications(int $userId, ?string $cursor = null, int $limit = 10): CursorPaginator;
 }

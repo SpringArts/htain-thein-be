@@ -23,7 +23,7 @@ class FetchAllNotificationRequest extends FormRequest
     {
         return [
             'limit' => ['integer'],
-            'page' => ['integer'],
+            'cursor' => ['string'],
         ];
     }
 }
