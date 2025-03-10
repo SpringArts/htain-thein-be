@@ -3,7 +3,7 @@
 use App\Http\Controllers\Api\AnnouncementController;
 use App\Http\Controllers\Api\AttachmentExportController;
 use App\Http\Controllers\Api\ContactInfoController;
-use App\Http\Controllers\Api\FirebaseChattingController;
+use App\Http\Controllers\Api\FirebaseController;
 use App\Http\Controllers\Api\GeneralOutcomeController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\NotiInfoController;
@@ -41,7 +41,7 @@ Route::middleware(['auth:sanctum'])->group(function (): void {
 
     Route::get('/announcement-batch-delete', [AnnouncementController::class, 'batchDelete']);
     Route::get('/dashboard', [HomeController::class, 'dashboard']);
-    Route::post('/send-message', [FirebaseChattingController::class, 'sendMessage']);
+    Route::post('/send-message', [FirebaseController::class, 'sendMessage']);
     Route::post('/notifications-mark-read-all', [NotiInfoController::class, 'markAllNotificationAsRead']);
     Route::post('/notifications-mark-read/{notificationRead}', [NotiInfoController::class, 'markNotificationAsRead']);
     Route::get('/testing', function () {

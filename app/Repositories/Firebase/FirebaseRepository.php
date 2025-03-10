@@ -4,7 +4,7 @@ namespace App\Repositories\Firebase;
 
 use App\Interfaces\Firebase\FirebaseInterface;
 use App\Services\Firebase\FirebaseConnectionService;
-use Google\Cloud\Firestore\FieldValue;
+use Google\Cloud\Core\Timestamp;
 use Google\Cloud\Firestore\FirestoreClient;
 use Illuminate\Http\JsonResponse;
 
@@ -29,30 +29,37 @@ class FirebaseRepository implements FirebaseInterface
         return response()->json(['message' => 'Message sent successfully']);
     }
 
-    public function storeNotification(array $data): string
+    /**
+     * Update unread count in FireStore for a single user
+     */
+    public function updateUnreadCount(int $userId, int $unreadCount): void
     {
-        $notifications = $this->fireStore->collection('notifications')->add([
-            'userId' => $data['user_id'],
-            'type' => $data['type'],
-            'timestamp' => date('Y-m-d H:i:s'),
-        ]);
-        $notificationId = $notifications->id();
+        $userMetaRef = $this->fireStore->collection('users')
+            ->document($userId);
 
-        return $notificationId;
-    }
-
-    public function markNotificationAsRead(int $userId, string $notificationId): JsonResponse
-    {
-        $notificationReadsRef = $this->fireStore->collection('notification_reads')->document($notificationId);
-        $notificationReadsRef->set([
-            'userIds' => FieldValue::arrayUnion([$userId]),
+        $userMetaRef->set([
+            'unread_count' => $unreadCount,
+            'last_updated' => new Timestamp(new \DateTime())
         ], ['merge' => true]);
-
-        return response()->json(['message' => 'Notification marked as read successfully']);
     }
 
-    public function deleteNotificationDocument(string $notificationId, string $collectionType): void
+    /**
+     * Batch update unread count for all users
+     */
+    public function batchUpdateUnreadCounts(array $userUnreadCounts): void
     {
-        $this->fireStore->collection($collectionType)->document($notificationId)->delete();
+        $batch = $this->fireStore->batch();
+
+        foreach ($userUnreadCounts as $userId => $unreadCount) {
+            $userMetaRef = $this->fireStore->collection('users')
+                ->document($userId);
+
+            $batch->set($userMetaRef, [
+                'unread_count' => $unreadCount,
+                'last_updated' => new Timestamp(new \DateTime())
+            ], ['merge' => true]);
+        }
+
+        $batch->commit();
     }
 }

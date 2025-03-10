@@ -3,6 +3,7 @@
 use App\Exceptions\CustomErrorException;
 use App\Models\User;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 if (! function_exists('getAuthUserOrFail')) {
     function getAuthUserOrFail(): User

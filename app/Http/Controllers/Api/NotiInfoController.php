@@ -11,28 +11,23 @@ use App\Models\NotificationRead;
 use App\Models\NotiInfo;
 use App\UseCases\NotiInfo\NotiInfoAction;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class NotiInfoController extends Controller
 {
     private NotiInfoAction $notiInfoAction;
 
-    // private FirebaseAction $firebaseAction;
-
     public function __construct(NotiInfoAction $notiInfoAction)
     {
         $this->notiInfoAction = $notiInfoAction;
-        //   $this->firebaseAction = $firebaseAction;
     }
 
     public function index(FetchAllNotificationRequest $request): JsonResponse
     {
-        $authUserId = $this->getAuthUserId();
+        $authUserId = getAuthUserOrFail()->id;
         $validatedData = $request->safe()->all();
-        return $this->notiInfoAction->getAllNotifications($validatedData, $authUserId);
+        return $this->notiInfoAction->getAllNotificationReadInfo($validatedData, $authUserId);
     }
-
 
     public function store(StoreNotiInfoRequest $request): JsonResponse
     {
@@ -49,24 +44,9 @@ class NotiInfoController extends Controller
             'data' => new NotiInfoResource($notification),
         ]);
     }
-
-    public function destroy(NotiInfo $notification): ?bool
-    {
-        return $this->notiInfoAction->deleteNotification($notification);
-    }
-
-    // Firebase Functions
-    // public function markAsRead(Request $request): JsonResponse
-    // {
-    //     $formData = $request->safe()->all();
-    //     return $this->firebaseAction->markNotificationAsRead($formData);
-    // }
-
-
-
     public function markNotificationAsRead(NotificationRead $notificationRead): JsonResponse
     {
-        $authUserId = $this->getAuthUserId();
+        $authUserId = getAuthUserOrFail()->id;
 
         if ($notificationRead->user_id !== $authUserId) {
             return ResponseHelper::fail('Notification is not related with your account', Response::HTTP_UNAUTHORIZED);
@@ -75,8 +55,8 @@ class NotiInfoController extends Controller
         return $this->notiInfoAction->markNotificationAsRead($notificationRead);
     }
 
-    private function getAuthUserId(): int
+    public function destroy(NotiInfo $notification): ?bool
     {
-        return getAuthUserOrFail()->id;
+        return $this->notiInfoAction->deleteNotification($notification);
     }
 }

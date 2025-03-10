@@ -3,24 +3,19 @@
 namespace App\Observers;
 
 use App\Enums\ActivityLogType;
-use App\Interfaces\Firebase\FirebaseInterface;
 use App\Models\ActivityLog;
 use App\Models\Announcement;
-use App\Models\NotiInfo;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class AnnouncementObserver
 {
-    protected User $authUser;
+    protected ?User $authUser;
 
-    protected FirebaseInterface $firebaseRepository;
-
-    public function __construct(FirebaseInterface $firebaseRepository)
+    public function __construct()
     {
-        $this->firebaseRepository = $firebaseRepository;
-        $this->authUser = getAuthUserOrFail();
+        $this->authUser = Auth::user();
     }
-
     public function created(Announcement $announcement): void
     {
         try {
@@ -66,18 +61,7 @@ class AnnouncementObserver
      * Handle the Announcement "deleting" event.
      * This runs BEFORE the announcement is deleted from the database.
      */
-    public function deleting(Announcement $announcement): void
-    {
-        try {
-            $notificationDocumentId = NotiInfo::where('announcement_id', $announcement->id)
-                ->where('user_id', $this->authUser->id)
-                ->firstOrFail()->firebase_notification_id;
-
-            $this->firebaseRepository->deleteNotificationDocument($notificationDocumentId, 'notifications');
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-    }
+    public function deleting(Announcement $announcement): void {}
 
     /**
      * Handle the Announcement "deleted" event.

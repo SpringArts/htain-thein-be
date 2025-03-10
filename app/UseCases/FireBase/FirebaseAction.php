@@ -29,4 +29,6 @@ class FirebaseAction
 
         return $this->firebaseRepository->markNotificationAsRead($userId, $notificationId);
     }
+
+    public function getUnreadNotificationsCount($userId) {}
 }

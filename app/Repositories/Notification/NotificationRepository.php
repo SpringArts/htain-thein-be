@@ -10,7 +10,6 @@ use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class NotificationRepository implements NotificationInterface
 {
@@ -30,13 +29,12 @@ class NotificationRepository implements NotificationInterface
             ->firstOrFail();
     }
 
-    public function createNotification(int $userId, mixed $reportId = null, mixed $announcementId = null, string $firebaseNotificationId): NotiInfo
+    public function createNotification(int $userId, mixed $reportId = null, mixed $announcementId = null): NotiInfo
     {
         return NotiInfo::create([
             'user_id' => $userId,
             'report_id' => $reportId,
             'announcement_id' => $announcementId,
-            'firebase_notification_id' => $firebaseNotificationId,
         ]);
     }
 
@@ -63,21 +61,26 @@ class NotificationRepository implements NotificationInterface
         });
     }
 
+    public function getAllNotificationReadInfo(int $userId, ?string $cursor = null, int $limit = 10): CursorPaginator
+    {
+        return NotificationRead::with('notiInfo')
+            ->where('user_id', $userId)
+            ->orderBy('id', 'desc')
+            ->cursorPaginate($limit, ['*'], 'cursor', $cursor);
+    }
+    public function updateNotificationReads(int $userId): int
+    {
+        return NotificationRead::where('user_id', $userId)->update(['read_at' => Carbon::now()]);
+    }
     public function markAllAsRead(int $userId): int
     {
         return NotiInfo::where('user_id', $userId)->update(['last_viewed_at' => Carbon::now()]);
     }
 
-    public function getAllNotifications(int $userId, ?string $cursor = null, int $limit = 10): CursorPaginator
+    public function getUnreadCounts(int $userId): int
     {
-        return NotificationRead::with('notiInfo')
-            ->where('user_id', $userId)
-            ->orderBy('id', 'desc')          // Secondary sort by id
-            ->cursorPaginate($limit, ['*'], 'cursor', $cursor);
-    }
-
-    public function updateNotificationReads(int $userId): int
-    {
-        return NotificationRead::where('user_id', $userId)->update(['read_at' => Carbon::now()]);
+        return NotificationRead::where('user_id', $userId)
+            ->whereNull('read_at')
+            ->count();
     }
 }

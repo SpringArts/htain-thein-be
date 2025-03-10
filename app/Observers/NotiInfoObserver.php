@@ -2,11 +2,18 @@
 
 namespace App\Observers;
 
+use App\Interfaces\Firebase\FirebaseInterface;
 use App\Jobs\CreateNotificationReadsJob;
 use App\Models\NotiInfo;
 
 class NotiInfoObserver
 {
+
+    private FirebaseInterface $firebaseRepository;
+    public function __construct(FirebaseInterface $firebaseRepository)
+    {
+        $this->firebaseRepository = $firebaseRepository;
+    }
     /**
      * Handle the NotiInfo "created" event.
      */

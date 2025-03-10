@@ -7,7 +7,7 @@ use App\Http\Requests\V1\App\Firebase\StoreMessageRequest;
 use App\UseCases\FireBase\FirebaseAction;
 use Illuminate\Http\JsonResponse;
 
-class FirebaseChattingController extends Controller
+class FirebaseController extends Controller
 {
     private FirebaseAction $firebaseAction;
 

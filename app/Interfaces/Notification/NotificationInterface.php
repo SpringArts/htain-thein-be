@@ -14,11 +14,13 @@ interface NotificationInterface
 
     public function getUserNotification(Report $report): NotiInfo;
 
-    public function createNotification(int $userId, mixed $reportId = null, mixed $announcementId = null, string $firebaseNotificationId): NotiInfo;
+    public function createNotification(int $userId, mixed $reportId = null, mixed $announcementId = null): NotiInfo;
 
     public function deleteNotification(NotiInfo $notiInfo): ?bool;
 
     public function updateViewAndRead(NotificationRead $notificationRead): void;
 
-    public function getAllNotifications(int $userId, ?string $cursor = null, int $limit = 10): CursorPaginator;
+    public function getAllNotificationReadInfo(int $userId, ?string $cursor = null, int $limit = 10): CursorPaginator;
+
+    public function getUnreadCounts(int $userId): int;
 }

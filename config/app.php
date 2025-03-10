@@ -68,6 +68,8 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
+    'firebase_credentials' => env('FIREBASE_CREDENTIALS'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

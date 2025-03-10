@@ -8,9 +8,7 @@ interface FirebaseInterface
 {
     public function storeMessage(array $data): JsonResponse;
 
-    public function storeNotification(array $data): string;
+    public function updateUnreadCount(int $userId, int $unreadCount): void;
 
-    public function markNotificationAsRead(int $userId, string $notificationId): JsonResponse;
-
-    public function deleteNotificationDocument(string $notificationId, string $collectionType): void;
+    public function batchUpdateUnreadCounts(array $userUnreadCounts): void;
 }
