@@ -1,3 +1,10 @@
+# Ignore Laravel logs
+/storage/logs/*.log
+/storage/framework/cache/*
+/storage/framework/views/*
+/storage/framework/sessions/*
+
+# Common ignores
 /.phpunit.cache
 /node_modules
 /public/build

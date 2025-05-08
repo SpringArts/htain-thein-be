@@ -20,6 +20,8 @@ interface NotificationInterface
 
     public function updateViewAndRead(NotificationRead $notificationRead): void;
 
+    public function markAsAllReadNotiInfo(array $ids, int $authUserId): void;
+
     public function getAllNotificationReadInfo(int $userId, ?string $cursor = null, int $limit = 10): CursorPaginator;
 
     public function getUnreadCounts(int $userId): int;

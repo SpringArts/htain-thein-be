@@ -83,4 +83,17 @@ class NotificationRepository implements NotificationInterface
             ->whereNull('read_at')
             ->count();
     }
+
+    public function markAsAllReadNotiInfo(array $ids, int $authUserId): void
+    {
+        DB::transaction(function () use ($ids, $authUserId) {
+            // Mark notifications as read
+            NotificationRead::whereIn('noti_info_id', $ids)
+                ->where('user_id', $authUserId)
+                ->markAsRead();
+
+            // Update last viewed timestamp
+            NotiInfo::whereIn('id', $ids)->updateLastViewed();
+        });
+    }
 }

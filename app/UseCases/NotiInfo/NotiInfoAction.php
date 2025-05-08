@@ -9,6 +9,7 @@ use App\Models\NotiInfo;
 use App\Services\NotificationInfo\DeleteNotificationInfoService;
 use App\Services\NotificationInfo\FetchNotificationInfoService;
 use App\Services\NotificationInfo\GetAllNotificationsService;
+use App\Services\NotificationInfo\MarkAllNotificationsAsReadService;
 use App\Services\NotificationInfo\MarkNotificationAsReadService;
 use App\Services\NotificationInfo\StoreNotificationInfoService;
 use Illuminate\Http\JsonResponse;
@@ -45,5 +46,10 @@ class NotiInfoAction
     public function markNotificationAsRead(NotificationRead $notificationRead): JsonResponse
     {
         return (new MarkNotificationAsReadService($this->notiInfoReponsitory, $this->firebaseRepository))($notificationRead);
+    }
+
+    public function markAllNotificationsAsRead(array $ids): JsonResponse
+    {
+        return (new MarkAllNotificationsAsReadService($this->notiInfoReponsitory, $this->firebaseRepository))($ids);
     }
 }

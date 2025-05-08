@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
-class MarkNotificationAsReadService
+class MarkAllNotificationsAsReadService
 {
     protected NotificationInterface $notiInfoRepository;
     protected FirebaseInterface $firebaseRepository;
@@ -19,13 +19,13 @@ class MarkNotificationAsReadService
         $this->notiInfoRepository = $notiInfoRepository;
         $this->firebaseRepository = $firebaseRepository;
     }
-    public function __invoke(NotificationRead $notificationRead): JsonResponse
+    public function __invoke(array $ids): JsonResponse
     {
         $authUserId = getAuthUserOrFail()->id;
-        $this->notiInfoRepository->updateViewAndRead($notificationRead);
+        $this->notiInfoRepository->markAsAllReadNotiInfo($ids, $authUserId);
         $getUnreadNotificationCount = $this->notiInfoRepository->getUnreadCounts($authUserId);
         $this->firebaseRepository->updateUnreadCount($authUserId, $getUnreadNotificationCount);
 
-        return ResponseHelper::success('Notification marked as read successfully', null, Response::HTTP_OK);
+        return ResponseHelper::success('Notifications marked as read successfully', null, Response::HTTP_OK);
     }
 }

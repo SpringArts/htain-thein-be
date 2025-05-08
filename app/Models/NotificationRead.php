@@ -62,8 +62,8 @@ class NotificationRead extends Model
         return $this->belongsTo(NotiInfo::class);
     }
 
-    public function markAsRead()
+    public function scopeMarkAsRead($query)
     {
-        $this->update(['read_at' => now()]);
+        return $query->update(['read_at' => now()]);
     }
 }

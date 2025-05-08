@@ -74,7 +74,7 @@ class NotiInfo extends Model
         return $this->hasMany(NotificationRead::class, 'noti_info_id');
     }
 
-    public function updateLastViewed()
+    public function scopeUpdateLastViewed()
     {
         $this->update(['last_viewed_at' => now()]);
     }

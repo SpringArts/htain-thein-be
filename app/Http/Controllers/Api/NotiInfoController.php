@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\App\NotificationInfo\FetchAllNotificationRequest;
+use App\Http\Requests\V1\App\NotificationInfo\MarkAllNotificationsRequest;
 use App\Http\Requests\V1\App\NotificationInfo\StoreNotiInfoRequest;
 use App\Http\Resources\NotiInfoResource;
 use App\Models\NotificationRead;
@@ -53,6 +54,12 @@ class NotiInfoController extends Controller
         }
 
         return $this->notiInfoAction->markNotificationAsRead($notificationRead);
+    }
+
+    public function markAllNotificationsAsRead(MarkAllNotificationsRequest $request): JsonResponse
+    {
+        $ids = $request->safe()->all()['ids'];
+        return $this->notiInfoAction->markAllNotificationsAsRead($ids);
     }
 
     public function destroy(NotiInfo $notification): ?bool

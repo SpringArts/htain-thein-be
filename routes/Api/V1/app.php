@@ -42,7 +42,7 @@ Route::middleware(['auth:sanctum'])->group(function (): void {
     Route::get('/announcement-batch-delete', [AnnouncementController::class, 'batchDelete']);
     Route::get('/dashboard', [HomeController::class, 'dashboard']);
     Route::post('/send-message', [FirebaseController::class, 'sendMessage']);
-    Route::post('/notifications-mark-read-all', [NotiInfoController::class, 'markAllNotificationAsRead']);
+    Route::post('/notifications-mark-read-all', [NotiInfoController::class, 'markAllNotificationsAsRead']);
     Route::post('/notifications-mark-read/{notificationRead}', [NotiInfoController::class, 'markNotificationAsRead']);
     Route::get('/testing', function () {
         return getAuthUserOrFail();
