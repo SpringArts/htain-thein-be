@@ -31,18 +31,15 @@ class AuthenticatedSessionController extends Controller
                 return response()->json(['message' => 'Your account is ' . AccountType::SUSPENDED . '.Please contact to Admin .'], 403);
             }
             // generate an API token for the authenticated user
-            $token = $authUser->createToken('authToken')->plainTextToken;
+            $token = $authUser->createToken('api-token')->plainTextToken;
 
             $this->userAgentAction->storeUserAgent($request);
-
+            $authUser = getAuthUserOrFail();
             // return the token as a response
             return response()->json([
-                'userId' => $authUser->id,
-                'userName' => $authUser->name,
-                'userRole' => $authUser->role,
-                'accountStatus' => $authUser->account_status,
-                'access_token' => $token,
+                'token' => $token,
                 'token_type' => 'Bearer',
+                'user' => $authUser->makeHidden(['password', 'remember_token']),
             ]);
         }
 
@@ -56,7 +53,7 @@ class AuthenticatedSessionController extends Controller
     {
         $user = getAuthUserOrFail();
         $user->tokens()->delete(); // Revoke all tokens for the user
-        Auth::guard('web')->logout(); // need for session logout
+        Auth::guard('web')->logout();
 
         return response()->json(['message' => 'Logged out successfully'], 200);
     }
