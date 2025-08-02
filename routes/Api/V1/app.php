@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->group(function (): void {
+Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function (): void {
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/reports', ReportController::class);
     Route::apiResource('/announcements', AnnouncementController::class);

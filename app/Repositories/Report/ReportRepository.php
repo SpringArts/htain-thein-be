@@ -19,7 +19,7 @@ class ReportRepository implements ReportInterface
     public function getAllVerifiedReports(int $limit, int $page): LengthAwarePaginator
     {
         return Report::where('verifier_id', '!=', '')
-            ->where('confirm_status', ConfirmStatus::CHECKED)
+            ->where('confirm_status', ConfirmStatus::ACCEPTED)
             ->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'page', $page)->withQueryString();
     }
 
@@ -45,7 +45,7 @@ class ReportRepository implements ReportInterface
 
     public function uncheckReport(int $limit, int $page): LengthAwarePaginator
     {
-        return Report::with('reporter', 'verifier')->where('confirm_status', ConfirmStatus::UNCHECKED)->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'page', $page)
+        return Report::with('reporter', 'verifier')->where('confirm_status', ConfirmStatus::PENDING)->orderBy('created_at', 'desc')->paginate($limit, ['*'], 'page', $page)
             ->withQueryString();
     }
 
@@ -53,7 +53,7 @@ class ReportRepository implements ReportInterface
     {
         return $report->update([
             'verifier_id' => getAuthUserOrFail()->id,
-            'confirm_status' => ConfirmStatus::CHECKED,
+            'confirm_status' => ConfirmStatus::ACCEPTED,
         ]);
     }
 

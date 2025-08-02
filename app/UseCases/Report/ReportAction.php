@@ -48,6 +48,7 @@ class ReportAction
     // create report depend on financial condition
     public function createReport(array $data): JsonResponse
     {
+        $data['confirm_status'] = $data['confirmStatus'];
         return (new CreateReportService())($data, $this->reportRepository, $this->notiInfoAction);
     }
 

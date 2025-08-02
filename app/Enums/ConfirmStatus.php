@@ -2,10 +2,9 @@
 
 namespace App\Enums;
 
-enum ConfirmStatus: int
+enum ConfirmStatus: string
 {
-    case UNCHECKED = 0; // Unchecked Value
-    case CHECKED = 1; // Checked Value
-    case ACCEPTED = 2; // Accepted Value
-    case REJECTED = 3; // Rejected Value
+    public const PENDING = "PENDING"; // Pending Value
+    public const ACCEPTED = "ACCEPTED"; // Accepted Value
+    public const REJECTED = "REJECTED"; // Rejected Value
 }

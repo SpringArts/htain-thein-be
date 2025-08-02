@@ -12,7 +12,7 @@ class FinancialCalculatorService
 {
     public static function overviewCalculate(): array
     {
-        $income = self::calculateSum(FinancialType::INCOME, 1);
+        $income = self::calculateSum(FinancialType::INCOME, ConfirmStatus::ACCEPTED);
         $outcome = self::calculateTotalOutcome();
         $regularCost = self::calculateRegularCost();
         $availableBalance = self::calculateAvailableBalance();
@@ -35,7 +35,7 @@ class FinancialCalculatorService
         return $data;
     }
 
-    private static function calculateSum(string $type, int $confirmStatus): mixed
+    private static function calculateSum(string $type, string $confirmStatus): mixed
     {
         return Report::where('type', $type)
             ->where('confirm_status', $confirmStatus)
@@ -83,7 +83,7 @@ class FinancialCalculatorService
     private static function findMostPerson(string $type): ?Report
     {
         return Report::where('type', $type)
-            ->where('confirm_status', ConfirmStatus::CHECKED)
+            ->where('confirm_status', ConfirmStatus::ACCEPTED)
             ->select('reporter_id', DB::raw('SUM(amount) as total_amount'))
             ->groupBy('reporter_id')
             ->orderByDesc('total_amount')

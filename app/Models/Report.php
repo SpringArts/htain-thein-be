@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ConfirmStatus;
 use App\Observers\ReportObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

@@ -2,8 +2,12 @@
 
 namespace App\Http\Requests\V1\App\Report;
 
+use App\Enums\ConfirmStatus;
+use App\Enums\FinancialType;
 use App\Rules\EvenOddCheckRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreReportRequest extends FormRequest
 {
@@ -23,11 +27,18 @@ class StoreReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'amount' => ['required', 'integer', 'gt:50', new EvenOddCheckRule()],
-            'description' => 'required|max:255',
-            'type' => ['required', 'string', 'in:INCOME,EXPENSE'],
-            'confirm_status' => 'nullable|boolean',
-            'verifier_id' => 'nullable|integer',
+            'amount' => ['bail', 'required', 'integer', 'gt:50', new EvenOddCheckRule()],
+            'description' => ['bail', 'required', 'max:255'],
+            'type' => ['bail', 'required', 'string', Rule::in([
+                FinancialType::INCOME,
+                FinancialType::EXPENSE,
+            ])],
+            'confirmStatus' => ['bail', 'required', 'string', ['bail', 'required', 'string', Rule::in([
+                ConfirmStatus::PENDING,
+                ConfirmStatus::ACCEPTED,
+                ConfirmStatus::REJECTED,
+            ])],],
+            'verifier_id' => ['bail', 'nullable', 'integer'],
         ];
     }
 }

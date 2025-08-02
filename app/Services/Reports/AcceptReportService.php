@@ -9,7 +9,7 @@ use App\Interfaces\Report\ReportInterface;
 use App\Mail\NotifyAcceptOrRejectMail;
 use App\Models\Report;
 use Illuminate\Http\JsonResponse;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 
 class AcceptReportService
 {
